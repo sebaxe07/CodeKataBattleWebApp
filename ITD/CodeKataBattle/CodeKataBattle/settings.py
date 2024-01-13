@@ -37,6 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'user_management',
+    'tournament_management',
+    'team_github_integration',
+    'automated_evaluation',
+    'scoring_system',
+    'notification_system',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +81,12 @@ WSGI_APPLICATION = 'CodeKataBattle.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'CKBdb',
+        'USER': 'postgres',
+        'PASSWORD': 'codekatabattle',
+        'HOST': 'ckb-db.cfm6asw80bof.eu-north-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
