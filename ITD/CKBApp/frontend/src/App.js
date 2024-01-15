@@ -1,11 +1,16 @@
 import "./App.css";
-import Login from "./views/auth/Login";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Login } from "./views/auth/Login";
+import { StudentHome } from "./views/student/StudentHome";
 
 function App() {
   return (
-    <>
-      <Login />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/student" element={<StudentHome />} />
+      </Routes>
+    </Router>
   );
 }
 

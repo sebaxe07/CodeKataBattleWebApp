@@ -39,12 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders', # CORS
     'rest_framework', # REST
+    'rest_framework.authtoken',
     'user_management',
     'tournament_management',
     'team_github_integration',
     'automated_evaluation',
     'scoring_system',
     'notification_system',
+    'djoser',
+
 ]
 
 MIDDLEWARE = [
@@ -57,6 +60,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
 
 CORS_ALLOW_ALL_ORIGINS = True # CORS
 

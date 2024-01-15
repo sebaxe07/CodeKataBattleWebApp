@@ -1,33 +1,34 @@
-from django.contrib.auth.models import User
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer
-from django.shortcuts import get_object_or_404
+from .serializers import UserRegisterSerializer
 from rest_framework import status
 
+
+
+ 
 class UserRegistrationView(generics.CreateAPIView):
-    serializer_class = UserSerializer
+    serializer_class = UserRegisterSerializer
     permission_classes = (permissions.AllowAny,)
-
     def create(self, request, *args, **kwargs):
-        # Override create method to customize the response
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+            serializer = self.get_serializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                # Customized response
+                user_data = serializer.data
+                response_data = {
+                    'user': user_data,
+                    'message': 'User registered successfully.',
+                }
+                return Response(response_data, status=status.HTTP_201_CREATED)
+            else:
+                # Handle the validation error
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # Customize the response data as needed
-        user_data = serializer.data
-        response_data = {
-            'user': user_data,
-            'message': 'User registered successfully.',
-        }
-
-        return Response(response_data, status=status.HTTP_201_CREATED)
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
-    serializer_class = UserSerializer
+    serializer_class = UserRegisterSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self):

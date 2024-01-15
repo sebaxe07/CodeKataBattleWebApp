@@ -1,9 +1,14 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+ 
 # User profile model base
 class UserProfile(models.Model):
+    USER_ROLES = (
+        ('educator', 'Educator'),
+        ('student', 'Student'),
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=10, choices=USER_ROLES)
     school = models.CharField(max_length=100)
 
 # Educator and student profile models
