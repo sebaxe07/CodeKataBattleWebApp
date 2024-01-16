@@ -56,7 +56,7 @@ export const Login = () => {
         <div className="w-[364px] h-[469px] bg-bgprimary rounded-[36px] flex flex-col justify-center items-center space-y-5">
           <Text
             text={["WELCOME", "BACK!"]}
-            size="40px"
+            size="text-[40px]"
             fontColor="text-white"
             fontType="font-black"
           />
@@ -81,7 +81,7 @@ export const Login = () => {
 
           <Text
             text={["Forgot password?"]}
-            size="16px"
+            size="text-[16px]"
             fontColor="text-accentprimary"
             fontType="font-medium"
             className="cursor-pointer hover:text-gray-300"
@@ -90,7 +90,7 @@ export const Login = () => {
       </div>
       <Text
         text={["I don't have an account"]}
-        size="16px"
+        size="text-[16px]"
         fontColor="text-accentsecondary"
         fontType="font-medium"
         className="cursor-pointer mt-[23px] hover:text-[#E951C5]"

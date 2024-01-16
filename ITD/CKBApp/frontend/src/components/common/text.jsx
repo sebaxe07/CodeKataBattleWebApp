@@ -16,7 +16,7 @@ import React from "react";
 export const Text = ({ text, size, fontType, fontColor, className }) => {
   return (
     <div
-      className={`text-[${size}] ${fontType} ${fontColor} text-center leading-10 ${className}`}
+      className={`${size} ${fontType} ${fontColor} text-center leading-10 ${className}`}
     >
       {text.map((line, index) => (
         <React.Fragment key={index}>
