@@ -3,11 +3,13 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      scrollbar: ["dark"],
+
       screens: {
-        sm: '640px',
-        md: '768px',
-        lg: '1024px',
-        xl: '1280px',
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
       },
       scale: ["active"],
       fontFamily: {
@@ -25,6 +27,7 @@ module.exports = {
         fontlabel: "#a2a1ab",
         shadowbox: "#5d4cd3",
         white: "#ffffff",
+        bgicon: "#43FFC0",
       },
     },
   },
@@ -33,6 +36,5 @@ module.exports = {
       textColor: ["placeholder"],
     },
   },
-  plugins: [require("@tailwindcss/forms"),
-],
+  plugins: [require("@tailwindcss/forms"), require("tailwind-scrollbar")],
 };

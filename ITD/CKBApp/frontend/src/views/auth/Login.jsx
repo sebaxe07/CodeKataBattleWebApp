@@ -94,6 +94,7 @@ export const Login = () => {
         fontColor="text-accentsecondary"
         fontType="font-medium"
         className="cursor-pointer mt-[23px] hover:text-[#E951C5]"
+        onClick={() => navigate("/signup")}
       />
       <Codekatabattle className="absolute bottom-[57px] right-[57px]" />
     </div>

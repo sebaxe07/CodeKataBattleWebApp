@@ -3,10 +3,10 @@ import { Text } from "../../common/text";
 import Card from "../../common/bgIconCard";
 import { ReactSVG } from "react-svg";
 
-import IcoElephant from "../../../assets/icons/elephant.svg";
-import IcoTiger from "../../../assets/icons/tiger.svg";
-import IcoPiggy from "../../../assets/icons/piggy.svg";
-import IcoBear from "../../../assets/icons/bear.svg";
+import IcoElephant from "../../../assets/icons/UsersIcons/elephant.svg";
+import IcoTiger from "../../../assets/icons/UsersIcons/tiger.svg";
+import IcoPiggy from "../../../assets/icons/UsersIcons/piggy.svg";
+import IcoBear from "../../../assets/icons/UsersIcons/bear.svg";
 
 export const AvatarUser = () => {
   const [activeCard, setActiveCard] = useState(null);
