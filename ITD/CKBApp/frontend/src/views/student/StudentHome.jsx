@@ -6,7 +6,6 @@ import { ReactComponent as Logo } from "../../assets/images/Logo.svg";
 import TournamentCard from "../../components/utils/TournamentCard";
 import TournamentDetails from "../../components/utils/TournamentDetails";
 import PastTournamentCard from "../../components/utils/PastTournamentCard";
-import python from "../../assets/icons/python.png";
 
 export const StudentHome = () => {
   return (

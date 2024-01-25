@@ -9,13 +9,21 @@ import { Login } from "./views/auth/Login";
 import { StudentHome } from "./views/student/StudentHome";
 import { SignUpSlides } from "./views/auth/UserSignUp";
 import Sidebar from "./components/utils/Sidebar";
+import { UserProvider } from "./services/providers/UserProvider";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<SignUpSlides />} />
+        <Route
+          path="/signup"
+          element={
+            <UserProvider>
+              <SignUpSlides />
+            </UserProvider>
+          }
+        />
         <Route path="/student" element={<Sidebar />}>
           <Route index element={<Navigate to="home" />} />
           <Route path="home" element={<StudentHome />} />
