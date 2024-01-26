@@ -2,7 +2,7 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
-from .serializers import UserRegisterSerializer
+from .serializers import UserRegisterSerializer, UserSerializer
 from rest_framework import status
 
 
@@ -27,12 +27,13 @@ class UserRegistrationView(generics.CreateAPIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserProfileView(generics.RetrieveUpdateAPIView):
-    serializer_class = UserRegisterSerializer
+class UserDetailView(generics.RetrieveAPIView):
+    serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self):
         return self.request.user
+
 
 class UserLogoutView(APIView):
     permission_classes = (permissions.IsAuthenticated,)

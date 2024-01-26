@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { TextField } from "../../common/textfield";
 import { Text } from "../../common/text";
+import { RegisterContext } from "../../../services/contexts/RegisterContext";
 
 export const NameUser = () => {
-  const [nickname, setNickname] = useState("");
+  const { userData, setUserData } = useContext(RegisterContext);
 
   // Nickname Screen
   return (
@@ -18,14 +19,19 @@ export const NameUser = () => {
         text={["This is how other Seito will see you.", "Choose a cool one!"]}
         size="text-[16px]"
         fontColor="text-white"
-        fontType="font-black"
+        fontType="font-bold"
       />
       <div className="flex justify-center">
         <TextField
           type={"text"}
-          placeholder="Nickname"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
+          placeholder="Username"
+          value={userData.username}
+          onChange={(e) =>
+            setUserData({
+              ...userData,
+              username: e.target.value, // replace key and value with your actual data
+            })
+          }
         />
       </div>
     </div>

@@ -4,10 +4,24 @@ from .models import UserProfile, EducatorProfile, StudentProfile
 
 
 
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('role', 'school')
+        fields = ('role', 'school', 'profile_icon', 'github_username')
+
+class UserSerializer(serializers.ModelSerializer):
+    user_profile = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email',  'first_name', 'last_name', 'user_profile')
+
+    def get_user_profile(self, obj):
+        return UserProfileSerializer(obj.user_profile).data
+    
+
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     user_profile = UserProfileSerializer(write_only=True)
@@ -28,12 +42,13 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             EducatorProfile.objects.create(user_profile=user_profile)
 
         return user
-
+    
+""" 
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
 
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ('username', 'password') """
  

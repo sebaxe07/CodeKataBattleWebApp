@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../services/api";
 import { Button } from "../../components/common/Button";
@@ -7,13 +7,16 @@ import { Text } from "../../components/common/text";
 import { CheckBox } from "../../components/common/CheckBox";
 import { ReactComponent as Logo } from "../../assets/images/Logo.svg";
 import { ReactComponent as Codekatabattle } from "../../assets/images/codekatabattle.svg";
+import { useToast } from "@chakra-ui/react";
+import { useFetchUserData } from "../../services/useFetchUserData";
 
 export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-
+  const toast = useToast();
   const navigate = useNavigate();
+  const fetchUserData = useFetchUserData();
 
   // Username and password are updated every time the user types in the input field
   useEffect(() => {
@@ -41,9 +44,22 @@ export const Login = () => {
       console.log(response.data); // Handle the response as needed
       const data = response.data;
       localStorage.setItem("token", data.auth_token);
+      fetchUserData(data.auth_token);
+      toast({
+        title: "Welcome back!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       // Redirect to home screen
       navigate("/student");
     } catch (error) {
+      toast({
+        title: "Error logging in. Please try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
       console.error("Error Login in user:", error);
     }
   };

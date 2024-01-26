@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { Text } from "../../common/text";
 import Card from "../../common/bgIconCard";
-import { ReactSVG } from "react-svg";
+import { RegisterContext } from "../../../services/contexts/RegisterContext";
 
 import IcoElephant from "../../../assets/icons/UsersIcons/elephant.svg";
 import IcoTiger from "../../../assets/icons/UsersIcons/tiger.svg";
@@ -9,7 +9,7 @@ import IcoPiggy from "../../../assets/icons/UsersIcons/piggy.svg";
 import IcoBear from "../../../assets/icons/UsersIcons/bear.svg";
 
 export const AvatarUser = () => {
-  const [activeCard, setActiveCard] = useState(null);
+  const { userData, setUserData } = useContext(RegisterContext);
 
   // School Screen
   return (
@@ -30,27 +30,47 @@ export const AvatarUser = () => {
         <Card
           icon={IcoElephant}
           bgColor={"bg-[#6CBE83]"}
-          onClick={() => setActiveCard("card1")}
-          active={activeCard === "card1"}
+          onClick={(e) =>
+            setUserData({
+              ...userData,
+              avatar: "elephant.svg",
+            })
+          }
+          active={userData.avatar === "elephant.svg"}
         />
         <Card
           icon={IcoTiger}
           on
           bgColor={"bg-[#DB79C0]"}
-          onClick={() => setActiveCard("card2")}
-          active={activeCard === "card2"}
+          onClick={(e) =>
+            setUserData({
+              ...userData,
+              avatar: "tiger.svg",
+            })
+          }
+          active={userData.avatar === "tiger.svg"}
         />
         <Card
           icon={IcoPiggy}
           bgColor={"bg-[#5D9BF6]"}
-          onClick={() => setActiveCard("card3")}
-          active={activeCard === "card3"}
+          onClick={(e) =>
+            setUserData({
+              ...userData,
+              avatar: "piggy.svg",
+            })
+          }
+          active={userData.avatar === "piggy.svg"}
         />
         <Card
           icon={IcoBear}
           bgColor={"bg-[#F4A358]"}
-          onClick={() => setActiveCard("card4")}
-          active={activeCard === "card4"}
+          onClick={(e) =>
+            setUserData({
+              ...userData,
+              avatar: "bear.svg",
+            })
+          }
+          active={userData.avatar === "bear.svg"}
         />
       </div>
     </div>

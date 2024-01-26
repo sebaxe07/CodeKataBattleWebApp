@@ -1,6 +1,6 @@
 import React from "react";
 
-export const TextField = ({ type, placeholder, value, onChange }) => {
+export const TextField = ({ type, placeholder, value, onChange, ...props }) => {
   return (
     <div className="flex justify-between items-center">
       <input
@@ -13,6 +13,7 @@ export const TextField = ({ type, placeholder, value, onChange }) => {
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        {...props}
       />
     </div>
   );

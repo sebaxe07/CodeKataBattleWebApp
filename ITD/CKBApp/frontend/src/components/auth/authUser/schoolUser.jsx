@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { TextField } from "../../common/textfield";
 import { Text } from "../../common/text";
+import { RegisterContext } from "../../../services/contexts/RegisterContext";
 
 export const SchoolName = () => {
   const [schoolname, setSchoolName] = useState("");
+  const { userData, setUserData } = useContext(RegisterContext);
 
   // School Screen
   return (
@@ -24,8 +26,13 @@ export const SchoolName = () => {
         <TextField
           type={"text"}
           placeholder="School Name"
-          value={schoolname}
-          onChange={(e) => setSchoolName(e.target.value)}
+          value={userData.school}
+          onChange={(e) =>
+            setUserData({
+              ...userData,
+              school: e.target.value, // replace key and value with your actual data
+            })
+          }
         />
       </div>
     </div>

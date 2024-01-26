@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { Text } from "../../common/text";
+import { RegisterContext } from "../../../services/contexts/RegisterContext";
+
 import UserStudent from "../../../assets/icons/userStudent.svg";
 import UserTeacher from "../../../assets/icons/userTeacher.svg";
 import Card from "../../common/card";
 
 export const UserType = () => {
-  const [activeCard, setActiveCard] = useState(null);
+  const { userData, setUserData } = useContext(RegisterContext);
 
   return (
     <div>
@@ -26,15 +28,25 @@ export const UserType = () => {
           title="SEITO"
           description="If you are an student"
           icon={UserStudent}
-          onClick={() => setActiveCard("SEITO")}
-          active={activeCard === "SEITO"}
+          onClick={() =>
+            setUserData({
+              ...userData,
+              userType: "student", // replace key and value with your actual data
+            })
+          }
+          active={userData.userType === "student"}
         />
         <Card
           title="SENSEI"
           description="If you are an teacher"
           icon={UserTeacher}
-          onClick={() => setActiveCard("SENSEI")}
-          active={activeCard === "SENSEI"}
+          onClick={() =>
+            setUserData({
+              ...userData,
+              userType: "educator", // replace key and value with your actual data
+            })
+          }
+          active={userData.userType === "educator"}
         />
       </div>
     </div>

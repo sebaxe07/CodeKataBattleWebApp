@@ -19,7 +19,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('user_management.urls')),  # Adjust this based on your app's name
+    path('ums/', include('user_management.urls')),  # Adjust this based on your app's name
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
 ]

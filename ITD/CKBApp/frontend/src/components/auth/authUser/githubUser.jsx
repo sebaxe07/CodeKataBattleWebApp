@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "../../common/Button";
+import React, { useContext } from "react";
 import { TextField } from "../../common/textfield";
 import { Text } from "../../common/text";
+import { RegisterContext } from "../../../services/contexts/RegisterContext";
 
 export const GithubAcc = () => {
-  const [githubacc, setGithub] = useState("");
+  const { userData, setUserData } = useContext(RegisterContext);
 
   // Login Screen
   return (
@@ -27,8 +27,13 @@ export const GithubAcc = () => {
         <TextField
           type={"text"}
           placeholder="Type your Github account"
-          value={githubacc}
-          onChange={(e) => setGithub(e.target.value)}
+          value={userData.githubacc}
+          onChange={(e) =>
+            setUserData({
+              ...userData,
+              githubacc: e.target.value, // replace key and value with your actual data
+            })
+          }
         />
       </div>
     </div>
