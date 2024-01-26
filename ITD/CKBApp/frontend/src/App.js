@@ -11,6 +11,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 import { Login } from "./views/auth/Login";
 import { StudentHome } from "./views/student/StudentHome";
+import { JoinTournament } from "./views/student/joinTournament";
+import { ProfileStudents } from "./views/student/ProfileStudents";
 import { SignUpSlides } from "./views/auth/UserSignUp";
 import Sidebar from "./components/utils/Sidebar";
 import { RegisterProvider } from "./services/providers/RegisterProvider";
@@ -47,6 +49,8 @@ function App() {
             <Route path="/student" element={<Sidebar />}>
               <Route index element={<Navigate to="home" />} />
               <Route path="home" element={<StudentHome />} />
+              <Route path="joinTournament" element={<JoinTournament />} />
+              <Route path="studentProfile" element={<ProfileStudents />} />
             </Route>
           </Routes>
         </Router>

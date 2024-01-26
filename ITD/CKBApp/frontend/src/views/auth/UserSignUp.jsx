@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { ReactComponent as Logo } from "../../assets/images/Logo.svg";
+import { useNavigate } from "react-router-dom";
+import { Text } from "../../components/common/text";
 import { Button } from "../../components/common/Button";
 import { ReactComponent as Codekatabattle } from "../../assets/images/codekatabattle.svg";
 import UserType from "../../components/auth/authUser/UserType";
@@ -11,7 +13,6 @@ import AvatarSelec from "../../components/auth/authUser/AvatarUser";
 import { RegisterContext } from "../../services/contexts/RegisterContext";
 import { Slide } from "react-awesome-reveal";
 import { useToast } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import { useFetchUserData } from "../../services/useFetchUserData";
 
 import axios from "../../services/api";
@@ -245,11 +246,11 @@ export const SignUpSlides = () => {
       }
     }
   };
-  const handleBackClick = () => {
-    if (slide > 0) {
-      setSlide(slide - 1);
-    }
-  };
+  // const handleBackClick = () => {
+  //   if (slide > 0) {
+  //     setSlide(slide - 1);
+  //   }
+  // };
 
   // Login Screen
   return (
@@ -271,6 +272,14 @@ export const SignUpSlides = () => {
         </div>
       </div>
       <div>
+        <Text
+          text={["I already have an account"]}
+          size="text-[16px]"
+          fontColor="text-accentsecondary"
+          fontType="font-medium"
+          className="cursor-pointer mt-[23px] hover:text-[#E951C5]"
+          onClick={() => navigate("/")}
+        />
         <Codekatabattle className="absolute bottom-[57px] right-[57px]" />
       </div>
     </div>

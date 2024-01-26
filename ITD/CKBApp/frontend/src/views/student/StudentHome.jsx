@@ -1,8 +1,9 @@
 import React /*, { useState, useEffect }*/ from "react";
 //import axios from "../../services/api";
 //import { TextField } from "../../components/common/textfield";
+import { ReactSVG } from "react-svg";
 import { Text } from "../../components/common/text";
-import { ReactComponent as Logo } from "../../assets/images/Logo.svg";
+import Logo from "../../assets/images/Logo.svg";
 import TournamentCard from "../../components/utils/TournamentCard";
 import TournamentDetails from "../../components/utils/TournamentDetails";
 import PastTournamentCard from "../../components/utils/PastTournamentCard";
@@ -10,7 +11,17 @@ import PastTournamentCard from "../../components/utils/PastTournamentCard";
 export const StudentHome = () => {
   return (
     <div className="bg-bgsecondary flex flex-row justify-center items-center h-screen w-[screen-120px] ml-[120px]">
-      <Logo className="absolute top-[58px] right-[91px] w-[74px] h-[40px]" />
+      <ReactSVG
+        src={Logo}
+        beforeInjection={(svg) => {
+          svg.setAttribute("style", "width: 70px; height: 70px");
+        }}
+        style={{
+          position: "fixed",
+          top: 30,
+          right: 30,
+        }}
+      />
       <div className="flex flex-col ">
         <div className="flex flex-col items-start space-y-2">
           <Text

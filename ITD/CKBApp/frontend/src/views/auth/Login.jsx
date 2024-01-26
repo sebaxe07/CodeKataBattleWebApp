@@ -9,10 +9,21 @@ import { ReactComponent as Logo } from "../../assets/images/Logo.svg";
 import { ReactComponent as Codekatabattle } from "../../assets/images/codekatabattle.svg";
 import { useToast } from "@chakra-ui/react";
 import { useFetchUserData } from "../../services/useFetchUserData";
+import { ReactSVG } from "react-svg";
+
+import PassHide from "../../assets/icons/passHide.svg";
+import PassShow from "../../assets/icons/passShow.svg";
 
 export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const [passwordType, setPasswordType] = useState("password");
+
+  const togglePasswordVisibility = () => {
+    setPasswordType(passwordType === "password" ? "text" : "password");
+  };
+
   const [rememberMe, setRememberMe] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
@@ -82,12 +93,21 @@ export const Login = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <TextField
-            type={"password"}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="flex flex-shrink-0 h-[42px] rounded-[14px] bg-white flex-end justify-around items-center pr-2">
+            <TextField
+              type={passwordType}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button onClick={togglePasswordVisibility}>
+              {passwordType === "password" ? (
+                <ReactSVG src={PassHide} />
+              ) : (
+                <ReactSVG src={PassShow} />
+              )}
+            </button>
+          </div>
 
           <CheckBox
             onChange={(e) => setRememberMe(e.target.checked)}
