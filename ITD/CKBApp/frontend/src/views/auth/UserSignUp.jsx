@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ReactComponent as Logo } from "../../assets/images/Logo.svg";
 import { useNavigate } from "react-router-dom";
 import { Text } from "../../components/common/text";
@@ -15,7 +15,51 @@ import { Slide } from "react-awesome-reveal";
 import { useToast } from "@chakra-ui/react";
 import { useFetchUserData } from "../../services/useFetchUserData";
 
+import {
+  Step,
+  StepDescription,
+  StepIcon,
+  StepIndicator,
+  StepNumber,
+  StepSeparator,
+  StepStatus,
+  StepTitle,
+  Stepper,
+  useSteps,
+} from "@chakra-ui/react";
+import {
+  ChakraProvider,
+  ColorModeProvider,
+  extendTheme,
+} from "@chakra-ui/react";
+
 import axios from "../../services/api";
+
+const colorSchemes = [
+  {
+    background: "bg-bgsecondary",
+    menu: "bg-bgprimary",
+    shadow: "bg-shadowbox",
+    stepper: "colorStudent",
+  },
+  {
+    background: "bg-[#19362D]",
+    menu: "bg-bgstudent",
+    shadow: "bg-[#265F4C]",
+    stepper: "colorEducator",
+  },
+];
+
+const customTheme = extendTheme({
+  colors: {
+    colorStudent: {
+      500: "#BAAFFF",
+    },
+    colorEducator: {
+      500: "#B4FFE6",
+    },
+  },
+});
 
 export const SignUpSlides = () => {
   const [slide, setSlide] = useState(0);
@@ -36,6 +80,15 @@ export const SignUpSlides = () => {
   function closeAll() {
     toast.closeAll();
   }
+
+  const [colorScheme, setColorScheme] = useState(colorSchemes[0]);
+
+  useEffect(() => {
+    setColorScheme(colorScheme[0]);
+    setColorScheme(
+      colorSchemes[registerContext.userData.userType == "educator" ? 1 : 0]
+    );
+  }, [registerContext]);
 
   const validateSignupForm = () => {
     closeAll();
@@ -94,7 +147,13 @@ export const SignUpSlides = () => {
 
   const screens = [
     {
-      component: <UserType />,
+      component: (
+        <UserType
+          context={
+            registerContext.userData.userType == "educator" ? "SENSEI" : ""
+          }
+        />
+      ),
       buttonAction: () => setSlide(1),
       validate: () => registerContext.userData.userType !== undefined,
     },
@@ -158,6 +217,7 @@ export const SignUpSlides = () => {
       last_name: lastName,
       user_profile: {
         role: userType,
+
         school: school,
         profile_icon: avatar,
         github_username: githubacc,
@@ -210,6 +270,7 @@ export const SignUpSlides = () => {
         if (slide === screens.length - 1) {
           console.log("submit");
           console.log(registerContext.userData);
+
           handleSubmit();
           return;
         }
@@ -239,21 +300,67 @@ export const SignUpSlides = () => {
     }
   };
 
+  const handleBackClick = () => {
+    if (slide > 0) {
+      setSlide(slide - 1);
+    }
+  };
+
+  const { activeStep, setActiveStep } = useSteps({
+    index: slide,
+    count: screens.length,
+  });
+
   // Login Screen
   return (
-    <div className="bg-bgsecondary flex flex-col justify-center items-center h-screen w-screen">
+    <div
+      className={`${colorScheme.background} transition-colors duration-1000 flex flex-col justify-center items-center h-screen w-screen`}
+    >
       <Logo />
-      <div className="mt-[22px] w-[770px] h-[526px] bg-shadowbox rounded-[36px]">
-        <div className="w-[760px] h-[520px] bg-bgprimary rounded-[36px] flex flex-col justify-center items-center space-y-5">
-          <div className="flex h-[430px] items-center justify-center overflow-hidden">
+      <div
+        className={`mt-[22px] w-[770px] h-[526px] ${colorScheme.shadow} transition-colors duration-1000 rounded-[36px]`}
+      >
+        <div
+          className={`w-[760px] h-[520px] ${colorScheme.menu} transition-colors duration-1000 rounded-[36px] flex flex-col justify-center items-center space-y-5`}
+        >
+          <div className="flex h-[430px] w-full items-center justify-center overflow-hidden">
             <Slide key={slide} direction="right">
               {screens[slide].component}
             </Slide>
           </div>
-          <div className="flex m-20 w-[650px]  justify-end">
-            <div>
-              <Button name="Next" onClick={() => handleNextClick()} />
+          <div className="flex-row  flex w-full justify-around ">
+            <div className="flex flex-row items-center text-white">
+              <ChakraProvider theme={customTheme}>
+                <ColorModeProvider options={{ useSystemColorMode: true }}>
+                  <Stepper
+                    size="sm"
+                    colorScheme={colorScheme.stepper}
+                    index={slide}
+                  >
+                    {screens.map((index) => (
+                      <Step key={index}>
+                        <StepIndicator>
+                          {slide == index ? (
+                            <StepStatus
+                              active={<StepNumber />}
+                              incomplete={<StepNumber />}
+                            />
+                          ) : (
+                            <StepStatus
+                              complete={<StepIcon />}
+                              incomplete={<StepNumber />}
+                              active={<StepNumber />}
+                            />
+                          )}
+                        </StepIndicator>
+                      </Step>
+                    ))}
+                  </Stepper>
+                </ColorModeProvider>
+              </ChakraProvider>
             </div>
+            <Button name="Back" onClick={() => handleBackClick()} />
+            <Button name="Next" onClick={() => handleNextClick()} />
           </div>
         </div>
       </div>

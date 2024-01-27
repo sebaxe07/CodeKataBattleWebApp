@@ -6,7 +6,7 @@ import UserStudent from "../../../assets/icons/userStudent.svg";
 import UserTeacher from "../../../assets/icons/userTeacher.svg";
 import Card from "../../common/card";
 
-export const UserType = () => {
+export const UserType = ({ context }) => {
   const { userData, setUserData } = useContext(RegisterContext);
 
   return (
@@ -25,6 +25,7 @@ export const UserType = () => {
       />
       <div className="flex mt-5 gap-10 flex-row justify-center items-center">
         <Card
+          context="context"
           title="SEITO"
           description="If you are an student"
           icon={UserStudent}
@@ -37,6 +38,7 @@ export const UserType = () => {
           active={userData.userType === "student"}
         />
         <Card
+          context={context}
           title="SENSEI"
           description="If you are an teacher"
           icon={UserTeacher}
