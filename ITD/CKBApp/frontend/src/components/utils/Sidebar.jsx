@@ -31,7 +31,7 @@ const Sidebar = () => {
               icon={TigerIcon}
               iWidth={"40px"}
               iHeight={"40px"}
-              classname={`bg-[#EE8361] w-[55px] h-[50px] rounded-[36px]`}
+              classname={"bg-[#EE8361] w-[55px] h-[50px] rounded-[36px]"}
             />
           </NavLink>
           <NavLink className=" flex justify-center">

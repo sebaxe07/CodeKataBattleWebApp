@@ -38,7 +38,6 @@ export const TournamentDetails = ({}) => {
       <div className="relative rounded-[36px] bg-bgprimary w-[747px] h-[97%]">
         <div className=" relative w-full h-[59%]  ">
           <TopDecorator LanguageIcon={Python} />
-
           <UserAmount UserAmount={"1-5"} />
 
           <EducatorName

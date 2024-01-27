@@ -246,25 +246,19 @@ export const SignUpSlides = () => {
       }
     }
   };
-  // const handleBackClick = () => {
-  //   if (slide > 0) {
-  //     setSlide(slide - 1);
-  //   }
-  // };
 
   // Login Screen
   return (
     <div className="bg-bgsecondary flex flex-col justify-center items-center h-screen w-screen">
       <Logo />
       <div className="mt-[22px] w-[770px] h-[526px] bg-shadowbox rounded-[36px]">
-        <div className="w-[759px] h-[520px] bg-bgprimary rounded-[36px] flex flex-col justify-center items-center space-y-5">
-          <div className="flex m-10 h-[350px] items-center justify-center">
-            <Slide direction="right">{screens[slide].component}</Slide>
+        <div className="w-[760px] h-[520px] bg-bgprimary rounded-[36px] flex flex-col justify-center items-center space-y-5">
+          <div className="flex h-[430px] items-center justify-center overflow-hidden">
+            <Slide key={slide} direction="right">
+              {screens[slide].component}
+            </Slide>
           </div>
           <div className="flex m-20 w-[650px]  justify-end">
-            <div>
-              {/* <Button name="Back" onClick={() => handleBackClick()} /> */}
-            </div>
             <div>
               <Button name="Next" onClick={() => handleNextClick()} />
             </div>

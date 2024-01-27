@@ -38,6 +38,7 @@ export const AvatarUser = () => {
           }
           active={userData.avatar === "elephant.svg"}
         />
+
         <Card
           icon={IcoTiger}
           on

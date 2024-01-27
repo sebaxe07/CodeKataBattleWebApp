@@ -3,12 +3,26 @@ import React /*, { useState, useEffect }*/ from "react";
 //import { TextField } from "../../components/common/textfield";
 import { ReactSVG } from "react-svg";
 import { Text } from "../../components/common/text";
+import { Button } from "../../components/common/Button";
 import Logo from "../../assets/images/Logo.svg";
 import TournamentCard from "../../components/utils/TournamentCard";
 import TournamentDetails from "../../components/utils/TournamentDetails";
+import BattleResume from "../../components/utils/TournamentDetails/BattleResume";
+import BattleDetails from "../../components/utils/TournamentDetails/BattleDetails";
 import PastTournamentCard from "../../components/utils/PastTournamentCard";
 
 export const StudentHome = () => {
+  const handleWheel = (e) => {
+    e.preventDefault();
+    const container = e.currentTarget;
+    const containerScrollPosition = container.scrollLeft;
+    const scrollSpeed = 0.3; // Change this value to adjust the scroll speed
+    container.scrollTo({
+      top: 0,
+      left: containerScrollPosition + e.deltaY * scrollSpeed,
+      behaviour: "smooth",
+    });
+  };
   return (
     <div className="bg-bgsecondary flex flex-row justify-center items-center h-screen w-[screen-120px] ml-[120px]">
       <ReactSVG
