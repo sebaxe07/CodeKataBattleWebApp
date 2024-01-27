@@ -11,7 +11,6 @@ const SignupForm = ({}) => {
   const { userData, setUserData } = useContext(RegisterContext);
 
   const [passwordType, setPasswordType] = useState("password");
-  const [passwordValid, setPasswordValidation] = useState("");
 
   const togglePasswordVisibility = () => {
     setPasswordType(passwordType === "password" ? "text" : "password");
@@ -22,16 +21,6 @@ const SignupForm = ({}) => {
       ...userData,
       [event.target.name]: event.target.value,
     });
-  };
-
-  const validateAndSubmit = () => {
-    const isValid =
-      userData.password === passwordValid &&
-      userData.password !== "" &&
-      userData.eMail !== "" &&
-      userData.firstName !== "" &&
-      userData.lastName !== "";
-    return isValid;
   };
 
   return (

@@ -5,9 +5,6 @@ from rest_framework.authtoken.models import Token
 from .serializers import UserRegisterSerializer, UserSerializer
 from rest_framework import status
 
-
-
- 
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegisterSerializer
     permission_classes = (permissions.AllowAny,)

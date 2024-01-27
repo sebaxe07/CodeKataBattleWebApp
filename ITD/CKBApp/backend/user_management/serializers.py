@@ -32,6 +32,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_profile_data = validated_data.pop('user_profile')
+        validated_data['is_active'] = False  # Set is_active to False until email is verified
         user = User.objects.create_user(**validated_data)
 
         user_profile = UserProfile.objects.create(user=user, **user_profile_data)
@@ -42,13 +43,3 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             EducatorProfile.objects.create(user_profile=user_profile)
 
         return user
-    
-""" 
-class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField()
-
-    class Meta:
-        model = User
-        fields = ('username', 'password') """
- 

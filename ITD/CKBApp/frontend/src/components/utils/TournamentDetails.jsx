@@ -66,7 +66,7 @@ export const TournamentDetails = ({}) => {
 
         <div
           onWheel={handleWheel}
-          className="relative bg-bgaccent w-full h-[28%] flex flex-row justify-start items-center  overflow-x-auto space-x-4  scrollbar-thumb-bgprimary scrollbar-thin"
+          className="relative bg-bgaccent w-full h-[28%] flex flex-row justify-start items-center  overflow-x-auto space-x-4 scrollbar scrollbar-thumb-bgprimary  "
         >
           <BattleComp
             battleName={"Battle 1"}

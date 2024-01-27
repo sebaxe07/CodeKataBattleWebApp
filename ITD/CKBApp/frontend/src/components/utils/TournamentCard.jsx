@@ -53,7 +53,7 @@ const TournamentCard = ({ name, description, position, score, select }) => {
         className={`relative ${colorScheme.shadow}  h-[84px] w-[758px] rounded-[29px]`}
       >
         <div
-          className={`relative ${colorScheme.background}  h-[78px] w-[754px] rounded-[29px] shadow-xl`}
+          className={`relative ${colorScheme.background} hover:border-[4px] hover:border-shadowbox  h-[78px] w-[754px] rounded-[29px] shadow-xl`}
         >
           <IconCard background={colorScheme.icon} />
           <div className="flex flex-row justify-between items-center h-[78px] ml-[140px] mr-[78px]">

@@ -3,15 +3,7 @@ import React from "react";
 import BgIconCard from "../../components/common/bgIconCard";
 import { Text } from "../.../../../components/common/text";
 
-export const ProfileCard = ({
-  name,
-  username,
-  icon,
-  cIcon,
-  rol,
-  age,
-  school,
-}) => {
+export const ProfileCard = ({ name, username, icon, rol, github, school }) => {
   return (
     <div className="w-[414px] h-[626px] bg-shadowbox rounded-[36px]">
       <div className="w-[402px] h-[616px] bg-bgprimary rounded-[36px] flex flex-col justify-around items-center">
@@ -19,7 +11,8 @@ export const ProfileCard = ({
           text={[`${rol}`]}
           size="text-[20px]"
           fontColor="text-white"
-          fontType="font-medium"
+          fontType="font-bold"
+          className={"tracking-widest"}
         />
         <div className="flex flex-col h-[350px] items-center justify-center">
           <div className="flex flex-col justify-center">
@@ -41,7 +34,7 @@ export const ProfileCard = ({
               icon={icon}
               iWidth={"100px"}
               iHeight={"100px"}
-              classname={`${cIcon} w-[168px] h-[160px] rounded-[100px]`}
+              classname={` w-[168px] h-[160px] rounded-[100px]`}
             />
           </div>
         </div>
@@ -49,13 +42,13 @@ export const ProfileCard = ({
           <div className="flex w-full justify-center ml-20 flex-col items-start">
             <div className="flex flex-col justify-center items-start -space-y-2">
               <Text
-                text={["Age"]}
+                text={["Github username"]}
                 size="text-[22px]"
                 fontColor="text-white"
                 fontType="font-bold"
               />
               <Text
-                text={[`${age}`]}
+                text={[`${github}`]}
                 size="text-[16px]"
                 fontColor="text-accentprimary"
                 fontType="font-normal "

@@ -1,15 +1,43 @@
 import React from "react";
 import { ReactSVG } from "react-svg";
+import TigerIcon from "../../assets/icons/UsersIcons/tiger.svg";
+import ElephantIcon from "../../assets/icons/UsersIcons/elephant.svg";
+import BearIcon from "../../assets/icons/UsersIcons/bear.svg";
+import PiggyIcon from "../../assets/icons/UsersIcons/piggy.svg";
 
 export const BgIconCard = ({
   icon,
+  bgIcon,
   iWidth,
   iHeight,
   classname,
-  bgColor,
   onClick,
+  bgColor,
   active,
 }) => {
+  switch (icon) {
+    case "tiger.svg":
+      icon = TigerIcon;
+      bgIcon = "bg-[#DB79C0]";
+      break;
+    case "elephant.svg":
+      icon = ElephantIcon;
+      bgIcon = "bg-[#6CBE83]";
+      break;
+    case "bear.svg":
+      icon = BearIcon;
+      bgIcon = "bg-[#F4A358]";
+      break;
+    case "piggy.svg":
+      icon = PiggyIcon;
+      bgIcon = "bg-[#5D9BF6]";
+      break;
+    default:
+      icon = ElephantIcon;
+      bgIcon = "bg-[#6CBE83]";
+      break;
+  }
+
   const handleClick = () => {
     if (onClick) {
       onClick();
@@ -20,7 +48,7 @@ export const BgIconCard = ({
     <div
       className={
         active == null
-          ? ` ${classname} flex justify-center items-center`
+          ? ` ${classname} ${bgIcon} flex justify-center items-center`
           : `flex justify-center items-center w-[110px] h-[101px] rounded-[36px] ${
               active ? bgColor : `bg-shadowbox`
             }`

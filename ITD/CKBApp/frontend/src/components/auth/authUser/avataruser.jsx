@@ -28,7 +28,7 @@ export const AvatarUser = () => {
       />
       <div className="flex mt-10 justify-center gap-5">
         <Card
-          icon={IcoElephant}
+          icon={"elephant.svg"}
           bgColor={"bg-[#6CBE83]"}
           onClick={(e) =>
             setUserData({
@@ -39,7 +39,7 @@ export const AvatarUser = () => {
           active={userData.avatar === "elephant.svg"}
         />
         <Card
-          icon={IcoTiger}
+          icon={"tiger.svg"}
           on
           bgColor={"bg-[#DB79C0]"}
           onClick={(e) =>
@@ -51,7 +51,7 @@ export const AvatarUser = () => {
           active={userData.avatar === "tiger.svg"}
         />
         <Card
-          icon={IcoPiggy}
+          icon={"piggy.svg"}
           bgColor={"bg-[#5D9BF6]"}
           onClick={(e) =>
             setUserData({
@@ -62,7 +62,7 @@ export const AvatarUser = () => {
           active={userData.avatar === "piggy.svg"}
         />
         <Card
-          icon={IcoBear}
+          icon={"bear.svg"}
           bgColor={"bg-[#F4A358]"}
           onClick={(e) =>
             setUserData({

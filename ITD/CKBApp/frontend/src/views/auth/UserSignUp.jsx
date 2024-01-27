@@ -168,47 +168,39 @@ export const SignUpSlides = () => {
       const response = await axios.post("/ums/register/", payload);
       console.log(response.data);
 
-      handleLogin();
-    } catch (error) {
-      console.error("Error Registering user:", error);
-      showToast("That dind't work, please try again. Error Registering user");
-    }
-  };
+      // Send activation email
+      await axios.post("/auth/users/resend_activation/", { email: eMail });
 
-  const handleLogin = async (event) => {
-    if (event) {
-      event.preventDefault();
-    }
-
-    const { password, username } = registerContext.userData;
-
-    const payload = {
-      username: username,
-      password: password,
-    };
-
-    try {
-      const response = await axios.post("/auth/token/login/", payload);
-      console.log(response.data); // Handle the response as needed
-      const data = response.data;
-      localStorage.setItem("token", data.auth_token);
-      fetchUserData(data.auth_token);
+      navigate("/");
       toast({
-        title: "Welcome to Codekata Battle! You are now registered.",
+        title: "User registered successfully, please login",
+        description: "Please check your email to confirm your account",
         status: "success",
         duration: 3000,
         isClosable: true,
       });
-      // Redirect to home screen
-      navigate("/student");
     } catch (error) {
+      console.error("Error Registering user:", error);
+
+      // Display an error message
+      let errorMessage = null;
+      if (error.response && error.response.data) {
+        const errors = error.response.data;
+        for (const key in errors) {
+          if (errors[key] instanceof Array) {
+            errorMessage = errors[key].join(" ");
+          } else {
+            errorMessage = errors[key];
+          }
+        }
+      }
       toast({
-        title: "Error logging in. Please try again.",
+        title: "Error Creating account! Please try again.",
+        description: errorMessage,
         status: "error",
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
       });
-      console.error("Error Login in user:", error);
     }
   };
 

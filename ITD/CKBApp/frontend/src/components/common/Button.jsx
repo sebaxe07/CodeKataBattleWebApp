@@ -5,11 +5,16 @@ import React from "react";
 // onClick: function
 // use: <Button name="Login" onClick={() => console.log("Button clicked")} />
 
-export const Button = ({ name, onClick, className }) => {
+export const Button = ({
+  name,
+  onClick,
+  className,
+  backg = "bg-accentsecondary",
+}) => {
   return (
     <button
       onClick={onClick}
-      className={` ${className} hover:bg-[#E951C5] shadow-lg px-[40px] py-[13px] transform active:scale-95  bg-accentsecondary rounded-[16px] font-extrabold   text-white text-[16px] tracking-[0] leading-[normal] whitespace-nowrap`}
+      className={` hover:bg-[#E951C5] shadow-lg px-[40px] py-[13px] transform active:scale-95  ${backg} rounded-[16px] font-extrabold   text-white text-[16px] tracking-[0] leading-[normal] whitespace-nowrap ${className}`}
     >
       {name}
     </button>

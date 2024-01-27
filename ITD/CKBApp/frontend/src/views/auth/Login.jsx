@@ -10,6 +10,21 @@ import { ReactComponent as Codekatabattle } from "../../assets/images/codekataba
 import { useToast } from "@chakra-ui/react";
 import { useFetchUserData } from "../../services/useFetchUserData";
 import { ReactSVG } from "react-svg";
+import { UserContext } from "../../services/contexts/UserContext";
+import { LoadingScreen } from "../../services/LoadingScreen";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
+  Portal,
+} from "@chakra-ui/react";
+import { forwardRef } from "react";
 
 import PassHide from "../../assets/icons/passHide.svg";
 import PassShow from "../../assets/icons/passShow.svg";
@@ -17,7 +32,10 @@ import PassShow from "../../assets/icons/passShow.svg";
 export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
+  const { activeUser, setActiveUser } = useContext(UserContext);
   const [passwordType, setPasswordType] = useState("password");
 
   const togglePasswordVisibility = () => {
@@ -26,21 +44,74 @@ export const Login = () => {
 
   const [rememberMe, setRememberMe] = useState(false);
   const toast = useToast();
-  const navigate = useNavigate();
   const fetchUserData = useFetchUserData();
+  const navigate = useNavigate();
 
-  // Username and password are updated every time the user types in the input field
-  useEffect(() => {
-    console.log("username updated:", username);
-  }, [username]);
-
-  useEffect(() => {
-    console.log("password updated:", password);
-  }, [password]);
+  const FocusableText = forwardRef((props, ref) => (
+    <button ref={ref} onClick={props.onClick} className={props.className}>
+      <Text {...props} />
+    </button>
+  ));
 
   useEffect(() => {
-    console.log("rememberMe updated:", rememberMe);
-  }, [rememberMe]);
+    const authToken = localStorage.getItem("authToken");
+    if (authToken) {
+      fetchUserData(authToken);
+
+      toast({
+        title: "Welcome back!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    // Check if activeUser is not null or undefined
+    if (activeUser) {
+      // Navigate to the new page
+      navigate("/student");
+    }
+  }, [activeUser]);
+
+  async function resendActivationEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isEmailCorrect = emailRegex.test(email);
+
+    if (!isEmailCorrect) {
+      toast({
+        title: "Please input a valid email",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.post("/auth/users/resend_activation/", {
+        email,
+      });
+      console.log(response.data);
+      toast({
+        title: "Activation email sent!",
+        description: "Please check your email to activate your account.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Error resending activation email.",
+        description: "Please try again later.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.error("Error resending activation email:", error);
+    }
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -50,34 +121,47 @@ export const Login = () => {
       password: password,
     };
 
+    setIsLoading(true); // Set loading to true when login starts
+
     try {
       const response = await axios.post("/auth/token/login/", payload);
       console.log(response.data); // Handle the response as needed
       const data = response.data;
-      localStorage.setItem("token", data.auth_token);
-      fetchUserData(data.auth_token);
+      const authToken = data.auth_token;
+
+      fetchUserData(authToken);
+
+      if (rememberMe) {
+        // Save the token in local storage if "Remember Me" is checked
+        localStorage.setItem("authToken", authToken);
+      }
       toast({
         title: "Welcome back!",
         status: "success",
         duration: 3000,
         isClosable: true,
       });
-      // Redirect to home screen
-      navigate("/student");
     } catch (error) {
       toast({
-        title: "Error logging in. Please try again.",
+        title: "Unable to log in.",
+        description:
+          "Please check your credentials and make sure your account is active",
         status: "error",
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
       });
+
       console.error("Error Login in user:", error);
+    } finally {
+      setIsLoading(false); // Set loading to false when login ends
     }
   };
 
   // Login Screen
   return (
     <div className="bg-bgsecondary flex flex-col justify-center items-center h-screen w-screen">
+      {isLoading && <LoadingScreen />}
+      {/* Render LoadingScreen when isLoading is true */}
       <Logo />
       <div className="mt-[22px] w-[373px] h-[482px] bg-shadowbox rounded-[36px]">
         <div className="w-[364px] h-[469px] bg-bgprimary rounded-[36px] flex flex-col justify-center items-center space-y-5">
@@ -114,14 +198,45 @@ export const Login = () => {
             value={rememberMe}
           />
           <Button name="Login" onClick={handleSubmit} />
-
-          <Text
-            text={["Forgot password?"]}
-            size="text-[16px]"
-            fontColor="text-accentprimary"
-            fontType="font-medium"
-            className="cursor-pointer hover:text-gray-300"
-          />
+          <div className="flex flex-col justify-between w-[100%] -space-y-3">
+            <Text
+              text={["Forgot password?"]}
+              size="text-[16px]"
+              fontColor="text-accentprimary"
+              fontType="font-medium"
+              onClick={() => navigate("/passwordreset")}
+              className="cursor-pointer hover:text-gray-300"
+            />
+            <Popover>
+              <PopoverTrigger>
+                <FocusableText
+                  text={["Resend Activation Email?"]}
+                  size="text-[16px]"
+                  fontColor="text-accentprimary"
+                  fontType="font-medium"
+                  className="cursor-pointer hover:text-gray-300"
+                />
+              </PopoverTrigger>
+              <PopoverContent className="relative">
+                <PopoverArrow />
+                <PopoverHeader>Enter your Email</PopoverHeader>
+                <PopoverCloseButton />
+                <PopoverBody className="flex flex-col justify-center items-center">
+                  <TextField
+                    type={"email"}
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <Button
+                    className="mt-2"
+                    name="Send Activation email"
+                    onClick={() => resendActivationEmail(email)}
+                  />
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
       </div>
       <Text
