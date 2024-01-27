@@ -1,9 +1,6 @@
 import React, { useContext, useState } from "react";
 import { ReactSVG } from "react-svg";
 import HomeIcon from "../../assets/icons/home.svg";
-import SettingsIcon from "../../assets/icons/settings.svg";
-import TigerIcon from "../../assets/icons/UsersIcons/tiger.svg";
-import NotificationIcon from "../../assets/icons/notification.svg";
 import Logout from "../../assets/icons/logout.svg";
 import BgIconCard from "../common/bgIconCard";
 import Button from "../common/Button";
@@ -102,6 +99,7 @@ const Sidebar = () => {
               iWidth={"40px"}
               iHeight={"40px"}
               classname={`w-[55px] h-[55px] rounded-[36px]`}
+              classname={"bg-[#EE8361] w-[55px] h-[50px] rounded-[36px]"}
             />
           </NavLink>
 
