@@ -44,7 +44,7 @@ const colorSchemes = [
   },
   {
     background: "bg-[#19362D]",
-    menu: "bg-bgstudent",
+    menu: "bg-bgeducator",
     shadow: "bg-[#265F4C]",
     stepper: "colorEducator",
   },

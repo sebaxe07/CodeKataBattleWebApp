@@ -71,7 +71,11 @@ export const Login = () => {
     // Check if activeUser is not null or undefined
     if (activeUser) {
       // Navigate to the new page
-      navigate("/student");
+      if (activeUser.user_profile.role === "educator") {
+        navigate("/educator");
+      } else {
+        navigate("/student");
+      }
     }
   }, [activeUser]);
 

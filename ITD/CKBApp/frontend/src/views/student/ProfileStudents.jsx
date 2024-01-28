@@ -24,7 +24,7 @@ export const ProfileStudents = ({}) => {
         <SuscribedTournaments />
         <ProfileCard
           icon={activeUser.user_profile.profile_icon}
-          rol={activeUser.user_profile.role === "student" ? "seito" : "Sensei"}
+          rol={activeUser.user_profile.role === "student" ? "Seito" : "Sensei"}
           name={activeUser.first_name + " " + activeUser.last_name}
           username={activeUser.username}
           github={activeUser.user_profile.github_username}

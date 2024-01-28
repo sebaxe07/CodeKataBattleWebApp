@@ -21,8 +21,8 @@ import Sidebar from "./components/utils/Sidebar";
 import { RegisterProvider } from "./services/providers/RegisterProvider";
 import { UserProvider } from "./services/providers/UserProvider";
 import ProtectedRouteGroup from "./services/ProtectedRouteGroup";
-
-import { LoadingScreen } from "./services/LoadingScreen";
+import { EducatorHome } from "./views/educator/EducatorHome";
+import { ProfileEducator } from "./views/educator/ProfileEducator";
 
 function App() {
   return (
@@ -50,7 +50,12 @@ function App() {
                 <Route index element={<Navigate to="home" />} />
                 <Route path="home" element={<StudentHome />} />
                 <Route path="joinTournament" element={<JoinTournament />} />
-                <Route path="studentProfile" element={<ProfileStudents />} />
+                <Route path="profile" element={<ProfileStudents />} />
+              </Route>
+              <Route path="/educator" element={<Sidebar />}>
+                <Route index element={<Navigate to="home" />} />
+                <Route path="home" element={<EducatorHome />} />
+                <Route path="profile" element={<ProfileEducator />} />
               </Route>
             </Route>
           </Routes>

@@ -33,8 +33,8 @@ export const BattleDetails = ({}) => {
   };
 
   return (
-    <div className="select-none relative rounded-[36px] bg-bgstudentsecondary w-[1500px] m-10 mr-2 mt-20 h-[76%] flex justify-center">
-      <div className="rounded-[36px] bg-bgstudent w-[1480px] h-[97%]">
+    <div className="select-none relative rounded-[36px] bg-accentSecondaryEducator w-[1500px] m-10 mr-2 mt-20 h-[76%] flex justify-center">
+      <div className="rounded-[36px] bg-bgeducator w-[1480px] h-[97%]">
         <TopDecorator LanguageIcon={Python} />
         <img
           src={Back}
@@ -96,7 +96,7 @@ export const BattleDetails = ({}) => {
                 />
               </div>
             </div>
-            <div className="flex flex-col w-[390px] h-[90%] mt-10 rounded-[26px] p-10 mr-2 mb-12 justify-between items-center bg-bgstudentsecondary">
+            <div className="flex flex-col w-[390px] h-[90%] mt-10 rounded-[26px] p-10 mr-2 mb-12 justify-between items-center bg-accentSecondaryEducator">
               <div>
                 <Text
                   text={[
@@ -168,7 +168,7 @@ export const BattleDetails = ({}) => {
                 </div>
                 <div
                   onWheel={handleWheel}
-                  className="bg-bgstudent flex-col rounded-l-[36px] w-full h-[90%] flex overflow-y-auto overflow-x-hidden scrollbar-thumb-bgstudentsecondary scrollbar-thin"
+                  className="bg-bgeducator flex-col rounded-l-[36px] w-full h-[90%] flex overflow-y-auto overflow-x-hidden scrollbar-thumb-accentSecondaryEducator scrollbar-thin"
                 >
                   <TeamLeaderboard
                     rank={"1"}

@@ -26,7 +26,7 @@ export const BattleResume = ({}) => {
 
   return (
     <div className="select-none relative rounded-[36px] bg-[#359673] w-[665px] m-10 mr-2 mt-20 h-[76%] flex justify-center">
-      <div className="relative rounded-[36px] bg-bgstudent w-[657px] h-[97%]">
+      <div className="relative rounded-[36px] bg-bgeducator w-[657px] h-[97%]">
         <div className=" relative w-full h-[59%]  ">
           <TopDecorator LanguageIcon={Python} />
           <img
@@ -82,7 +82,7 @@ export const BattleResume = ({}) => {
                 />
               </div>
             </div>
-            <div className="flex flex-col w-[390px] h-[450px] rounded-[26px] p-10 mr-2 mb-12 justify-between items-center bg-bgstudentsecondary">
+            <div className="flex flex-col w-[390px] h-[450px] rounded-[26px] p-10 mr-2 mb-12 justify-between items-center bg-accentSecondaryEducator">
               <div>
                 <Text
                   text={[

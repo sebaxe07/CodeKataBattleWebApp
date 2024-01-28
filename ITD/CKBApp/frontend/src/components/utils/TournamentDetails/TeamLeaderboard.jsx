@@ -7,7 +7,7 @@ export const TeamLeaderboard = ({ rank, icon, iconBg, name, exp }) => {
   return (
     <div
       className={`flex w-full h-[60px] align-center justify-around pt-2 ${
-        rank % 2 == 0 ? "bg-accentstudent" : "bg-bgstudentsecondary"
+        rank % 2 == 0 ? "bg-accenteducator" : "bg-accentSecondaryEducator"
       }`}
     >
       <div className="flex flex-row gap-5">

@@ -3,28 +3,13 @@ import React /*, { useState, useEffect }*/ from "react";
 //import { TextField } from "../../components/common/textfield";
 import { ReactSVG } from "react-svg";
 import { Text } from "../../components/common/text";
-import { Button } from "../../components/common/Button";
 import Logo from "../../assets/images/Logo.svg";
-import TournamentCard from "../../components/utils/TournamentCard";
-import TournamentDetails from "../../components/utils/TournamentDetails";
-import BattleResume from "../../components/utils/TournamentDetails/BattleResume";
-import BattleDetails from "../../components/utils/TournamentDetails/BattleDetails";
-import PastTournamentCard from "../../components/utils/PastTournamentCard";
+import MyTournament from "../../components/utils/Educator/MyTournament";
+import AddIcon from "../../assets/icons/add.svg";
 
-export const StudentHome = () => {
-  const handleWheel = (e) => {
-    e.preventDefault();
-    const container = e.currentTarget;
-    const containerScrollPosition = container.scrollLeft;
-    const scrollSpeed = 0.3; // Change this value to adjust the scroll speed
-    container.scrollTo({
-      top: 0,
-      left: containerScrollPosition + e.deltaY * scrollSpeed,
-      behaviour: "smooth",
-    });
-  };
+export const EducatorHome = () => {
   return (
-    <div className="bg-bgsecondary flex flex-row justify-center items-center h-screen w-[screen-120px] ml-[120px]">
+    <div className="bg-bgsecondaryeducator flex flex-row justify-center items-center h-screen w-[screen-120px] ml-[120px]">
       <ReactSVG
         src={Logo}
         beforeInjection={(svg) => {
@@ -36,85 +21,144 @@ export const StudentHome = () => {
           right: 30,
         }}
       />
-      <div className="flex flex-col ">
-        <div className="flex flex-col items-start space-y-2">
-          <Text
-            text={["Current tournaments"]}
-            size="text-[24px]"
-            fontColor="text-white"
-            fontType="font-bold"
-          />
-          <TournamentCard
-            name="Tournament 1"
-            description="Description 1"
-            position="1"
-            score="100"
-            select={true}
-          />
-          <TournamentCard
-            name="Tournament 2"
-            description="Description 2"
-            position="2"
-            score="50"
-            select={false}
-          />
-          <TournamentCard
-            name="Tournament 3"
-            description="Description 3"
-            position="3"
-            score="25"
-            select={false}
-          />
-          <TournamentCard
-            name="Tournament 4"
-            description="Description 4"
-            position="4"
-            score="10"
-            select={false}
-          />
+      <div className="flex flex-col  h-full w-full justify-center">
+        <Text
+          text={["My Tournaments"]}
+          size="text-[24px]"
+          fontColor="text-white"
+          fontType="font-bold"
+        />
+        <div className="fadeScroll">
+          <div
+            className="overflow-auto  scrollbar-thin scrollbar-thumb-bgeducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
+            style={{ maxHeight: "600px" }}
+          >
+            <MyTournament
+              name={"Tournament 1"}
+              description={
+                "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={true}
+            />
+            <MyTournament
+              name={"Tournament 1"}
+              description={
+                "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={true}
+            />
+            <MyTournament
+              name={"Tournament 1"}
+              description={
+                "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={true}
+            />
+            <MyTournament
+              name={"Tournament 1"}
+              description={
+                "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={true}
+            />
+            <MyTournament
+              name={"Tournament 1"}
+              description={
+                "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={true}
+            />
+            <MyTournament
+              name={"Tournament 1"}
+              description={
+                "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={true}
+            />
+            <MyTournament
+              name={"Tournament 1"}
+              description={
+                "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={true}
+            />
+            <MyTournament
+              name={"Tournament 1"}
+              description={
+                "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={true}
+            />
+            <MyTournament
+              name={"Tournament 1"}
+              description={
+                "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={true}
+            />
+            <MyTournament
+              name={"Tournament 1"}
+              description={
+                "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={true}
+            />
+            <MyTournament
+              name={"Tournament 1"}
+              description={
+                "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={true}
+            />
+            <MyTournament
+              name={"Tournament 3"}
+              description={
+                "Tournament Description 3 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={true}
+            />
+            <MyTournament
+              name={"Tournament 2"}
+              description={
+                "Tournament Description 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+              }
+              startDate={"22 Dec. 2023"}
+              endDate={"01 Jan. 2024"}
+              active={false}
+            />
+          </div>
         </div>
-        <div className="flex flex-col items-start mt-[50px] space-y-2">
-          <Text
-            text={["Past tournaments"]}
-            size="text-[24px]"
-            fontColor="text-accentprimary"
-            fontType="font-bold"
-          />
-          <PastTournamentCard
-            name="Tournament 1"
-            description="Description 1"
-            position="1"
-            score="100"
-            select={true}
-          />
-          <PastTournamentCard
-            name="Tournament 2"
-            description="Description 2"
-            position="2"
-            score="50"
-            select={false}
-          />
-          <PastTournamentCard
-            name="Tournament 3"
-            description="Description 3"
-            position="3"
-            score="25"
-            select={false}
-          />
-          <PastTournamentCard
-            name="Tournament 4"
-            description="Description 4"
-            position="4"
-            score="10"
-            select={false}
-          />
+
+        <div className="flex justify-center cursor-pointer mt-5">
+          <ReactSVG src={AddIcon} />
         </div>
-      </div>
-      <div className="flex justify-center items-center ml-10  h-screen ">
-        <TournamentDetails />
       </div>
     </div>
   );
 };
 
-export default StudentHome;
+export default EducatorHome;

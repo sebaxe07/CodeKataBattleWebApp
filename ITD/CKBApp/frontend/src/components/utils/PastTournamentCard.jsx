@@ -47,7 +47,7 @@ const PastTournamentCard = ({ name, description, position, score, select }) => {
         className={`relative ${colorScheme.shadow}  h-[84px] w-[758px] rounded-[29px]`}
       >
         <div
-          className={`relative ${colorScheme.background} hover:border-[4px] hover:border-shadowbox  h-[78px] w-[754px] rounded-[29px] shadow-xl`}
+          className={`relative ${colorScheme.background} hover:ring-4 hover:ring-shadowbox transition-all h-[78px] w-[754px] rounded-[29px] shadow-xl`}
         >
           <div className="w-[58px] h-[58px] top-[11px] left-[45px]  bg-bgsecondary rounded-full flex justify-center items-center absolute">
             <ReactSVG src={trophy} className=" w-[35px] h-[35px] " />
