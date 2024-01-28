@@ -82,6 +82,7 @@ export const SignUpSlides = () => {
   }
 
   const [colorScheme, setColorScheme] = useState(colorSchemes[0]);
+  const [slideDirection, setDirection] = useState("right");
 
   useEffect(() => {
     setColorScheme(colorScheme[0]);
@@ -265,6 +266,7 @@ export const SignUpSlides = () => {
   };
 
   const handleNextClick = () => {
+    setDirection("right");
     if (slide < screens.length) {
       if (screens[slide].validate()) {
         if (slide === screens.length - 1) {
@@ -301,6 +303,7 @@ export const SignUpSlides = () => {
   };
 
   const handleBackClick = () => {
+    setDirection("left");
     if (slide > 0) {
       setSlide(slide - 1);
     }
@@ -324,7 +327,7 @@ export const SignUpSlides = () => {
           className={`w-[760px] h-[520px] ${colorScheme.menu} transition-colors duration-1000 rounded-[36px] flex flex-col justify-center items-center space-y-5`}
         >
           <div className="flex h-[430px] w-full items-center justify-center overflow-hidden">
-            <Slide key={slide} direction="right">
+            <Slide key={slide} direction={slideDirection}>
               {screens[slide].component}
             </Slide>
           </div>
@@ -359,7 +362,13 @@ export const SignUpSlides = () => {
                 </ColorModeProvider>
               </ChakraProvider>
             </div>
-            <Button name="Back" onClick={() => handleBackClick()} />
+            {slide > 0 ? (
+              <Button
+                name="Back"
+                backg={"bg-[#BAAFFF]"}
+                onClick={() => handleBackClick()}
+              />
+            ) : null}
             <Button name="Next" onClick={() => handleNextClick()} />
           </div>
         </div>

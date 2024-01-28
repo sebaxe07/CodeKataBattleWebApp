@@ -16,13 +16,14 @@ import { ActivationPage } from "./views/auth/ActivationPage";
 import { StudentHome } from "./views/student/StudentHome";
 import { JoinTournament } from "./views/student/joinTournament";
 import { ProfileStudents } from "./views/student/ProfileStudents";
+import { EducatorProfile } from "./views/educator/EducatorProfile";
+import { ProfileEducator } from "./views/educator/ProfileEducator";
 import { SignUpSlides } from "./views/auth/UserSignUp";
 import Sidebar from "./components/utils/Sidebar";
 import { RegisterProvider } from "./services/providers/RegisterProvider";
 import { UserProvider } from "./services/providers/UserProvider";
 import ProtectedRouteGroup from "./services/ProtectedRouteGroup";
 import { EducatorHome } from "./views/educator/EducatorHome";
-import { ProfileEducator } from "./views/educator/ProfileEducator";
 
 function App() {
   return (
@@ -54,8 +55,9 @@ function App() {
               </Route>
               <Route path="/educator" element={<Sidebar />}>
                 <Route index element={<Navigate to="home" />} />
-                <Route path="home" element={<EducatorHome />} />
-                <Route path="profile" element={<ProfileEducator />} />
+                <Route path="home" element={<StudentHome />} />
+                <Route path="createTournament" element={<EducatorProfile />} />
+                <Route path="educatorProfile" element={<ProfileEducator />} />
               </Route>
             </Route>
           </Routes>

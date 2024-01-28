@@ -47,8 +47,8 @@ export const BgIconCard = ({
       ];
       break;
     default:
-      icon = ElephantIcon;
-      bgIcon = "bg-[#6CBE83]";
+      icon = icon;
+      bgIcon = bgColor;
       break;
   }
 

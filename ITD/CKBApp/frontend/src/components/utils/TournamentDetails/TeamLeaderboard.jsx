@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ReactSVG } from "react-svg";
 import { Text } from "../../common/text";
 import BgIconCard from "../../common/bgIconCard";
 
-export const TeamLeaderboard = ({ rank, icon, iconBg, name, exp }) => {
+export const TeamLeaderboard = ({ context, rank, icon, iconBg, name, exp }) => {
+  const colorSchemes = [
+    {
+      even: "bg-bgaccent",
+      uneven: "bg-bgprimary",
+    },
+    {
+      even: "bg-[#2C785F]",
+      uneven: "bg-[bgaccenteducator]",
+    },
+  ];
+
+  const [colorScheme, setColorScheme] = useState(colorSchemes[0]);
+
+  useEffect(() => {
+    setColorScheme(colorScheme[0]);
+    setColorScheme(colorSchemes[context == "b" ? 1 : 0]);
+  }, [context]);
+
   return (
     <div
-      className={`flex w-full h-[60px] align-center justify-around pt-2 ${
-        rank % 2 == 0 ? "bg-accenteducator" : "bg-accentSecondaryEducator"
+      className={`flex w-full h-[60px] align-center justify-around pt-2 pb-2 ${
+        rank % 2 == 0 ? colorScheme.even : colorScheme.uneven
       }`}
     >
       <div className="flex flex-row gap-5">
