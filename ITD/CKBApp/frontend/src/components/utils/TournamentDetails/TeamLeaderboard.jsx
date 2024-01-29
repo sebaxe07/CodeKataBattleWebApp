@@ -10,8 +10,8 @@ export const TeamLeaderboard = ({ context, rank, icon, iconBg, name, exp }) => {
       uneven: "bg-bgprimary",
     },
     {
-      even: "bg-[#2C785F]",
-      uneven: "bg-[bgaccenteducator]",
+      even: "bg-bgeducator",
+      uneven: "bg-accentSecondaryEducator",
     },
   ];
 

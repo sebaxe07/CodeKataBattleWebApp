@@ -16,11 +16,12 @@ import BgIconCard from "../../common/bgIconCard";
 
 // import styled from "react-rainbow-components/styled";
 
-export const CreateTournament = () => {
+export const CreateBattle = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [dateStart, setStartDate] = useState(null);
   const [dateEnd, setEndDate] = useState(null);
+  const [files, setFile] = useState(0);
 
   function onChange(dateStart) {
     setStartDate(dateStart);
@@ -32,14 +33,14 @@ export const CreateTournament = () => {
   const theme = {
     rainbow: {
       palette: {
-        brand: "#5c56b6",
-        mainBackground: "#332786",
+        brand: "#39B58B",
+        mainBackground: "#265F4C",
       },
     },
   };
 
   return (
-    <div className="select-none relative rounded-[36px] bg-shadowbox w-[35%] m-10 ml-20 mt-20 h-[100%] flex justify-center">
+    <div className="select-none relative rounded-[36px] bg-accentSecondaryEducator w-[35%]  ml-20 mt-20 h-[80%] flex justify-center">
       <div className="w-full">
         <div className="flex h-[10%] w-[100%] justify-start items-center ml-5">
           <img
@@ -50,21 +51,22 @@ export const CreateTournament = () => {
             }}
           />
           <Text
-            text={["CREATE TOURNAMENT"]}
+            text={["CREATE BATTLE"]}
             size="text-[20px] "
             className={"leading-normal text-start ml-5"}
             fontColor="text-white"
             fontType="font-bold"
           />
         </div>
-        <div className="flex flex-col translate-y-2 w-[98%] h-[87%] bg-bgprimary rounded-b-[36px]">
-          <div className=" justify-center flex items-center translate-x-40 -translate-y-8">
-            <TopDecorator
-              LanguageIcon={Python}
-              dWidth={"300px"}
-              dHeight={"300px"}
+        <div className="flex flex-col w-[98%] h-[87%] bg-bgeducator rounded-b-[36px]">
+          <div className=" justify-center flex items-center translate-x-40 -translate-y-10">
+            <BattleLogo
+              BattleIcon={Python}
+              dWidth={"200px"}
+              dHeight={"200px"}
               iHeight={"120px"}
               iWidth={"120px"}
+              offset={"translate-x-8 -translate-y-9"}
             />
             <div onClick={() => console.log("Edit Tournament Logo")}>
               <BgIconCard
@@ -72,7 +74,7 @@ export const CreateTournament = () => {
                 iWidth={"30px"}
                 iHeight={"30px"}
                 classname={
-                  "translate-x-14 translate-y-10 bg-white h-[45px] w-[45px] rounded-[100px] "
+                  " translate-y-5 bg-white h-[45px] w-[45px] rounded-[100px] "
                 }
               />
             </div>
@@ -90,7 +92,7 @@ export const CreateTournament = () => {
                 <TextField
                   type={"text"}
                   classname={
-                    "w-[450px] whitespace-pre-wrap h-[50px] p-5 pl-10  items-center bg-[#332786] text-white rounded-[26px]"
+                    "w-[450px] whitespace-pre-wrap h-[50px] p-5 pl-10  items-center bg-shadowboxeducator text-white rounded-[26px]"
                   }
                   placeholder=""
                   value={name}
@@ -109,7 +111,7 @@ export const CreateTournament = () => {
                   mode={"area"}
                   type={"text"}
                   classname={
-                    "w-[450px] resize-none whitespace-pre-wrap h-[210px] p-5 pl-10  items-center bg-[#332786] text-white rounded-[26px]"
+                    "w-[450px] resize-none whitespace-pre-wrap h-[210px] p-5 pl-10  items-center bg-shadowboxeducator text-white rounded-[26px]"
                   }
                   placeholder=""
                   value={description}
@@ -177,10 +179,44 @@ export const CreateTournament = () => {
               </div>
             </Application>
           </div>
-          <div className="flex flex-row gap-10 justify-center h-[20%] w-full items-center">
-            <div className="w-[70%] justify-evenly flex items-center">
-              <Button name="Invite Sensei" backg={"bg-[#BAAFFF]"} />
-              <Button name="Edit Tournament" />
+          <div className="flex flex-row gap-5 items-start justify-evenly w-full">
+            <div className="flex flex-col items-center gap-1 justify-center">
+              <Text
+                text={["Team Size"]}
+                size="text-[16px]"
+                fontColor="text-white"
+                className={"text-start"}
+                fontType="font-bold"
+              />
+              <div
+                className={`flex justify-center space-x-2 items-center rounded-[40px] bg-accentSecondaryEducator pl-4 pr-6 w-[120%] h-[34px]`}
+              >
+                <ReactSVG
+                  src={CalendarT}
+                  beforeInjection={(svg) => {
+                    svg.setAttribute("style", "width: 17px; height: 17px");
+                  }}
+                />
+                <Text
+                  text={["1-5"]}
+                  size="text-[16px]"
+                  fontColor={"text-white"}
+                  fontType={"text-bold"}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col justify-start h-[20%] w-full items-start">
+              <Text
+                text={[`You have ${files} files uploaded`]}
+                size="text-[16px]"
+                fontColor={"text-white"}
+                className={"text-start ml-5 "}
+                fontType={"font-bold"}
+              />
+              <div className="w-[70%] flex-row justify-evenly gap-5 flex items-center">
+                <Button name="Upload Code" backg={"bg-[#BAAFFF]"} />
+                <Button name="Create" />
+              </div>
             </div>
           </div>
         </div>
@@ -189,4 +225,4 @@ export const CreateTournament = () => {
   );
 };
 
-export default CreateTournament;
+export default CreateBattle;

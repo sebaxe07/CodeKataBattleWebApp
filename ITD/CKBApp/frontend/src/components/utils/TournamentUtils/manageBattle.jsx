@@ -20,12 +20,12 @@ import TigerUser from "../../../assets/icons/UsersIcons/tiger.svg";
 import TeamLeaderboard from "../TournamentDetails/TeamLeaderboard";
 import Add from "../../../assets/icons/add.svg";
 
-export const ManageTournament = () => {
+export const ManageBattle = () => {
   return (
-    <div className="select-none relative rounded-[36px] bg-shadowbox w-[1500px] m-10 ml-20 mt-20 h-[85%] flex justify-center">
+    <div className="select-none relative rounded-[36px] bg-accentSecondaryEducator w-[1500px] m-10 ml-20 mt-20 h-[85%] flex justify-center">
       <div className="flex flex-col h-full">
-        <div className="flex rounded-t-[36px] h-[10%] bg-bgprimary w-full justify-between items-center">
-          <div className="flex flex-row items-center">
+        <div className="flex rounded-t-[36px] h-[10%]  w-full justify-between items-center">
+          <div className="flex flex-row items-center ml-10">
             <img
               src={Back}
               className="w-[40px] h-[40px]  rounded-[100%]"
@@ -34,7 +34,7 @@ export const ManageTournament = () => {
               }}
             />
             <Text
-              text={["MANAGE TOURNAMENT"]}
+              text={["MANAGE BATTLE"]}
               size="text-[20px] "
               className={"leading-normal text-start ml-5"}
               fontColor="text-white"
@@ -70,20 +70,20 @@ export const ManageTournament = () => {
         </div>
         <div className="flex h-full rounded-[36px] flex-row">
           {/* Lado Izquierdo */}
-          <div className="flex flex-col h-[682px] w-[700px] ml-10 pl-10 justify-center items-center">
+          <div className="flex flex-col h-[98%] w-[50%] pl-28 justify-center items-center bg-bgeducator rounded-bl-[36px]">
             <div className="flex flex-row -space-y-2  items-center justify-evenly w-full">
               <div className="mt-16">
                 <BattleLogo BattleIcon={Binary} />
               </div>
               <div className="flex flex-col justify-evenly h-full -space-y-2">
                 <MiniDetails
-                  context={""}
+                  context={"b"}
                   title={"Started"}
                   icon={"Calendar"}
                   msg={"22 Dec. 2023"}
                 />
                 <MiniDetails
-                  context={""}
+                  context={"b"}
                   title={"Ends"}
                   icon={"Calendar"}
                   msg={"22 Dec. 2023"}
@@ -99,7 +99,7 @@ export const ManageTournament = () => {
                   fontColor="text-white"
                   fontType="font-bold"
                 />
-                <div className="flex w-[80%] h-[15%] rounded-[26px] p-5 pl-10  mb-12 justify-between items-center bg-bgaccent">
+                <div className="flex w-[80%] h-[15%] rounded-[26px] p-5 pl-10  mb-12 justify-between items-center bg-accentSecondaryEducator">
                   <Text
                     text={["Tournament 1"]}
                     size="text-[16px] "
@@ -115,7 +115,7 @@ export const ManageTournament = () => {
                   fontColor="text-white"
                   fontType="font-bold"
                 />
-                <div className="flex w-[80%] h-[50%] rounded-[26px] p-10 pl-10 pr-10 mr-2 justify-between items-center bg-bgaccent">
+                <div className="flex w-[80%] h-[50%] rounded-[26px] p-10 pl-10 pr-10 mr-2 justify-between items-center bg-accentSecondaryEducator">
                   <Text
                     text={[
                       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
@@ -129,55 +129,39 @@ export const ManageTournament = () => {
               </div>
             </div>
             <div className="flex justify-center w-full mr-40">
-              <Button name="Edit Tournament" />
-            </div>
-          </div>
-          {/* Lado Derecho */}
-          <div className="flex flex-row h-[97%] w-[730px] justify-center items-center rounded-br-[36px] bg-bgaccent">
-            <div className="flex flex-col h-full w-full justify-center">
-              {/* Created Battles */}
-              <div className="flex flex-col -translate-y-5 h-[45%] pl-14 pr-14">
+              <Button name="Edit Battle" />
+              <div className="flex flex-row gap-3 items-center justify-center">
                 <Text
-                  text={["Created battles"]}
-                  size="text-[20px] "
-                  className={"leading-normal text-start mb-5 ml-5"}
+                  text={["Team Size"]}
+                  size="text-[16px]"
                   fontColor="text-white"
-                  fontType="font-black"
+                  className={"text-start ml-20"}
+                  fontType="font-bold"
                 />
                 <div
-                  // onWheel={handleWheel}
-                  className="bg-bgaccent h-[58%] gap-4 flex-col flex  overflow-y-auto overflow-x-hidden scrollbar-thumb-bgprimary scrollbar-thin fixed-height-container"
+                  className={`flex justify-center space-x-2 items-center rounded-[40px] bg-accentSecondaryEducator pl-4 pr-6 w-auto h-[34px]`}
                 >
-                  <CreatedBattle
-                    icon={TigerUser}
-                    iconBg={"bg-[#FFC700]"}
-                    name={"Juanito"}
-                    state={"ACTIVE"}
-                  />
-                  <CreatedBattle
-                    icon={TigerUser}
-                    iconBg={"bg-[#FFC700]"}
-                    name={"Juanito"}
-                    state={"ACTIVE"}
-                  />
-                  <CreatedBattle
-                    icon={TigerUser}
-                    iconBg={"bg-[#FFC700]"}
-                    name={"Juanito"}
-                    state={"ACTIVE"}
-                  />
-                </div>
-                <div className="fixed ml-16 bottom-10">
                   <ReactSVG
-                    src={Add}
+                    src={Sensei}
                     beforeInjection={(svg) => {
-                      svg.setAttribute("style", "width: 25px; height: 25px");
+                      svg.setAttribute("style", "width: 17px; height: 17px");
                     }}
+                  />
+                  <Text
+                    text={["1-5"]}
+                    size="text-[16px]"
+                    fontColor={"text-white"}
+                    fontType={"text-bold"}
                   />
                 </div>
               </div>
+            </div>
+          </div>
+          {/* Lado Derecho */}
+          <div className="flex flex-row h-[98%] w-[49%] justify-center items-center rounded-br-[36px] bg-[#2F8F6F]">
+            <div className="flex flex-col h-full w-full justify-center">
               {/* LeaderBoard */}
-              <div className="w-full h-[40%]">
+              <div className="w-full h-[90%]">
                 <div className="flex justify-between pr-20 items-center w-full flex-row">
                   <Text
                     text={["Leaderboard"]}
@@ -186,34 +170,6 @@ export const ManageTournament = () => {
                     className={"text-start ml-20"}
                     fontType="font-black"
                   />
-                  <div className="flex flex-row gap-3 items-center justify-center">
-                    <Text
-                      text={["Seito Suscribed"]}
-                      size="text-[16px]"
-                      fontColor="text-white"
-                      className={"text-start ml-20"}
-                      fontType="font-bold"
-                    />
-                    <div
-                      className={`flex justify-center space-x-2 items-center rounded-[40px] bg-bgprimary pl-4 pr-6 w-auto h-[34px]`}
-                    >
-                      <ReactSVG
-                        src={Sensei}
-                        beforeInjection={(svg) => {
-                          svg.setAttribute(
-                            "style",
-                            "width: 17px; height: 17px"
-                          );
-                        }}
-                      />
-                      <Text
-                        text={["104"]}
-                        size="text-[16px]"
-                        fontColor={"text-white"}
-                        fontType={"text-bold"}
-                      />
-                    </div>
-                  </div>
                 </div>
                 <div className="flex flex-col h-full">
                   <div className="flex flex-row justify-between ml-20 mr-20">
@@ -241,10 +197,11 @@ export const ManageTournament = () => {
                   </div>
                   <div
                     //   onWheel={handleWheel}
-                    className="bg-bgaccent flex-col rounded-br-[36px] h-[90%] flex overflow-y-auto overflow-x-hidden scrollbar-thumb-bgprimary` scrollbar-thin"
+                    className="flex-col rounded-br-[36px] h-[90%] flex overflow-y-auto overflow-x-hidden scrollbar-thumb-bgprimary` scrollbar-thin"
                   >
                     <TeamLeaderboard
                       rank={"1"}
+                      context={"b"}
                       icon={TigerUser}
                       iconBg={"bg-[#FFC700]"}
                       name={"Juanito"}
@@ -252,6 +209,7 @@ export const ManageTournament = () => {
                     />
                     <TeamLeaderboard
                       rank={"2"}
+                      context={"b"}
                       icon={TigerUser}
                       iconBg={"bg-[#FFC700]"}
                       name={"Juanito"}
@@ -260,6 +218,7 @@ export const ManageTournament = () => {
                     <TeamLeaderboard
                       rank={"3"}
                       icon={TigerUser}
+                      context={"b"}
                       iconBg={"bg-[#FFC700]"}
                       name={"Juanito"}
                       exp={"100"}
@@ -267,6 +226,7 @@ export const ManageTournament = () => {
                     <TeamLeaderboard
                       rank={"4"}
                       icon={TigerUser}
+                      context={"b"}
                       iconBg={"bg-[#FFC700]"}
                       name={"Juanito"}
                       exp={"100"}
@@ -274,6 +234,7 @@ export const ManageTournament = () => {
                     <TeamLeaderboard
                       rank={"5"}
                       icon={TigerUser}
+                      context={"b"}
                       iconBg={"bg-[#FFC700]"}
                       name={"Juanito"}
                       exp={"100"}
@@ -281,6 +242,7 @@ export const ManageTournament = () => {
                     <TeamLeaderboard
                       rank={"6"}
                       icon={TigerUser}
+                      context={"b"}
                       iconBg={"bg-[#FFC700]"}
                       name={"Juanito"}
                       exp={"100"}
@@ -296,4 +258,4 @@ export const ManageTournament = () => {
   );
 };
 
-export default ManageTournament;
+export default ManageBattle;

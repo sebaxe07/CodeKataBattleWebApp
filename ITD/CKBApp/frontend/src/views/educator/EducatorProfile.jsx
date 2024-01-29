@@ -7,7 +7,11 @@ import ManageTournament from "../../components/utils/TournamentUtils/manageTourn
 import CreateTournament from "../../components/utils/TournamentUtils/createTournament";
 import More from "../../assets/icons/dotsAccent.svg";
 
-import CompleteCreation from "../../components/utils/TournamentUtils/completeCreation";
+import CompleteTournamentCreation from "../../components/utils/TournamentUtils/completeTournamentCreation";
+
+import CreateBattle from "../../components/utils/TournamentUtils/createBattle";
+import ManageBattle from "../../components/utils/TournamentUtils/manageBattle";
+import CompleteBattleCreation from "../../components/utils/TournamentUtils/completeBattleCreation";
 
 export const EducatorProfile = () => {
   return (
@@ -23,9 +27,13 @@ export const EducatorProfile = () => {
           right: 30,
         }}
       />
-      {/* <CompleteCreation /> */}
+      {/* <ManageTournament /> */}
       {/* <CreateTournament /> */}
-      <ManageTournament />
+      {/* <CompleteTournamentCreation /> */}
+
+      {/* <ManageBattle /> */}
+      <CreateBattle />
+      {/* <CompleteBattleCreation /> */}
     </div>
   );
 };
