@@ -55,8 +55,7 @@ export const ProfileCard = ({ name, username, icon, rol, github, school }) => {
           <div className="flex bg-white w-[180px] h-[172px] rounded-[100px] justify-center items-center">
             <BgIconCard
               icon={icon}
-              iWidth={"100px"}
-              iHeight={"100px"}
+              size={150}
               classname={` w-[168px] h-[160px] rounded-[100px]`}
             />
           </div>

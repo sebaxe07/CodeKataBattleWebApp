@@ -37,7 +37,7 @@ export const TournamentDetails = ({}) => {
     <div className="select-none relative rounded-[36px] bg-shadowbox w-[765px] h-[76%] flex justify-center">
       <div className="relative rounded-[36px] bg-bgprimary w-[747px] h-[97%]">
         <div className=" relative w-full h-[59%]  ">
-          <TopDecorator LanguageIcon={Python} />
+          <TopDecorator LanguageIcon={Python} size={230} />
           <UserAmount UserAmount={"1-5"} />
 
           <EducatorName
