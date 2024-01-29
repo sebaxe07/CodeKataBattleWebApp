@@ -122,8 +122,7 @@ const Sidebar = () => {
           >
             <BgIconCard
               icon={activeUser.user_profile.profile_icon}
-              iWidth={"40px"}
-              iHeight={"40px"}
+              size={55}
               classname={`w-[55px] h-[55px] rounded-[36px]`}
             />
           </NavLink>

@@ -4,13 +4,13 @@ import { Text } from "../../common/text";
 import BgIconCard from "../../common/bgIconCard";
 import Button from "../../common/Button";
 
-export const CreatedBattle = ({ context, icon, iconBg, name, state }) => {
+export const CreatedBattle = ({ context, icon, name, state }) => {
   const colorSchemes = [
     {
-      even: "bg-bgsecondary",
+      background: "bg-bgsecondary",
     },
     {
-      even: "bg-[#2C785F]",
+      background: "bg-[#2C785F]",
     },
   ];
 
@@ -23,16 +23,11 @@ export const CreatedBattle = ({ context, icon, iconBg, name, state }) => {
 
   return (
     <div
-      className={`flex w-[90%] ml-10 h-[60px] items-center justify-around pb-1 ${colorScheme.even} rounded-[36px]`}
+      className={`flex w-[90%] ml-10 h-[60px] items-center justify-around pb-1 ${colorScheme.background} rounded-[36px]`}
     >
       <div className="flex flex-row -translate-x-10 gap-5 justify-start items-center">
         <div className=" flex bg-white rounded-[100%] justify-center items-center w-[60px] h-[60px]">
-          <BgIconCard
-            icon={icon}
-            iWidth={"45px"}
-            iHeight={"45px"}
-            classname={`${iconBg} rounded-[100%] w-[55px] h-[55px]`}
-          />
+          <BgIconCard icon={icon} size={50} />
         </div>
         <Text
           text={[name]}

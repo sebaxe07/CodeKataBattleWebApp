@@ -9,9 +9,7 @@ import Trophy from "../../assets/icons/Trophy/trophyGold.svg";
 export const BgIconCard = ({
   icon,
   bgIcon,
-  iWidth,
-  iHeight,
-  classname,
+  size,
   onClick,
   bgColor,
   active,
@@ -58,21 +56,26 @@ export const BgIconCard = ({
     }
   };
 
+  const innerSize = (size / 70) * 74;
+  const innermostSize = (size / 70) * 65;
+  const imgSize = (size / 70) * 52;
+
   return (
     <div
       className={
         active == null
-          ? ` ${classname} ${bgIcon} flex justify-center items-center`
-          : `flex justify-center items-center w-[110px] h-[101px] rounded-[36px] ${
+          ? `rounded-full ${bgIcon} flex justify-center items-center`
+          : `flex justify-center items-center rounded-[36px] ${
               active ? bgColor : `bg-shadowbox`
             }`
       }
+      style={{ width: `${innerSize}px`, height: `${innerSize}px` }}
       onClick={handleClick}
     >
       <ReactSVG
         src={icon}
         beforeInjection={(svg) => {
-          svg.setAttribute("style", `width: ${iWidth}; height: ${iHeight};`);
+          svg.setAttribute("style", `width: ${imgSize}; height: ${imgSize};`);
         }}
       />
     </div>

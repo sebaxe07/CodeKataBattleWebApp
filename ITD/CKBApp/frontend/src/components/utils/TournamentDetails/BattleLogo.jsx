@@ -2,34 +2,31 @@ import React from "react";
 import { ReactSVG } from "react-svg";
 import Decorator from "../../../assets/images/BattleDecorator2.svg";
 
-export const BattleLogo = ({
-  BattleIcon,
-  dWidth,
-  dHeight,
-  iWidth,
-  iHeight,
-  offset,
-}) => {
+export const BattleLogo = ({ BattleIcon, size = 80 }) => {
+  const innerSize = (size / 60) * 74;
+  const innermostSize = (size / 60) * 65;
+  const imgSize = (size / 70) * 52;
+
   return (
     <>
-      <div className="">
-        <ReactSVG
-          src={Decorator}
-          beforeInjection={(svg) => {
-            svg.setAttribute(
-              "style",
-              `width: ${dWidth ? dWidth : "170px"}; height: ${
-                dHeight ? dHeight : "170px"
-              }`
-            );
-          }}
-          className=" absolute transform -translate-y-1/3 "
-        />
+      <ReactSVG
+        src={Decorator}
+        beforeInjection={(svg) => {
+          svg.setAttribute(
+            "style",
+            `width: ${innerSize}px ; height: ${innerSize}px`
+          );
+        }}
+        className="absolute top-0 left-1/2 transform -translate-x-16 -translate-y-1/2"
+      />
+      <div
+        className="rounded-full flex justify-center items-center"
+        style={{ width: `${innermostSize}px`, height: `${innermostSize}px` }}
+      >
         <img
           src={BattleIcon}
-          className={`relative w-[${iWidth ? iWidth : "170px"}] h-[${
-            iHeight ? iHeight : "170px"
-          }] translate-x-5 -translate-y-10  rounded-[100%] ${offset}`}
+          style={{ width: `${imgSize}px`, height: `${imgSize}px` }}
+          className={`absolute top-0 left-1/2 transform -translate-x-9 -translate-y-16`}
         />
       </div>
     </>
