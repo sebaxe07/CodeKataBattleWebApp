@@ -4,12 +4,20 @@ from .models import UserProfile, EducatorProfile, StudentProfile
 
 
 
+class EducatorProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EducatorProfile
+        fields = '__all__'
 
-
+class StudentProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentProfile
+        fields = '__all__'
+        
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('role', 'school', 'profile_icon', 'github_username')
+        fields = ('id', 'role', 'school', 'profile_icon', 'github_username')
 
 class UserSerializer(serializers.ModelSerializer):
     user_profile = serializers.SerializerMethodField()

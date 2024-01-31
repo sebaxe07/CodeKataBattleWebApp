@@ -13,7 +13,7 @@ import { BattleComp } from "./TournamentDetails/BattleComp";
 import { Dates } from "./TournamentDetails/Dates";
 
 import Java from "../../assets/icons/java.svg";
-import Python from "../../assets/icons/python.png";
+import Python from "../../assets/icons/python.svg";
 import Sensei from "../../assets/icons/UsersIcons/BearSensei.svg";
 import BearUser from "../../assets/icons/UsersIcons/bear.svg";
 import TigerUser from "../../assets/icons/UsersIcons/tiger.svg";
@@ -53,7 +53,7 @@ export const TournamentDetails = ({}) => {
             }
           />
 
-          <div className="flex flex-row justify-center items-end relative top-[32%]">
+          <div className="flex flex-row justify-center items-end relative top-[25%]">
             <TopScore
               users={["Pablo", "Juan", "Sebas"]}
               score={["100", "50", "25"]}
@@ -65,7 +65,7 @@ export const TournamentDetails = ({}) => {
 
         <div
           onWheel={handleWheel}
-          className="relative bg-bgaccent w-full h-[28%] flex flex-row justify-start items-center  overflow-x-auto space-x-4 scrollbar scrollbar-thumb-bgprimary  "
+          className="relative bg-bgaccent w-full h-[30%] flex flex-row justify-start items-center overflow-auto scrollbar-thin scrollbar-thumb-bgprimary scrollbar-track-transparent"
         >
           <BattleComp
             battleName={"Battle 1"}

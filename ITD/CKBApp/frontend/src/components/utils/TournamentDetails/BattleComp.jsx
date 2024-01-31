@@ -14,11 +14,11 @@ export const BattleComp = ({
     <div className="bg-bgprimary relative w-[34%] h-[63%] min-w-[259px] rounded-[36px] flex justify-center items-start mx-2">
       <ReactSVG
         src={BattleDecorator}
-        className="absolute  -right-4  top-0  transform  -translate-y-1/2"
+        className="absolute  -right-4  top-0  transform  -translate-y-1/3"
       />
       <ReactSVG
         src={languageIcon}
-        className="absolute  right-1  top-2  transform  -translate-y-1/2"
+        className="absolute  right-1  top-2  transform  -translate-y-1/4"
       />
       <div className="flex flex-col justify-center items-start -ml-[50px] -space-y-2 mt-[15px]">
         <Text

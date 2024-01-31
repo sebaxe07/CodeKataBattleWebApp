@@ -24,11 +24,11 @@ export const TeamLeaderboard = ({ context, rank, icon, iconBg, name, exp }) => {
 
   return (
     <div
-      className={`flex w-full h-[60px] align-center  justify-around pt-2 pb-2 ${
+      className={`flex w-full h-[60px] items-center  justify-around p-2 ${
         rank % 2 == 0 ? colorScheme.even : colorScheme.uneven
       }`}
     >
-      <div className="flex flex-row gap-5 pl-2">
+      <div className="flex flex-row gap-5 ">
         <Text
           text={[rank]}
           size="text-[16px]"
@@ -44,7 +44,7 @@ export const TeamLeaderboard = ({ context, rank, icon, iconBg, name, exp }) => {
           text={[name]}
           size="text-[16px]"
           fontColor="text-white"
-          className={"text-start pr-10"}
+          className={"text-start "}
           fontType="font-bold"
         />
       </div>
@@ -53,7 +53,7 @@ export const TeamLeaderboard = ({ context, rank, icon, iconBg, name, exp }) => {
           text={[`${exp} XP`]}
           size="text-[16px]"
           fontColor="text-white"
-          className={"text-start pr-14"}
+          className={"text-start "}
           fontType="font-bold"
         />
       </div>

@@ -9,9 +9,9 @@ import { MiniDetails } from "./MiniDetails";
 
 import { TopScore } from "../../common/TopScore";
 import { YouScore } from "../../common/YouScore";
-import Python from "../../../assets/icons/python.png";
-import Binary from "../../../assets/icons/binaryIcon.png";
-import Back from "../../../assets/icons/backArrow.png";
+import Python from "../../../assets/icons/python.svg";
+import Binary from "../../../assets/icons/binaryIcon.svg";
+import Back from "../../../assets/icons/backArrow.svg";
 import Sensei from "../../../assets/icons/UsersIcons/BearSensei.svg";
 import ElephantUser from "../../../assets/icons/UsersIcons/elephant.svg";
 import PiggyUser from "../../../assets/icons/UsersIcons/piggy.svg";

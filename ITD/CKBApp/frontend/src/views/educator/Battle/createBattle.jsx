@@ -1,35 +1,41 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { Text } from "../../../components/common/text";
 import { TextField } from "../../../components/common/textfield";
 import Button from "../../../components/common/Button";
 import { Application, DatePicker } from "react-rainbow-components";
 import { BattleLogo } from "../../../components/utils/TournamentDetails/BattleLogo";
 import { ReactSVG } from "react-svg";
+import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
+import axios from "../../../services/api";
+import { LoadingScreen } from "../../../services/LoadingScreen";
+import { UserContext } from "../../../services/contexts/UserContext";
+import { CompleteBattleCreation } from "../../../views/educator/Battle/completeBattleCreation";
 
 import Logo from "../../../assets/images/Logo.svg";
 
-import Python from "../../../assets/icons/python.png";
-import Back from "../../../assets/icons/backArrow.png";
+import Back from "../../../assets/icons/backArrow.svg";
 import CalendarT from "../../../assets/icons/calendar.svg";
 import Edit from "../../../assets/icons/edit.svg";
 import BgIconCard from "../../../components/common/bgIconCard";
 
-// import styled from "react-rainbow-components/styled";
-
 export const CreateBattle = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [teamSize, setTeamSize] = useState("");
+  const [teamMin, setTeamMin] = useState("");
+  const [teamMax, setTeamMax] = useState("");
   const [dateStart, setStartDate] = useState(null);
   const [dateEnd, setEndDate] = useState(null);
   const [files, setFile] = useState(0);
-
-  function onChange(dateStart) {
-    setStartDate(dateStart);
-  }
-  function onChange(dateEnd) {
-    setEndDate(dateEnd);
-  }
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
+  const [langIco, setLangIco] = useState("binaryIcon.svg");
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
+  const { activeUser, setActiveUser } = useContext(UserContext);
+  const [isCreated, setIsCreated] = useState(false);
+  const { id } = useParams();
 
   const theme = {
     rainbow: {
@@ -39,9 +45,147 @@ export const CreateBattle = () => {
       },
     },
   };
+  const showToast = (title) => {
+    toast({
+      title,
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
+  function closeAll() {
+    toast.closeAll();
+  }
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    const validMimeTypes = [
+      "application/zip",
+      "application/x-zip-compressed",
+      "multipart/x-zip",
+      "application/octet-stream",
+    ];
+
+    if (!validMimeTypes.includes(file.type)) {
+      showToast("Please upload a zip file");
+      return;
+    }
+    setSelectedFile(file);
+  };
+
+  useEffect(() => {
+    console.log(selectedFile);
+    if (selectedFile) {
+      setFile(selectedFile.name);
+    }
+  }, [selectedFile]);
+
+  const handleClickUploadCode = () => {
+    // Trigger the file input click event
+    fileInputRef.current.click();
+  };
+
+  const handleSubmit = async (event) => {
+    closeAll();
+    event.preventDefault();
+
+    // Check if all fields are valid
+    const validName = name !== "";
+    const validDescription = description !== "";
+    const validDateStart = dateStart !== null;
+    const validDateEnd = dateEnd !== null;
+    const validTeamMin = teamMin !== "";
+    const validTeamMax = teamMax !== "";
+    const validTeamSize = Number(teamMin) <= Number(teamMax);
+    const validFile = selectedFile !== null;
+    const validLangIco = langIco !== "";
+
+    // Set error messages if needed
+    const conditions = [
+      { isValid: validName, message: "Please input a valid name." },
+      {
+        isValid: validDescription,
+        message: "Please input a valid description.",
+      },
+      { isValid: validDateStart, message: "Please input a valid start date." },
+      { isValid: validDateEnd, message: "Please input a valid end date." },
+      {
+        isValid: validTeamMin,
+        message: "Please input a valid minimum team size.",
+      },
+      {
+        isValid: validTeamMax,
+        message: "Please input a valid maximum team size.",
+      },
+      {
+        isValid: validTeamSize,
+        message:
+          "Minimum team size must be less than or equal to maximum team size.",
+      },
+      { isValid: validFile, message: "Please upload a file." },
+      { isValid: validLangIco, message: "Please select a language icon." },
+    ];
+
+    conditions.forEach(({ isValid, message }) => {
+      if (!isValid) {
+        showToast(message);
+      }
+    });
+
+    // If any of the conditions is not valid, stop the function
+    if (!conditions.every(({ isValid }) => isValid)) {
+      return;
+    }
+
+    const payload = new FormData();
+    payload.append("name", name);
+    payload.append("description", description);
+    payload.append("created_by", activeUser.roleid);
+    payload.append("min_students_per_group", teamMin);
+    payload.append("max_students_per_group", teamMax);
+    payload.append(
+      "start_date",
+      new Date(dateStart).toISOString().split(".")[0]
+    );
+    payload.append("end_date", new Date(dateEnd).toISOString().split(".")[0]);
+    payload.append("picture", langIco);
+    payload.append("software_project", selectedFile);
+    payload.append("tournament", id);
+    payload.append("active", true);
+
+    console.log(payload);
+
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post("/tms/battles/", payload, {
+        headers: {
+          Authorization: `Token ${activeUser.authToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response.data);
+
+      setIsCreated(true);
+    } catch (error) {
+      toast({
+        title: "Unable to create battle.",
+        description: "Please try again later.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+
+      console.error("Error creating tournament: ", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="bg-[#19362D] flex flex-col justify-center items-center  h-screen w-screen">
+      {isLoading && <LoadingScreen />}
       <ReactSVG
         src={Logo}
         beforeInjection={(svg) => {
@@ -53,39 +197,41 @@ export const CreateBattle = () => {
           right: 30,
         }}
       />
-      <div className="select-none relative rounded-[36px] bg-accentSecondaryEducator w-[35%]  ml-20 mt-20 h-[84%] flex justify-center">
-        <div className="w-full">
+      {isCreated ? (
+        <CompleteBattleCreation icon={langIco} />
+      ) : (
+        <div className="flex flex-col  select-none rounded-[36px] bg-accentSecondaryEducator w-[35%] h-[84%] ">
           {/* Header Section */}
-          <div className="flex h-[10%] w-[100%] items-center ml-5">
-            <img
+          <div className="flex h-[10%] w-[100%] items-center  ">
+            <ReactSVG
               src={Back}
-              className="w-[40px] h-[40px]  rounded-[100%]"
+              beforeInjection={(svg) => {
+                svg.setAttribute("style", "width: 30px; height: 30px");
+              }}
+              className="cursor-pointer text-accenteducator ml-10"
               onClick={() => {
-                console.log("pressed");
+                navigate(-1);
               }}
             />
             <Text
               text={["CREATE BATTLE"]}
               size="text-[20px] "
-              className={"leading-normal text-start ml-5"}
+              className={"leading-normal  ml-2"}
               fontColor="text-white"
-              fontType="font-bold"
+              fontType="font-black"
             />
           </div>
           {/* Body */}
-          <div className="flex flex-col w-[98%] h-[88%] bg-bgeducator rounded-b-[36px]">
+          <div className="flex flex-col relative bg-bgeducator h-[87%] w-[98%] rounded-b-[36px]">
             {/* Logo */}
-            <div className=" justify-center flex items-center translate-x-40 -translate-y-10">
-              <BattleLogo BattleIcon={Python} size={150} />
-              <div
-                className="-translate-x-14 translate-y-5"
-                onClick={() => console.log("Edit Tournament Logo")}
-              >
+            <div className="translate-x-32 -translate-y-10">
+              <BattleLogo BattleIcon={langIco} size={150} />
+              <div className="translate-x-96 translate-y-1/2 cursor-pointer">
                 <BgIconCard icon={Edit} size={45} bgColor={"bg-white"} />
               </div>
             </div>
             {/* Main Content */}
-            <div className="flex flex-col -translate-y-10 justify-center items-center">
+            <div className="flex flex-col justify-center items-center">
               {/* Information Section */}
               <div className="flex flex-col gap-5 items-center">
                 <div className="flex flex-col">
@@ -118,7 +264,7 @@ export const CreateBattle = () => {
                     mode={"area"}
                     type={"text"}
                     classname={
-                      "w-[450px] resize-none whitespace-pre-wrap h-[210px] p-5 pl-10  items-center bg-shadowboxeducator text-white rounded-[26px]"
+                      "w-[450px] resize-none h-[210px]  items-center bg-shadowboxeducator text-white rounded-[26px] overflow-auto scrollbar-thin scrollbar-thumb-accentSecondaryEducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
                     }
                     placeholder=""
                     value={description}
@@ -187,45 +333,81 @@ export const CreateBattle = () => {
                 </div>
               </Application>
               {/* Footer */}
-              <div className=" w-[100%] ml-10">
-                <div className="flex flex-row gap-5 ml-20 items-start justify-evenly w-full">
-                  <div className="flex flex-col items-center gap-1 justify-center">
-                    <Text
-                      text={["Team Size"]}
-                      size="text-[16px]"
-                      fontColor="text-white"
-                      className={"text-start"}
-                      fontType="font-bold"
+              <div className="flex flex-row  ">
+                <div className="flex flex-col items-center  w-full justify-center mr-2">
+                  <Text
+                    text={["Team Size (1-50)"]}
+                    size="text-[16px]"
+                    fontColor="text-white"
+                    className={"text-start"}
+                    fontType="font-bold"
+                  />
+                  <div className="flex flex-row justify-between gap-1 items-center">
+                    <TextField
+                      type={"number"}
+                      classname={
+                        "w-[90px] h-[40px]  bg-shadowboxeducator text-white rounded-[26px] "
+                      }
+                      placeholder="Min"
+                      value={teamMin}
+                      onChange={(e) => {
+                        if (
+                          e.target.value === "" ||
+                          (e.target.value >= 1 && e.target.value <= 50)
+                        ) {
+                          setTeamMin(e.target.value);
+                        }
+                      }}
                     />
                     <TextField
-                      type={"text"}
+                      type={"number"}
                       classname={
-                        "w-[100px] h-[40px] p-5 pl-10  items-center bg-shadowboxeducator text-white rounded-[26px]"
+                        "w-[90px] h-[40px]  bg-shadowboxeducator text-white rounded-[26px]"
                       }
-                      placeholder=""
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Max"
+                      value={teamMax}
+                      onChange={(e) => {
+                        if (
+                          e.target.value === "" ||
+                          (e.target.value >= 1 && e.target.value <= 50)
+                        ) {
+                          setTeamMax(e.target.value);
+                        }
+                      }}
                     />
                   </div>
-                  <div className="flex flex-col justify-start h-[20%] w-full items-start">
-                    <Text
-                      text={[`You have ${files} files uploaded`]}
-                      size="text-[16px]"
-                      fontColor={"text-white"}
-                      className={"text-start ml-5 "}
-                      fontType={"font-bold"}
+                </div>
+                <div className="flex flex-col  w-full items-center ">
+                  <Text
+                    text={[`File ${files} uploaded.`]}
+                    size="text-[16px]"
+                    fontColor={"text-white"}
+                    className={"text-start "}
+                    fontType={"font-bold"}
+                  />
+                  <div className="w-[70%] flex-row justify-evenly gap-5 flex items-center">
+                    {/* Hidden file input */}
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      style={{ display: "none" }}
+                      onChange={handleFileChange}
+                      accept=".zip"
                     />
-                    <div className="w-[70%] flex-row justify-evenly gap-5 flex items-center">
-                      <Button name="Upload Code" backg={"bg-[#BAAFFF]"} />
-                      <Button name="Create" />
-                    </div>
+                    {/* Button to trigger file input */}
+                    <Button
+                      onClick={handleClickUploadCode}
+                      name="Upload Code"
+                      backg={"bg-[#BAAFFF]"}
+                    />
+                    <Button name="Create" onClick={handleSubmit} />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

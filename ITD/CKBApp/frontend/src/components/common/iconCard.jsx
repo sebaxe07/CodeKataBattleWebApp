@@ -1,14 +1,28 @@
 import React from "react";
-import python from "../../assets/icons/python.png";
+import python from "../../assets/icons/python.svg";
+import binary from "../../assets/icons/binaryIcon.svg";
+import { ReactSVG } from "react-svg";
 
 export const iconCard = ({
   background = "bg-accentprimary",
   shadow = "bg-bgprimary",
+  icon = "binaryIcon.svg",
   size = 80,
 }) => {
   const innerSize = (size / 80) * 74;
   const innermostSize = (size / 80) * 65;
   const imgSize = (size / 80) * 52;
+
+  switch (icon) {
+    case "python.svg":
+      icon = python;
+      break;
+    case "binaryIcon.svg":
+      icon = binary;
+      break;
+    default:
+      icon = python;
+  }
 
   return (
     <div
@@ -20,13 +34,17 @@ export const iconCard = ({
         style={{ width: `${innerSize}px`, height: `${innerSize}px` }}
       >
         <div
-          className={`${background} rounded-full flex justify-center items-center`}
+          className={`${background} rounded-full flex justify-center items-center `}
           style={{ width: `${innermostSize}px`, height: `${innermostSize}px` }}
         >
-          <img
-            src={python}
-            alt="fireSpot"
-            style={{ width: `${imgSize}px`, height: `${imgSize}px` }}
+          <ReactSVG
+            src={icon}
+            beforeInjection={(svg) => {
+              svg.setAttribute(
+                "style",
+                `width: ${imgSize}; height: ${imgSize};`
+              );
+            }}
           />
         </div>
       </div>

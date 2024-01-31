@@ -91,7 +91,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = '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'
-DEFAULT_FROM_EMAIL = 'codekatabattle.mailprovider@gmail.com'
+DEFAULT_FROM_EMAIL = 'info@codekatabattle.site'
 
 
 TEMPLATES = [
@@ -145,6 +145,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# Github API 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
 
 
 # Internationalization

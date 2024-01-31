@@ -6,10 +6,10 @@ import { EducatorName } from "./../TournamentDetails/EducatorName";
 import { TopDecorator } from "./../TournamentDetails/TopDecorator";
 import { BattleLogo } from "./../TournamentDetails/BattleLogo";
 import { MiniDetails } from "../TournamentDetails/MiniDetails";
-import Python from "../../../assets/icons/python.png";
+import Python from "../../../assets/icons/python.svg";
 import Sensei from "../../../assets/icons/UsersIcons/BearSensei.svg";
-import Back from "../../../assets/icons/backArrow.png";
-import Binary from "../../../assets/icons/binaryIcon.png";
+import Back from "../../../assets/icons/backArrow.svg";
+import Binary from "../../../assets/icons/binaryIcon.svg";
 
 export const BattleResume = ({}) => {
   const handleWheel = (e) => {

@@ -5,15 +5,27 @@ import ElephantIcon from "../../assets/icons/UsersIcons/elephant.svg";
 import BearIcon from "../../assets/icons/UsersIcons/bear.svg";
 import PiggyIcon from "../../assets/icons/UsersIcons/piggy.svg";
 import Trophy from "../../assets/icons/Trophy/trophyGold.svg";
+import Swords from "../../assets/icons/swords.svg";
 
 export const BgIconCard = ({
   icon,
   bgIcon,
-  size,
+  size = 60,
   onClick,
   bgColor,
   active,
 }) => {
+  const colors = [
+    "#EE8361",
+    "#60ADF4",
+    "#6360F4",
+    "#F4A358",
+    "#5D9BF6",
+    "#DB79C0",
+    "#6CBE83",
+  ];
+  const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
   switch (icon) {
     case "tiger.svg":
       icon = TigerIcon;
@@ -33,16 +45,11 @@ export const BgIconCard = ({
       break;
     case "trophyGold.svg":
       icon = Trophy;
-      // Random background color
-      const colors = [
-        "#EE8361",
-        "#60ADF4",
-        "#6360F4",
-        "#F4A358",
-        "#5D9BF6",
-        "#DB79C0",
-        "#6CBE83",
-      ];
+      bgIcon = `bg-[${randomColor}]`;
+      break;
+    case "swords.svg":
+      icon = Swords;
+      bgIcon = `bg-[${randomColor}]`;
       break;
     default:
       icon = icon;

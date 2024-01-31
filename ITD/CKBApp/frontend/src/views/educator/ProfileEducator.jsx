@@ -5,7 +5,7 @@ import { SuscribedTournaments } from "../../components/utils/SuscribedTournament
 import { UserContext } from "../../services/contexts/UserContext";
 import Logo from "../../assets/images/Logo.svg";
 import { Text } from "../../components/common/text";
-import MyTournament from "../../components/utils/Educator/MyTournament";
+import MyTournament from "../../components/utils/TournamentUtils/MyTournament";
 
 export const ProfileEducator = ({}) => {
   const { activeUser, setActiveUser } = useContext(UserContext);

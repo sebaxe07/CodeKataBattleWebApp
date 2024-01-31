@@ -218,7 +218,6 @@ export const SignUpSlides = () => {
       last_name: lastName,
       user_profile: {
         role: userType,
-
         school: school,
         profile_icon: avatar,
         github_username: githubacc,

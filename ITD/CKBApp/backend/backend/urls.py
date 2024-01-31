@@ -19,7 +19,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ums/', include('user_management.urls')),  # Adjust this based on your app's name
+    path('ums/', include('user_management.urls')), 
+    path('tms/', include('tournament_management.urls')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
 ]

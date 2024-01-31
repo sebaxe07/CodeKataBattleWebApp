@@ -9,4 +9,4 @@ class TournamentSerializer(serializers.ModelSerializer):
 class BattleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Battle
-        fields = '__all__'
+        fields = '__all__'  

@@ -11,14 +11,43 @@ export function useFetchUserData() {
         headers: { Authorization: `Token ${authToken}` },
       });
       const userData = response.data;
+
+      let roleprofile = null;
+      try {
+        if (userData.user_profile.role === "educator") {
+          const ProfileResponse = await axios.get(
+            `/ums/educator-profile/${userData.user_profile.id}/`,
+            {
+              headers: { Authorization: `Token ${authToken}` },
+            }
+          );
+          roleprofile = ProfileResponse.data;
+          console.log(ProfileResponse.data);
+        } else {
+          const ProfileResponse = await axios.get(
+            `/ums/student-profile/${userData.user_profile.id}/`,
+            {
+              headers: { Authorization: `Token ${authToken}` },
+            }
+          );
+          roleprofile = ProfileResponse.data;
+          console.log(ProfileResponse.data);
+        }
+      } catch (error) {
+        console.error("Error getting profile: ", error);
+        return;
+      }
+
       const userWithToken = {
         authToken: authToken,
         id: userData.id,
+        roleid: roleprofile.id,
         username: userData.username,
         first_name: userData.first_name,
         last_name: userData.last_name,
         email: userData.email,
         user_profile: {
+          id: userData.user_profile.id,
           role: userData.user_profile.role,
           school: userData.user_profile.school,
           github_username: userData.user_profile.github_username,

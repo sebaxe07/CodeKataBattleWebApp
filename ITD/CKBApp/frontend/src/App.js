@@ -23,14 +23,13 @@ import { StudentHome } from "./views/student/StudentHome";
 import { ProfileStudents } from "./views/student/ProfileStudents";
 
 import { EducatorHome } from "./views/educator/EducatorHome";
-import { ProfileEducator } from "./views/educator/ProfileEducator";
-
 import { ManageTournament } from "./views/educator/Tournament/manageTournament";
-import { CreateTournament } from "./views/educator/Tournament/createTournament.jsx";
-import { JoinTournament } from "./views/student/joinTournament";
-
+import { CreateTournament } from "./views/educator/Tournament/createTournament";
+import { CompleteBattleCreation } from "./views/educator/Battle/completeBattleCreation";
 import { ManageBattle } from "./views/educator/Battle/manageBattle";
 import { CreateBattle } from "./views/educator/Battle/createBattle";
+import { ProfileEducator } from "./views/educator/ProfileEducator";
+import { JoinTournament } from "./views/student/joinTournament";
 
 function App() {
   return (
@@ -63,11 +62,18 @@ function App() {
               <Route path="/educator" element={<Sidebar />}>
                 <Route index element={<Navigate to="home" />} />
                 <Route path="home" element={<EducatorHome />} />
-                <Route path="createTournament" element={<CreateTournament />} />
-                <Route path="manageTournament" element={<ManageTournament />} />
-                <Route path="manageBattle" element={<ManageBattle />} />
-                <Route path="createBattle" element={<CreateBattle />} />
                 <Route path="profile" element={<ProfileEducator />} />
+                <Route path="tournament">
+                  <Route index element={<Navigate to="home" />} />
+                  <Route path="manage/:id" element={<ManageTournament />} />
+                  <Route path="create" element={<CreateTournament />} />
+                  <Route path=":id/battle">
+                    <Route index element={<Navigate to="home" />} />
+                    <Route path="manage/:bid" element={<ManageBattle />} />
+                    <Route path="create" element={<CreateBattle />} />
+                  </Route>
+                </Route>
+                <Route path="*" element={<Navigate to="home" />} />
               </Route>
             </Route>
           </Routes>

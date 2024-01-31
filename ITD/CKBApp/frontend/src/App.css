@@ -13,6 +13,15 @@
   }
 }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -76,6 +85,37 @@
   height: 40px;
   pointer-events: none;
   background-image: linear-gradient(to top, #231e51, transparent);
+}
+
+.fadeScroll2 {
+  position: relative;
+}
+
+.fadeScroll2::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 20px;
+  pointer-events: none;
+  z-index: 1;
+  background-image: linear-gradient(to bottom, #413e97, transparent);
+}
+
+.fadeScroll2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 40px;
+  pointer-events: none;
+  background-image: linear-gradient(to top, #413e97, transparent);
+}
+
+.spin {
+  animation: spin 0.5s linear infinite;
 }
 
 .App-link {

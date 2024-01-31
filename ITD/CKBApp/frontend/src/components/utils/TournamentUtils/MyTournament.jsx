@@ -6,6 +6,8 @@ import Calendar2 from "../../../assets/icons/calendarC.svg";
 import { ReactSVG } from "react-svg";
 import { Button } from "../../common/Button";
 import { TextField } from "../../common/textfield";
+import { useNavigate } from "react-router-dom";
+
 import {
   Modal,
   ModalOverlay,
@@ -13,7 +15,6 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
 
@@ -33,12 +34,15 @@ const colorSchemes = [
 ];
 
 export const MyTournament = ({
+  id,
   name,
   description,
+  picture,
   startDate,
   endDate,
   active,
 }) => {
+  const navigate = useNavigate();
   const [colorScheme, setColorScheme] = useState(colorSchemes[0]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [email, setEmail] = useState("");
@@ -57,11 +61,12 @@ export const MyTournament = ({
       >
         <IconCard
           background={colorScheme.icon}
+          icon={picture}
           shadow="bg-shadowboxeducator"
           size={150}
         />
-        <div className="flex flex-row justify-between items-center   min-h-[140px] ml-[140px] mr-[200px]">
-          <div className="flex flex-col justify-center items-start w-[397px] my-2  grow -space-y-2">
+        <div className="flex flex-row justify-between items-center   min-h-[100px] ml-[140px] mr-[200px]">
+          <div className="flex flex-col justify-center items-start  w-[397px] max-h-[110px] my-2  grow -space-y-2">
             <Text
               text={[`${name}`]}
               size="text-[25px]"
@@ -73,7 +78,7 @@ export const MyTournament = ({
               size="text-[19px]"
               fontColor={`${colorScheme.label}`}
               fontType="font-normal"
-              className="text-start leading-tight overflow-y-scroll  scrollbar scrollbar-hide"
+              className="text-start leading-tight overflow-y-scroll w-full scrollbar scrollbar-hide"
             />
           </div>
 
@@ -130,7 +135,11 @@ export const MyTournament = ({
               </div>
 
               <div className="absolute  flex flex-col justify-center items-center gap-3 ml-4 right-5">
-                <Button name="View" className={"min-w-[137px]"} />
+                <Button
+                  name="View"
+                  className={"min-w-[137px]"}
+                  onClick={() => navigate(`/educator/tournament/manage/${id}`)}
+                />
                 <Button
                   name="Inivte"
                   className={"min-w-[137px]"}
@@ -141,7 +150,11 @@ export const MyTournament = ({
           )}
           {!active && (
             <div className="absolute  flex flex-col justify-center items-center ml-4 right-5">
-              <Button name="View" className={"min-w-[137px]"} />
+              <Button
+                name="View"
+                className={"min-w-[137px]"}
+                onClick={() => navigate(`/educator/tournament/manage/${id}`)}
+              />
             </div>
           )}
         </div>

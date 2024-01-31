@@ -1,27 +1,99 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { ReactSVG } from "react-svg";
+import { useParams } from "react-router-dom";
 import { Text } from "../../../components/common/text";
 import Button from "../../../components/common/Button";
 import { TopDecorator } from "../../../components/utils/TournamentDetails/TopDecorator";
-import { BattleLogo } from "../../../components/utils/TournamentDetails/BattleLogo";
 import { MiniDetails } from "../../../components/utils/TournamentDetails/MiniDetails";
 import BgIconCard from "../../../components/common/bgIconCard";
 import Logo from "../../../assets/images/Logo.svg";
+import axios from "../../../services/api";
+import { UserContext } from "../../../services/contexts/UserContext";
 
 import CreatedBattle from "../../../components/utils/TournamentDetails/CreatedBattle";
 
-import Python from "../../../assets/icons/python.png";
-import Binary from "../../../assets/icons/binaryIcon.png";
-import Back from "../../../assets/icons/backArrow.png";
-import Sensei from "../../../assets/icons/UsersIcons/BearSensei.svg";
-import ElephantUser from "../../../assets/icons/UsersIcons/elephant.svg";
-import PiggyUser from "../../../assets/icons/UsersIcons/piggy.svg";
-import BearUser from "../../../assets/icons/UsersIcons/bear.svg";
-import TigerUser from "../../../assets/icons/UsersIcons/tiger.svg";
+import Back from "../../../assets/icons/backArrow.svg";
 import TeamLeaderboard from "../../../components/utils/TournamentDetails/TeamLeaderboard";
 import Add from "../../../assets/icons/add.svg";
+import { TextField } from "../../../components/common/textfield";
+import { useNavigate } from "react-router-dom";
+import { LoadingScreen } from "../../../services/LoadingScreen";
+import RefreshG from "../../../assets/icons/refreshB.svg";
+
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 export const ManageTournament = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [tournament, setTournament] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [battles, setBattles] = useState([]);
+  const { activeUser, setActiveUser } = useContext(UserContext);
+
+  useEffect(() => {
+    console.log(id);
+    const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
+    const tournamentId = Number(id); // Convert id to number
+    setTournament(
+      storedTournaments.filter(
+        (tournament) => tournament.id === tournamentId
+      )[0]
+    );
+
+    const storedBattles = JSON.parse(localStorage.getItem(`battle${id}`));
+    if (storedBattles) {
+      setBattles(storedBattles);
+    } else {
+      fetchBattles();
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(tournament);
+  }, [tournament]);
+
+  useEffect(() => {
+    console.log(battles);
+  }, [battles]);
+
+  const fetchBattles = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `/tms/battles/user/${activeUser.roleid}/${id}`,
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+
+      // Save battles
+      localStorage.setItem(`battle${id}`, JSON.stringify(response.data));
+
+      setBattles(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Failed to fetch battles:", error);
+    } finally {
+      setIsLoading(false);
+      setIsSpinning(false);
+    }
+  };
+
+  const refresh = () => {
+    fetchBattles();
+  };
+
   return (
     <div className="bg-[#19362D] flex flex-col justify-center items-center  h-screen w-screen">
       <ReactSVG
@@ -35,15 +107,19 @@ export const ManageTournament = () => {
           right: 30,
         }}
       />
-      <div className="select-none relative rounded-[36px] bg-shadowbox w-[1500px] m-10 ml-20 mt-20 h-[85%] max-h-[85%]  flex justify-center">
-        <div className="flex flex-col h-[99%]">
+      {isLoading && <LoadingScreen />}
+      <div className="select-none relative rounded-[36px] bg-shadowbox w-[1500px] m-10 ml-20 mt-20 h-[85%] max-h-[85%]  flex justify-start">
+        <div className="flex flex-col h-[98%] w-[99%]">
           <div className="flex rounded-t-[36px] h-[10%]  w-full justify-between items-center">
             <div className="flex flex-row items-center ml-10">
-              <img
+              <ReactSVG
                 src={Back}
-                className="w-[40px] h-[40px]  rounded-[100%]"
+                beforeInjection={(svg) => {
+                  svg.setAttribute("style", "width: 30px; height: 30px");
+                }}
+                className="cursor-pointer text-accentprimary"
                 onClick={() => {
-                  console.log("pressed");
+                  navigate("/educator/home");
                 }}
               />
               <Text
@@ -51,49 +127,80 @@ export const ManageTournament = () => {
                 size="text-[20px] "
                 className={"leading-normal text-start ml-5"}
                 fontColor="text-white"
-                fontType="font-bold"
+                fontType="font-black"
               />
             </div>
-            <div className="flex gap-5 flex-row mr-10">
+            <div className="flex gap-5 flex-row  items-center justify-center mr-10">
               <div className="flex flex-row gap-3">
                 <div className="flex bg-white rounded-[100%] justify-center items-center w-[50px] h-[50px]">
                   <BgIconCard icon={"elephant.svg"} size={40} />
                 </div>
                 <div className="flex bg-white rounded-[100%] justify-center items-center w-[50px] h-[50px]">
-                  <BgIconCard icon={"elephant.svg"} size={40} />
+                  <BgIconCard icon={"tiger.svg"} size={40} />
                 </div>
               </div>
-              <BgIconCard
-                icon={Add}
-                size={30}
-                onClick={() => console.log("Add new Sensei")}
-              />
+              <div className="flex flex-row gap-3 cursor-pointer">
+                <ReactSVG
+                  src={Add}
+                  beforeInjection={(svg) => {
+                    svg.setAttribute("style", "width: 25px; height: 25px");
+                  }}
+                  className="cursor-pointer text-accentprimary"
+                  onClick={onOpen}
+                />
+              </div>
+              <Modal isOpen={isOpen} onClose={onClose} isCentered>
+                <ModalOverlay />
+                <ModalContent borderRadius="36px">
+                  <ModalHeader>Invite Educators</ModalHeader>
+                  <ModalBody>
+                    <TextField
+                      type={"text"}
+                      placeholder="Email Address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <Button
+                      name="Close"
+                      onClick={onClose}
+                      className={"mx-4"}
+                      backg={"bg-accentprimary"}
+                    />
+                    <Button name="Invite" />
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
             </div>
           </div>
-          <div className="flex h-full rounded-[36px] flex-row">
+          <div className="flex h-full rounded-[36px] w-full flex-row">
             {/* Lado Izquierdo */}
-            <div className="flex flex-col h-[95%] rounded-bl-[36px] w-[50%] pl-10 justify-center items-center bg-bgprimary">
-              <div className="flex flex-row -space-y-2  items-center justify-evenly w-full">
-                <div className="mt-16 -translate-x-10 translate-y-12">
-                  <BattleLogo BattleIcon={Binary} size={150} />
-                </div>
-                <div className="flex flex-col justify-evenly h-full -space-y-2">
+            <div className="flex flex-col h-full rounded-bl-[36px] w-full justify-center items-center bg-bgprimary">
+              <div className="flex flex-row  -space-y-1  items-center justify-evenly h-full w-full ">
+                <TopDecorator
+                  LanguageIcon={tournament.picture}
+                  size={200}
+                  shouldTranslate={false}
+                />
+                <div className="flex flex-col justify-evenly h-full -space-y-16">
                   <MiniDetails
                     context={""}
                     title={"Started"}
                     icon={"Calendar"}
-                    msg={"22 Dec. 2023"}
+                    msg={new Date(tournament.start_date).toLocaleDateString()}
                   />
                   <MiniDetails
                     context={""}
                     title={"Ends"}
                     icon={"Calendar"}
-                    msg={"22 Dec. 2023"}
+                    msg={new Date(tournament.end_date).toLocaleDateString()}
                   />
                 </div>
               </div>
-              <div className="flex flex-col w-full items-center -mt-5 m-10">
-                <div className="space-y-4 mt-5 justify-center items-center">
+              <div className="flex  flex-col w-full h-full items-center  justify-center  ">
+                <div className="flex justify-start w-[80%]  items-center ">
                   <Text
                     text={["Name"]}
                     size="text-[16px] "
@@ -101,15 +208,19 @@ export const ManageTournament = () => {
                     fontColor="text-white"
                     fontType="font-bold"
                   />
-                  <div className="flex w-[80%] h-[15%] rounded-[26px] p-5 pl-10  mb-12 justify-between items-center bg-shadowbox">
-                    <Text
-                      text={["Tournament 1"]}
-                      size="text-[16px] "
-                      className={"leading-normal text-start"}
-                      fontColor="text-white"
-                      fontType="font-bold"
-                    />
-                  </div>
+                </div>
+                <div className="flex w-[80%] h-[15%] rounded-[26px] p-5 pl-10  mb-8 justify-between items-center bg-shadowbox">
+                  <Text
+                    text={[tournament.name]}
+                    size="text-[16px] "
+                    className={
+                      "leading-normal text-start whitespace-nowrap overflow-hidden overflow-ellipsis"
+                    }
+                    fontColor="text-white"
+                    fontType="font-bold"
+                  />
+                </div>
+                <div className="flex justify-start w-[80%]  items-center ">
                   <Text
                     text={["Description"]}
                     size="text-[16px] "
@@ -117,119 +228,106 @@ export const ManageTournament = () => {
                     fontColor="text-white"
                     fontType="font-bold"
                   />
-                  <div className="flex w-[80%] h-[50%] rounded-[26px] p-10 pl-10 pr-10 mr-2 justify-between items-center bg-shadowbox">
+                </div>
+                <div className="flex w-[80%] h-[157px] rounded-[26px]  pl-10 justify-between items-center bg-shadowbox">
+                  <div className="overflow-auto h-[150px] mt-1 w-full scrollbar-thin scrollbar-thumb-bgaccent scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full ">
                     <Text
-                      text={[
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                      ]}
+                      text={[tournament.description]}
                       size="text-[16px] "
-                      className={"leading-normal text-start"}
+                      className={"leading-normal text-start mr-5"}
                       fontColor="text-white"
                       fontType="font-normal"
                     />
                   </div>
                 </div>
               </div>
-              <div className="flex justify-center w-full mr-40">
+              <div className="flex justify-center items-center w-full h-full">
                 <Button name="Edit Tournament" />
               </div>
             </div>
             {/* Lado Derecho */}
-            <div className="flex flex-col h-[95%] rounded-br-[36px] w-[50%] justify-center items-center bg-[#413e97]">
+            <div className="flex flex-col h-full rounded-br-[36px] w-full  bg-[#413e97]">
               {/* Created Battles */}
-              <div className="flex flex-col w-full h-[48%] justify-evenly pl-14 pr-14">
-                <div
-                  // onWheel={handleWheel}
-                  className="flex-col rounded-[36px] overflow-y-clip overflow-x-hidden h-[68%] flex "
-                >
-                  <Text
-                    text={["Created Battles"]}
-                    size="text-[20px] "
-                    className={"leading-normal text-start mb-5 ml-5"}
-                    fontColor="text-white"
-                    fontType="font-black"
-                  />
-                  <div className="w-full gap-4 flex-col flex overflow-y-auto overflow-x-hidden scrollbar-thumb-bgprimary scrollbar-thin fixed-height-container">
-                    <CreatedBattle
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      state={"ACTIVE"}
-                    />
-                    <CreatedBattle
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      state={"ACTIVE"}
-                    />
-                    <CreatedBattle
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      state={"ACTIVE"}
-                    />
-                    <CreatedBattle
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      state={"ACTIVE"}
-                    />
-                    <CreatedBattle
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      state={"ACTIVE"}
-                    />
+              <div className="flex flex-col w-full h-full justify-center basis-2/4	 ">
+                <Text
+                  text={["Created Battles"]}
+                  size="text-[20px] "
+                  className={"leading-normal text-start  ml-5"}
+                  fontColor="text-white"
+                  fontType="font-black"
+                />
+                <div className="fadeScroll2">
+                  <div
+                    className="overflow-auto flex flex-col items-center scrollbar-thin scrollbar-thumb-bgaccent scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
+                    style={{ maxHeight: "200px", minHeight: "200px" }}
+                  >
+                    {battles.map((battle) => (
+                      <CreatedBattle
+                        key={battle.id}
+                        bid={battle.id}
+                        name={battle.name}
+                        state={battle.active}
+                        icon={"swords.svg"}
+                      />
+                    ))}
                   </div>
                 </div>
-                <div className="ml-16">
+                <div className="ml-16 my-5 flex flex-row   justify-around ">
                   <ReactSVG
                     src={Add}
                     beforeInjection={(svg) => {
                       svg.setAttribute("style", "width: 25px; height: 25px");
                     }}
+                    className="cursor-pointer text-accentprimary"
+                    onClick={() =>
+                      navigate(`/educator/tournament/${id}/battle/create`)
+                    }
+                  />
+                  <ReactSVG
+                    src={RefreshG}
+                    beforeInjection={(svg) => {
+                      svg.setAttribute("style", "width: 25px; height: 25px");
+                    }}
+                    className={`cursor-pointer ${isSpinning ? "spin" : ""}`}
+                    onClick={() => {
+                      setIsSpinning(true);
+                      refresh();
+                    }}
                   />
                 </div>
               </div>
-              {/* LeaderBoard */}
-              <div className="flex flex-col w-full h-[48%] ">
+              {/* LeaderBoard  */}
+              <div className="flex basis-2/4 flex-col w-full h-full justify-center  ">
                 {/* Leaderboard Header */}
-                <div className="flex justify-around h-[20%] pr-20 items-center w-full flex-col">
-                  <div className="flex justify-between w-full">
-                    <div>
+                <div className="flex justify-around h-full  items-center w-full flex-col ">
+                  <div className="flex justify-around items-center h-full w-full ">
+                    <Text
+                      text={["Leaderboard"]}
+                      size="text-[20px]"
+                      fontColor="text-white"
+                      className={"text-start "}
+                      fontType="font-black"
+                    />
+                    <div
+                      className={`flex justify-center items-center rounded-[40px] bg-bgprimary p-4  w-auto h-[34px]`}
+                    >
                       <Text
-                        text={["Leaderboard"]}
-                        size="text-[20px]"
-                        fontColor="text-white"
-                        className={"text-start ml-20"}
-                        fontType="font-black"
-                      />
-                    </div>
-                    <div className="flex flex-row gap-3 items-center justify-center">
-                      <Text
-                        text={["Seito Suscribed"]}
+                        text={["Seito Suscribed:"]}
                         size="text-[16px]"
                         fontColor="text-white"
-                        className={"text-start ml-20"}
+                        className={"text-start mr-5"}
                         fontType="font-bold"
                       />
-                      <div
-                        className={`flex justify-center space-x-2 items-center rounded-[40px] bg-bgprimary pl-4 pr-6 w-auto h-[34px]`}
-                      >
-                        <ReactSVG
-                          src={Sensei}
-                          beforeInjection={(svg) => {
-                            svg.setAttribute(
-                              "style",
-                              "width: 17px; height: 17px"
-                            );
-                          }}
-                        />
-                        <Text
-                          text={["104"]}
-                          size="text-[16px]"
-                          fontColor={"text-white"}
-                          fontType={"text-bold"}
-                        />
-                      </div>
+
+                      <Text
+                        text={["104"]}
+                        size="text-[16px]"
+                        fontColor={"text-white"}
+                        fontType={"text-bold"}
+                      />
                     </div>
                   </div>
-                  <div className="flex flex-row justify-around w-full ml-20 mr-20">
+                  <div className="flex flex-row justify-around h-full w-full ">
                     <Text
                       text={["#"]}
                       size="text-[16px]"
@@ -238,7 +336,7 @@ export const ManageTournament = () => {
                       fontType="font-bold"
                     />
                     <Text
-                      text={["Leaderboard"]}
+                      text={["Name"]}
                       size="text-[16px]"
                       fontColor="text-white"
                       className={"text-start"}
@@ -254,11 +352,16 @@ export const ManageTournament = () => {
                   </div>
                 </div>
                 {/* Leaderboard Information */}
-                <div className="flex flex-col max-h-[82%] ">
-                  <div //   onWheel={handleWheel}
-                    className="rounded-br-[36px] overflow-y-clip   fadeScroll1 "
-                  >
-                    <div className="flex flex-col w-full overflow-y-scroll max-h-[100%] overflow-x-hidden scrollbar-thumb-bgaccent scrollbar-thin">
+                <div className="flex flex-col h-full w-full rounded-br-[36px] ">
+                  <div className="overflow-hidden rounded-br-[36px] fadeScroll1">
+                    <div
+                      className="overflow-auto flex flex-col items-center scrollbar-thin scrollbar-thumb-bgaccent scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
+                      style={{
+                        maxHeight: "300px",
+                        minHeight: "300px",
+                        paddingBottom: "20px",
+                      }}
+                    >
                       <TeamLeaderboard
                         rank={"1"}
                         icon={"tiger.svg"}
@@ -272,55 +375,49 @@ export const ManageTournament = () => {
                         exp={"100"}
                       />
                       <TeamLeaderboard
-                        rank={"1"}
+                        rank={"3"}
                         icon={"tiger.svg"}
                         name={"Juanito"}
                         exp={"100"}
                       />
                       <TeamLeaderboard
-                        rank={"2"}
+                        rank={"4"}
                         icon={"tiger.svg"}
                         name={"Juanito"}
                         exp={"100"}
                       />
                       <TeamLeaderboard
-                        rank={"1"}
+                        rank={"5"}
                         icon={"tiger.svg"}
                         name={"Juanito"}
                         exp={"100"}
                       />
                       <TeamLeaderboard
-                        rank={"2"}
+                        rank={"6"}
                         icon={"tiger.svg"}
                         name={"Juanito"}
                         exp={"100"}
                       />
                       <TeamLeaderboard
-                        rank={"1"}
+                        rank={"7"}
                         icon={"tiger.svg"}
                         name={"Juanito"}
                         exp={"100"}
                       />
                       <TeamLeaderboard
-                        rank={"1"}
+                        rank={"8"}
                         icon={"tiger.svg"}
                         name={"Juanito"}
                         exp={"100"}
                       />
                       <TeamLeaderboard
-                        rank={"2"}
+                        rank={"9"}
                         icon={"tiger.svg"}
                         name={"Juanito"}
                         exp={"100"}
                       />
                       <TeamLeaderboard
-                        rank={"1"}
-                        icon={"tiger.svg"}
-                        name={"Juanito"}
-                        exp={"100"}
-                      />
-                      <TeamLeaderboard
-                        rank={"1"}
+                        rank={"10"}
                         icon={"tiger.svg"}
                         name={"Juanito"}
                         exp={"100"}
