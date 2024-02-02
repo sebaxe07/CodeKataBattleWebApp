@@ -173,6 +173,7 @@ export const CreateBattle = () => {
     payload.append("active", true);
 
     console.log(payload);
+    console.log(activeUser.roleid);
 
     setIsLoading(true);
 

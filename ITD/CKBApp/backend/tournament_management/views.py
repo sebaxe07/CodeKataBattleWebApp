@@ -3,7 +3,7 @@ from rest_framework import generics
 from django.http import Http404
 from .models import Tournament, Battle
 from user_management.models import StudentProfile
-from .serializers import TournamentSerializer, BattleSerializer, TournamentWithBattlesSerializer
+from .serializers import TournamentSerializer, BattleSerializer, TournamentWithBattlesSerializer, BattleEducatorSerializer
 from rest_framework.response import Response
 
 
@@ -30,7 +30,7 @@ class UserTournamentsListView(generics.ListAPIView):
 # Battles views
 
 class UserBattlesListView(generics.ListAPIView):
-    serializer_class = BattleSerializer
+    serializer_class = BattleEducatorSerializer
 
     def get_queryset(self):
         user_id = self.kwargs['user_id']

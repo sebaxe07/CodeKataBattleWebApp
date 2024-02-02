@@ -27,17 +27,21 @@ class TournamentSerializer(serializers.ModelSerializer):
         model = Tournament
         fields = '__all__'
 
-class BattleSerializer(serializers.ModelSerializer):
+class BattleEducatorSerializer(serializers.ModelSerializer):
     created_by = EducatorProfileSerializer(read_only=True)
 
     class Meta:
         model = Battle
         fields = '__all__'  
 
+class BattleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Battle
+        fields = '__all__'  
 
 
 class TournamentWithBattlesSerializer(serializers.ModelSerializer):
-    battles = BattleSerializer(many=True, read_only=True)
+    battles = BattleEducatorSerializer(many=True, read_only=True)
     created_by = EducatorProfileSerializer(read_only=True)
 
     class Meta:

@@ -10,6 +10,7 @@ import PastTournamentCard from "../../components/utils/PastTournamentCard";
 import { useNavigate } from "react-router-dom";
 import { LoadingScreen } from "../../services/LoadingScreen";
 import { UserContext } from "../../services/contexts/UserContext";
+import RefreshB from "../../assets/icons/refreshB.svg";
 
 export const StudentHome = () => {
   const [preview, setPreview] = useState(false);
@@ -31,52 +32,64 @@ export const StudentHome = () => {
     setPreview(false);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(
-          `/tms/tournaments/subscribed/${activeUser.roleid}`,
+  const refresh = () => {
+    fetchData();
+  };
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `/tms/tournaments/subscribed/${activeUser.roleid}`,
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+
+      console.log(response.data);
+      if (response.data.length === 0) {
+        console.log("No tournaments");
+        navigate("/student/joinTournament");
+      } else {
+        console.log("Tournaments");
+        setTournaments(response.data);
+        // Sort the tournaments by end date
+        const sortedTournaments = response.data.sort(
+          (a, b) => new Date(a.end_date) - new Date(b.end_date)
+        );
+
+        // Set the selected tournament to the one with the end date closest to now
+        setSelectedTournament(sortedTournaments[0].id);
+        localStorage.setItem("tournaments", JSON.stringify(response.data));
+
+        const teamsResponse = await axios.get(
+          `/tgms/teams/student/${activeUser.roleid}`,
           {
             headers: { Authorization: `Token ${activeUser.authToken}` },
           }
         );
 
-        console.log(response.data);
-        if (response.data.length === 0) {
-          console.log("No tournaments");
-          navigate("/student/joinTournament");
-        } else {
-          console.log("Tournaments");
-          setTournaments(response.data);
-          // Sort the tournaments by end date
-          const sortedTournaments = response.data.sort(
-            (a, b) => new Date(a.end_date) - new Date(b.end_date)
-          );
-
-          // Set the selected tournament to the one with the end date closest to now
-          setSelectedTournament(sortedTournaments[0].id);
-          localStorage.setItem("tournaments", JSON.stringify(response.data));
-
-          const teamsResponse = await axios.get(
-            `/tgms/teams/student/${activeUser.roleid}`,
-            {
-              headers: { Authorization: `Token ${activeUser.authToken}` },
-            }
-          );
-
-          console.log(teamsResponse.data);
-          setTeams(teamsResponse.data);
-          localStorage.setItem("teams", JSON.stringify(teamsResponse.data));
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-        setIsSpinning(false);
+        console.log(teamsResponse.data);
+        setTeams(teamsResponse.data);
+        localStorage.setItem("teams", JSON.stringify(teamsResponse.data));
       }
-    };
-    fetchData();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+      setIsSpinning(false);
+    }
+  };
+
+  useEffect(() => {
+    const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
+    const storedTeams = JSON.parse(localStorage.getItem("teams"));
+    if (storedTournaments && storedTeams) {
+      setTournaments(storedTournaments);
+      setTeams(storedTeams);
+    } else {
+      fetchData();
+    }
   }, []);
 
   return (
@@ -96,13 +109,25 @@ export const StudentHome = () => {
       />
       <div className="flex flex-col w-full h-[90%]  justify-center items-center m-10  ">
         <div className="flex flex-col justify-center items-center space-y-2 w-full h-full ">
-          <Text
-            text={["Current tournaments"]}
-            size="text-[24px]"
-            fontColor="text-white"
-            fontType="font-bold"
-          />
-
+          <div className="flex flex-row justify-evenly items-center w-full h-full ">
+            <Text
+              text={["Current tournaments"]}
+              size="text-[24px]"
+              fontColor="text-white"
+              fontType="font-bold"
+            />
+            <ReactSVG
+              src={RefreshB}
+              beforeInjection={(svg) => {
+                svg.setAttribute("style", "width: 30px; height: 30px");
+              }}
+              className={`cursor-pointer ${isSpinning ? "spin" : ""}`}
+              onClick={() => {
+                setIsSpinning(true);
+                refresh();
+              }}
+            />
+          </div>
           {tournaments.filter((tournament) => tournament.active).length > 0 ? (
             <div className="fadeScroll1 w-full h-full">
               <div
@@ -193,13 +218,22 @@ export const StudentHome = () => {
             onBackClick={handleBackClick}
             tourData={selectedTournamentData}
           />
-        ) : (
+        ) : selectedTournamentData ? (
           <TournamentDetails
             tournamentData={selectedTournamentData}
             onSeeMoreClick={handleSeeMoreClick}
             onBattleSelect={setSelectedBattle}
             teams={teams}
           />
+        ) : (
+          <div className="flex flex-row items-center justify-center w-[80%] h-[80%] bg-bgprimary rounded-[36px]">
+            <Text
+              text={["Select a tournament to see more details!"]}
+              size="text-[24px]"
+              fontColor="text-accentprimary"
+              fontType="font-black"
+            />
+          </div>
         )}
       </div>
     </div>
