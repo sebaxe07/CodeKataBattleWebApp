@@ -29,13 +29,14 @@ export const CreateBattle = () => {
   const [files, setFile] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
-  const [langIco, setLangIco] = useState("binaryIcon.svg");
+  const [langIco, setLangIco] = useState("python.svg");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const { activeUser, setActiveUser } = useContext(UserContext);
   const [isCreated, setIsCreated] = useState(false);
   const { id } = useParams();
+  const [tournament, setTournament] = useState([]);
 
   const theme = {
     rainbow: {
@@ -57,6 +58,21 @@ export const CreateBattle = () => {
   function closeAll() {
     toast.closeAll();
   }
+
+  useEffect(() => {
+    console.log(id);
+    const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
+    const tournamentId = Number(id); // Convert id to number
+    setTournament(
+      storedTournaments.filter(
+        (tournament) => tournament.id === tournamentId
+      )[0]
+    );
+  }, []);
+
+  useEffect(() => {
+    setStartDate(new Date(tournament.start_date));
+  }, [tournament]);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -100,6 +116,7 @@ export const CreateBattle = () => {
     const validTeamSize = Number(teamMin) <= Number(teamMax);
     const validFile = selectedFile !== null;
     const validLangIco = langIco !== "";
+    const validDate = dateStart < dateEnd;
 
     // Set error messages if needed
     const conditions = [
@@ -110,6 +127,7 @@ export const CreateBattle = () => {
       },
       { isValid: validDateStart, message: "Please input a valid start date." },
       { isValid: validDateEnd, message: "Please input a valid end date." },
+      { isValid: validDate, message: "Please input a valid date range." },
       {
         isValid: validTeamMin,
         message: "Please input a valid minimum team size.",
@@ -177,7 +195,7 @@ export const CreateBattle = () => {
         isClosable: true,
       });
 
-      console.error("Error creating tournament: ", error);
+      console.error("Error creating battle: ", error);
     } finally {
       setIsLoading(false);
     }
@@ -291,6 +309,14 @@ export const CreateBattle = () => {
                       placeholder={dateStart ? dateStart : "Select date"}
                       value={dateStart}
                       onChange={(dateStart) => setStartDate(dateStart)}
+                      minDate={new Date(tournament.start_date)}
+                      maxDate={
+                        new Date(
+                          new Date(tournament.end_date).setDate(
+                            new Date(tournament.end_date).getDate() - 1
+                          )
+                        )
+                      }
                       icon={
                         <ReactSVG
                           src={CalendarT}
@@ -317,6 +343,14 @@ export const CreateBattle = () => {
                       placeholder={dateEnd ? dateEnd : "Select date"}
                       value={dateEnd}
                       onChange={(dateEnd) => setEndDate(dateEnd)}
+                      minDate={
+                        new Date(
+                          new Date(dateStart).setDate(
+                            new Date(dateStart).getDate() + 1
+                          )
+                        )
+                      }
+                      maxDate={new Date(tournament.end_date)}
                       icon={
                         <ReactSVG
                           src={CalendarT}

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 import HomeIcon from "../../assets/icons/home.svg";
 import Logout from "../../assets/icons/logout.svg";
+import search from "../../assets/icons/search.svg";
 import BgIconCard from "../common/bgIconCard";
 import Button from "../common/Button";
 import { NavLink, Outlet } from "react-router-dom";
@@ -78,6 +79,14 @@ const Sidebar = () => {
         localStorage.removeItem("user");
       }
 
+      if (localStorage.getItem("tournaments")) {
+        localStorage.removeItem("tournaments");
+      }
+
+      const keys = Object.keys(localStorage);
+      const battleKeys = keys.filter((key) => key.startsWith("battle"));
+      battleKeys.forEach((key) => localStorage.removeItem(key));
+
       // Remove the user object from the global context
       setActiveUser(null);
 
@@ -126,6 +135,19 @@ const Sidebar = () => {
               classname={`w-[55px] h-[55px] rounded-[36px]`}
             />
           </NavLink>
+          {!educator ? (
+            <NavLink
+              to="/student/joinTournament"
+              className=" flex justify-center "
+            >
+              <ReactSVG
+                src={search}
+                beforeInjection={(svg) => {
+                  svg.setAttribute("style", "width: 40px; height: 35px;");
+                }}
+              />
+            </NavLink>
+          ) : null}
 
           <div
             onClick={onOpen}

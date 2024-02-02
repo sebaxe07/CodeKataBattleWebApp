@@ -3,13 +3,15 @@ import { Text } from "../../common/text";
 
 export const TourDescript = ({ name, description }) => {
   return (
-    <div className="flex flex-col justify-center items-center relative top-[15%] mx-[71px] ">
+    <div className="flex flex-col justify-center items-center relative top-[25%] mx-[71px] ">
       <Text
         text={[name]}
         size="text-[32px]"
         fontColor="text-white"
         fontType="font-bold"
-        className={"  leading-tight "}
+        className={
+          "whitespace-nowrap overflow-hidden overflow-ellipsis w-[450px] text-center"
+        }
       />
       <Text
         text={[description]}

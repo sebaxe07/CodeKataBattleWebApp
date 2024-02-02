@@ -1,5 +1,5 @@
 from django.db import models
-from user_management.models import EducatorProfile
+from user_management.models import EducatorProfile, StudentProfile
  
 class Tournament(models.Model):
     name = models.CharField(max_length=255)
@@ -9,9 +9,10 @@ class Tournament(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     invited_Educators = models.ManyToManyField(EducatorProfile, related_name='invited_tournaments', blank=True)
+    subscribed_Students = models.ManyToManyField(StudentProfile, related_name='subscribed_tournaments', blank=True)
     active = models.BooleanField(default=True)
 
-    def __str__(self):
+    def __str__(self): 
         return self.name
 
 class Battle(models.Model):

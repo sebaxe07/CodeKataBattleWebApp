@@ -242,7 +242,12 @@ export const ManageTournament = () => {
                 </div>
               </div>
               <div className="flex justify-center items-center w-full h-full">
-                <Button name="Edit Tournament" />
+                <Button
+                  name="Edit Tournament"
+                  onClick={() => {
+                    navigate("edit");
+                  }}
+                />
               </div>
             </div>
             {/* Lado Derecho */}

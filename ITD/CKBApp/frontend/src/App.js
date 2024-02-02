@@ -21,13 +21,15 @@ import ProtectedRouteGroup from "./services/ProtectedRouteGroup";
 
 import { StudentHome } from "./views/student/StudentHome";
 import { ProfileStudents } from "./views/student/ProfileStudents";
+import { BattleDetails } from "./views/student/BattleDetails";
 
 import { EducatorHome } from "./views/educator/EducatorHome";
 import { ManageTournament } from "./views/educator/Tournament/manageTournament";
 import { CreateTournament } from "./views/educator/Tournament/createTournament";
-import { CompleteBattleCreation } from "./views/educator/Battle/completeBattleCreation";
 import { ManageBattle } from "./views/educator/Battle/manageBattle";
 import { CreateBattle } from "./views/educator/Battle/createBattle";
+import { EditTournament } from "./views/educator/Tournament/editTournament";
+import { EditBattle } from "./views/educator/Battle/editBattle";
 import { ProfileEducator } from "./views/educator/ProfileEducator";
 import { JoinTournament } from "./views/student/joinTournament";
 
@@ -58,6 +60,8 @@ function App() {
                 <Route path="home" element={<StudentHome />} />
                 <Route path="joinTournament" element={<JoinTournament />} />
                 <Route path="profile" element={<ProfileStudents />} />
+                <Route path="battle/:id" element={<BattleDetails />} />
+                <Route path="*" element={<Navigate to="home" />} />
               </Route>
               <Route path="/educator" element={<Sidebar />}>
                 <Route index element={<Navigate to="home" />} />
@@ -65,11 +69,17 @@ function App() {
                 <Route path="profile" element={<ProfileEducator />} />
                 <Route path="tournament">
                   <Route index element={<Navigate to="home" />} />
-                  <Route path="manage/:id" element={<ManageTournament />} />
+                  <Route path="manage/:id">
+                    <Route index element={<ManageTournament />} />
+                    <Route path="edit" element={<EditTournament />} />
+                  </Route>
                   <Route path="create" element={<CreateTournament />} />
                   <Route path=":id/battle">
                     <Route index element={<Navigate to="home" />} />
-                    <Route path="manage/:bid" element={<ManageBattle />} />
+                    <Route path="manage/:bid">
+                      <Route index element={<ManageBattle />} />
+                      <Route path="edit" element={<EditBattle />} />
+                    </Route>
                     <Route path="create" element={<CreateBattle />} />
                   </Route>
                 </Route>

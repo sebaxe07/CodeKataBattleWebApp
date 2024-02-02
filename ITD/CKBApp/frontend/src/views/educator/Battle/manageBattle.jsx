@@ -16,27 +16,14 @@ import Back from "../../../assets/icons/backArrow.svg";
 import Sensei from "../../../assets/icons/UsersIcons/BearSensei.svg";
 import TeamLeaderboard from "../../../components/utils/TournamentDetails/TeamLeaderboard";
 import Add from "../../../assets/icons/add.svg";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  useDisclosure,
-} from "@chakra-ui/react";
 
 export const ManageBattle = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   const [battles, setBattles] = useState([]);
-  const { activeUser, setActiveUser } = useContext(UserContext);
   const navigate = useNavigate();
   const { id, bid } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
   const [teamSize, setTeamSize] = useState(0);
-  const [email, setEmail] = useState("");
 
   useEffect(() => {
     console.log(id);
@@ -157,7 +144,12 @@ export const ManageBattle = () => {
                 </div>
               </div>
               <div className="flex justify-center items-center h-full w-full  ">
-                <Button name="Edit Battle" />
+                <Button
+                  name="Edit Battle"
+                  onClick={() => {
+                    navigate("edit");
+                  }}
+                />
                 <div className="flex flex-row gap-3 items-center justify-center">
                   <Text
                     text={["Team Size"]}

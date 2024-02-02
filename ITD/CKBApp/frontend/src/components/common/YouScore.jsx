@@ -1,8 +1,29 @@
 import React from "react";
 import { ReactSVG } from "react-svg";
 import { Text } from "./text";
+import BearUser from "../../assets/icons/UsersIcons/bear.svg";
+import TigerUser from "../../assets/icons/UsersIcons/tiger.svg";
+import ElephantUser from "../../assets/icons/UsersIcons/elephant.svg";
+import PiggyUser from "../../assets/icons/UsersIcons/piggy.svg";
 
 export const YouScore = ({ userIcon, position, score }) => {
+  switch (userIcon) {
+    case "bear.svg":
+      userIcon = BearUser;
+      break;
+    case "tiger.svg":
+      userIcon = TigerUser;
+      break;
+    case "elephant.svg":
+      userIcon = ElephantUser;
+      break;
+    case "piggy.svg":
+      userIcon = PiggyUser;
+      break;
+    default:
+      userIcon = BearUser;
+  }
+
   return (
     <div className="relative rounded-[40px] bg-accentprimary w-[111px] h-[150px] flex flex-col justify-center items-center ">
       <div className="absolute transform  -translate-y-[70px] bg-bgaccent rounded-[40px] min-w-[57px]">

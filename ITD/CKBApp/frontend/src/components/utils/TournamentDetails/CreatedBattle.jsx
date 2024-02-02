@@ -42,8 +42,8 @@ export const CreatedBattle = ({ context = "", icon, name, state, bid }) => {
       </div>
       <div className="flex flex-1 flex-row items-center justify-between h-full">
         <Button
-          name="Edit"
-          className={"h-full  max-w-[120px] flex-grow"}
+          name="Manage"
+          className={"h-full  max-w-[120px] justify-center items-center flex"}
           onClick={() =>
             navigate(`/educator/tournament/${id}/battle/manage/${bid}`)
           }

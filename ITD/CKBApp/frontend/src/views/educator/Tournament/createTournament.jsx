@@ -21,9 +21,11 @@ import BgIconCard from "../../../components/common/bgIconCard";
 export const CreateTournament = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [dateStart, setStartDate] = useState(null);
+  const [dateStart, setStartDate] = useState(
+    new Date(new Date().setDate(new Date().getDate() + 1))
+  );
   const [dateEnd, setEndDate] = useState(null);
-  const [langIco, setLangIco] = useState("binaryIcon.svg");
+  const [langIco, setLangIco] = useState("python.svg");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -60,6 +62,7 @@ export const CreateTournament = () => {
     const validDescription = description.length > 0;
     const validDateStart = dateStart !== null;
     const validDateEnd = dateEnd !== null;
+    const validDate = dateStart < dateEnd;
 
     // Set error messages if needed
     const conditions = [
@@ -70,6 +73,7 @@ export const CreateTournament = () => {
       },
       { isValid: validDateStart, message: "Please enter a valid start date." },
       { isValid: validDateEnd, message: "Please enter a valid end date." },
+      { isValid: validDate, message: "Please enter a valid date range." },
     ];
 
     conditions.forEach(({ isValid, message }) => {
@@ -195,7 +199,7 @@ export const CreateTournament = () => {
                       mode={"area"}
                       type={"text"}
                       classname={
-                        "w-[450px] resize-none whitespace-pre-wrap h-[210px] p-5 pl-10  items-center bg-[#332786] text-white rounded-[26px]"
+                        "w-[450px] resize-none h-[210px] p-5 pl-10  items-center bg-[#332786] text-white rounded-[26px] overflow-auto  scrollbar-thin scrollbar-thumb-bgprimary scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full "
                       }
                       placeholder=""
                       value={description}
@@ -221,6 +225,10 @@ export const CreateTournament = () => {
                         placeholder={dateStart ? dateStart : "Select date"}
                         value={dateStart}
                         onChange={(dateStart) => setStartDate(dateStart)}
+                        minDate={
+                          new Date(new Date().setDate(new Date().getDate() + 1))
+                        }
+                        maxDate={new Date(2025, 11, 31)}
                         icon={
                           <ReactSVG
                             src={CalendarT}
@@ -247,6 +255,14 @@ export const CreateTournament = () => {
                         placeholder={dateEnd ? dateEnd : "Select date"}
                         value={dateEnd}
                         onChange={(dateEnd) => setEndDate(dateEnd)}
+                        minDate={
+                          new Date(
+                            new Date(dateStart).setDate(
+                              new Date(dateStart).getDate() + 1
+                            )
+                          )
+                        }
+                        maxDate={new Date(2025, 11, 31)}
                         icon={
                           <ReactSVG
                             src={CalendarT}

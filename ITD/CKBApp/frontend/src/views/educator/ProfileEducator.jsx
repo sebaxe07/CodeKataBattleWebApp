@@ -22,9 +22,9 @@ export const ProfileEducator = ({}) => {
           right: 30,
         }}
       />
-      <div className="flex flex-row w-full  items-center ">
+      <div className="flex flex-row w-full items-center ">
         <div className="flex flex-col w-full  ml-24">
-          <div className="flex flex-col w-full items-start space-y-2 ">
+          <div className="flex flex-col w-full  items-start space-y-2 ">
             <Text
               text={["Current tournaments"]}
               size="text-[24px]"
@@ -35,7 +35,7 @@ export const ProfileEducator = ({}) => {
               <div
                 className="overflow-auto  scrollbar-thin scrollbar-thumb-bgeducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
                 style={{
-                  maxHeight: "400px",
+                  maxHeight: "350px",
                   minHeight: "300px",
                   width: "1100px",
                 }}
@@ -90,7 +90,7 @@ export const ProfileEducator = ({}) => {
               <div
                 className="overflow-auto  scrollbar-thin scrollbar-thumb-bgeducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
                 style={{
-                  maxHeight: "400px",
+                  maxHeight: "350px",
                   minHeight: "300px",
                   width: "1100px",
                 }}
