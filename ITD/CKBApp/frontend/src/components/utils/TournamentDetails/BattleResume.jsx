@@ -108,6 +108,23 @@ export const BattleResume = ({ onBackClick, selectedBattle, tourData }) => {
         JSON.stringify(response.data)
       );
       setNewCode(response.data.code);
+      const newTeamData = response.data;
+
+      // Get the existing teams from local storage
+      let existingTeams = JSON.parse(localStorage.getItem("teams"));
+      console.log(existingTeams);
+      // If there are no existing teams, initialize an empty array
+      if (!existingTeams) {
+        existingTeams = [];
+        console.log("No hay teams");
+      }
+
+      // Add the new team to the existing teams
+      existingTeams.push(newTeamData);
+      console.log(existingTeams);
+      // Update local storage with the new array of teams
+      localStorage.setItem("teams", JSON.stringify(existingTeams));
+      console.log("Teams updated");
       setStep(3);
     } catch (error) {
       console.error(error);
@@ -119,26 +136,49 @@ export const BattleResume = ({ onBackClick, selectedBattle, tourData }) => {
 
   const handleJoinTeam = (teamCode) => {
     setTeamCode(teamCode);
-    handleJoinTeamCode();
+    handleJoinTeamCode(teamCode);
   };
 
-  const handleJoinTeamCode = async () => {
+  const handleJoinTeamCode = async (inputTeamCode) => {
     closeAll();
-    if (teamCode === "") {
+    setIsLoading(true);
+
+    const codeToUse = inputTeamCode || teamCode;
+
+    // timeout for code update
+    if (codeToUse === "") {
       showToast("Please enter a team code");
+      setIsLoading(false);
       return;
     }
 
-    setIsLoading(true);
     try {
       const response = await axios.post(
-        `/tgms/teams/join/${teamCode}/${activeUser.roleid}/${selectedBattle.id}/`,
+        `/tgms/teams/join/${codeToUse}/${activeUser.roleid}/${selectedBattle.id}/`,
         {},
         {
           headers: { Authorization: `Token ${activeUser.authToken}` },
         }
       );
       console.log(response.data);
+
+      const newTeamData = response.data.team;
+
+      // Get the existing teams from local storage
+      let existingTeams = JSON.parse(localStorage.getItem("teams"));
+      console.log(existingTeams);
+      // If there are no existing teams, initialize an empty array
+      if (!existingTeams) {
+        existingTeams = [];
+        console.log("No hay teams");
+      }
+
+      // Add the new team to the existing teams
+      existingTeams.push(newTeamData);
+      console.log(existingTeams);
+      // Update local storage with the new array of teams
+      localStorage.setItem("teams", JSON.stringify(existingTeams));
+      console.log("Teams updated");
       navigate(`/student/battle/${selectedBattle.id}`);
     } catch (error) {
       console.error(error);

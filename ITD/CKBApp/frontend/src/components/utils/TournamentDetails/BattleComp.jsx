@@ -44,7 +44,7 @@ export const BattleComp = ({
           text={[battleName]}
           size="text-[24px]"
           fontColor="text-white"
-          fontType="font-bold"
+          fontType="font-bold whitespace-nowrap overflow-hidden overflow-ellipsis w-[150px]"
           className={""}
         />
       </div>

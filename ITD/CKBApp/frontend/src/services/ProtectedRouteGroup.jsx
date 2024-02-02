@@ -9,7 +9,6 @@ const ProtectedRouteGroup = () => {
   const location = useLocation();
   const protectedRoutes = ["/student", "/educator"];
 
-  console.log("Protected Route");
   if (
     !auth &&
     protectedRoutes.some((route) => location.pathname.startsWith(route))
@@ -22,9 +21,6 @@ const ProtectedRouteGroup = () => {
     });
     return <Navigate to="/" />;
   } else {
-    console.log("auth " + auth);
-    console.log("location.pathname " + location.pathname);
-    console.log("OUTLET");
     return <Outlet />;
   }
 };

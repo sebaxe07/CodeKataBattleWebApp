@@ -8,7 +8,6 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const data = localStorage.getItem("user");
-    console.log("USER CONTEXT");
     if (data) {
       setActiveUser(JSON.parse(data));
     }

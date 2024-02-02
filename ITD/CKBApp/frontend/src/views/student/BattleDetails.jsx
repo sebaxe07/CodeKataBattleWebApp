@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ReactSVG } from "react-svg";
+import { useParams } from "react-router-dom";
 import { Text } from "../../components/common/text";
 import Button from "../../components/common/Button";
+import { useNavigate } from "react-router-dom";
 import { EducatorName } from "../../components/utils/TournamentDetails/EducatorName";
 import { TopDecorator } from "../../components/utils/TournamentDetails/TopDecorator";
 import { BattleLogo } from "../../components/utils/TournamentDetails/BattleLogo";
@@ -20,8 +22,59 @@ import BearUser from "../../assets/icons/UsersIcons/bear.svg";
 import TigerUser from "../../assets/icons/UsersIcons/tiger.svg";
 import TeamLeaderboard from "../../components/utils/TournamentDetails/TeamLeaderboard";
 
+const defaultTournamentData = {
+  name: "Tournament Name",
+  description: "Tournament description",
+  start_date: "2021-05-25",
+  end_date: "2021-05-25",
+  picture: "python.svg",
+  battles: [],
+  created_by: {
+    user_profile: {
+      profile_icon: "bear.svg",
+      user: {
+        first_name: "Sensei",
+      },
+    },
+  },
+};
+
+const defaultBattle = {
+  active: true,
+  created_by: {
+    user_profile: {
+      user: { id: 10, first_name: "Sebastian" },
+      profile_icon: "bear.svg",
+    },
+  },
+  description: "",
+  end_date: "2024-02-07T23:00:00Z",
+  max_students_per_group: 5,
+  min_students_per_group: 1,
+  name: "",
+  picture: "python.svg",
+  software_project: "",
+  start_date: "2024-02-05T23:00:00Z",
+};
+
+const defaultTeam = {
+  name: "Team Name",
+  code: "123456",
+  battle: 1,
+  members: [],
+};
+
 export const BattleDetails = ({}) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [team, setTeam] = useState(defaultTeam);
+  const [tournamentData, setTournamentData] = useState(defaultTournamentData);
+  const [battle, setBattle] = useState(defaultBattle);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [teamSize, setTeamSize] = useState(0);
+  const firstName =
+    tournamentData.created_by.user_profile.user.first_name.split(" ")[0];
+
   const handleWheel = (e) => {
     e.preventDefault();
     const container = e.currentTarget;
@@ -33,6 +86,40 @@ export const BattleDetails = ({}) => {
       behaviour: "smooth",
     });
   };
+
+  useEffect(() => {
+    console.log(battle);
+    if (battle.min_students_per_group == battle.max_students_per_group) {
+      setTeamSize(battle.min_students_per_group);
+    } else {
+      setTeamSize(
+        battle.min_students_per_group + " - " + battle.max_students_per_group
+      );
+    }
+  }, [battle]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    const battleID = Number(id);
+    const teams = JSON.parse(localStorage.getItem("teams")) || [];
+    const foundTeam = teams.find((team) => team.battle === battleID);
+    setTeam(foundTeam);
+    const tournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
+
+    // find the battle in the tournaments
+    let foundTournament = null;
+    tournaments.forEach((tournament) => {
+      const foundBattle = tournament.battles.find(
+        (battle) => battle.id === battleID
+      );
+      if (foundBattle) {
+        foundTournament = tournament;
+        setBattle(foundBattle);
+      }
+    });
+    setTournamentData(foundTournament);
+    setIsLoading(false);
+  }, []);
 
   return (
     <div className="bg-bgsecondary flex flex-row justify-center items-center h-screen w-[screen-120px] ml-[120px]">
@@ -51,37 +138,45 @@ export const BattleDetails = ({}) => {
       />
       <div className="select-none relative rounded-[36px] bg-accentSecondaryEducator w-[1500px] m-10 mr-2 mt-20 h-[76%] flex justify-center">
         <div className="rounded-[36px] bg-bgeducator w-[1480px] h-[97%]">
-          <TopDecorator LanguageIcon={Python} />
+          <TopDecorator LanguageIcon={tournamentData.picture} size={250} />
           <img
             src={Back}
-            className=" relative w-[40px] h-[40px] translate-x-10 translate-y-10  rounded-[100%]"
+            className=" relative w-[40px] h-[40px] translate-x-10 translate-y-10  rounded-[100%] cursor-pointer"
             onClick={() => {
-              console.log("pressed");
+              navigate(-1);
             }}
           />
           <EducatorName
             SenseiImg={Sensei}
-            SenseiName={"Miguel"}
+            SenseiName={firstName}
             bg={"bg-[#359673]"}
           />
           <div className="flex h-full rounded-[36px] flex-row -mt-10">
             {/* Lado Izquierdo */}
             <div className="flex flex-row h-[682px] w-[720px] gap-8 ml-4 pt-10 justify-center items-center">
               <div className="flex flex-col -space-y-2  items-start mt-20">
-                <BattleLogo BattleIcon={Binary} />
+                <BattleLogo
+                  BattleIcon={battle.picture}
+                  shouldTranslate={false}
+                  size={100}
+                />
                 <div className="flex flex-col -space-y-2">
                   <Text
-                    text={["Battle"]}
+                    text={[battle.name]}
                     size="text-[32px]"
                     fontColor="text-white"
-                    className={"text-start"}
+                    className={
+                      "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[150px]"
+                    }
                     fontType="font-bold"
                   />
                   <Text
-                    text={["Active Tournament 1"]}
+                    text={[tournamentData.name]}
                     size="text-[16px]"
                     fontColor="text-white"
-                    className={"text-start"}
+                    className={
+                      "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[150px]"
+                    }
                     fontType="font-normal"
                   />
                 </div>
@@ -90,52 +185,73 @@ export const BattleDetails = ({}) => {
                     context={"b"}
                     title={"Team Size"}
                     icon={"Students"}
-                    msg={"1-5"}
+                    msg={teamSize}
                   />
                   <MiniDetails
                     context={"b"}
                     title={"Started"}
                     icon={"Calendar"}
-                    msg={"22 Dec. 2023"}
+                    msg={new Date(battle.start_date).toLocaleDateString()}
                   />
                   <MiniDetails
                     context={"b"}
                     title={"Ends"}
                     icon={"Calendar"}
-                    msg={"22 Dec. 2023"}
+                    msg={new Date(battle.end_date).toLocaleDateString()}
                   />
                   <MiniDetails
                     context={"b"}
-                    title={"Saito Suscribed"}
+                    title={"Seito Suscribed"}
                     icon={"Calendar"}
-                    msg={"100"}
+                    msg={
+                      tournamentData.subscribed_Students
+                        ? tournamentData.subscribed_Students.length
+                        : 0
+                    }
                   />
                 </div>
               </div>
-              <div className="flex flex-col w-[390px] h-[90%] mt-10 rounded-[26px] p-10 mr-2 mb-12 justify-between items-center bg-accentSecondaryEducator">
-                <div>
+              <div className="flex flex-col w-[390px] h-[90%]  rounded-[26px]  justify-center items-center">
+                <div className="flex items-center justify-evenly w-[100%] h-[50%]">
                   <Text
-                    text={[
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                    ]}
-                    size="text-[16px] "
-                    className={"leading-normal text-start"}
+                    text={["My team"]}
+                    size="text-[20px]"
                     fontColor="text-white"
-                    fontType="font-normal"
+                    className={"text-start"}
+                    fontType="font-bold"
                   />
                   <Text
-                    text={[
-                      "Lorem ipsum dolor sit amet,",
-                      "eiusmod tempor incididunt ",
-                      "laboris nisi ut aliquip ex ea commodo.",
-                    ]}
+                    text={[team.name]}
+                    size="text-[20px]"
+                    fontColor="text-white"
+                    className={
+                      "text-start bg-accentSecondaryEducator rounded-[40px] py-2  px-5 ml-2"
+                    }
+                    fontType="font-bold"
+                  />
+                  <Text
+                    text={["Invite Code:", team.code]}
                     size="text-[16px]"
-                    fontColor="text-white "
-                    className={"text-start leading-8"}
-                    fontType="font-normal"
+                    fontColor="text-white"
+                    className={"text-center leading-tight"}
+                    fontType="font-bold"
                   />
                 </div>
-                <Button name="RESUME" />
+                <div className="flex flex-col w-[390px] h-full rounded-[26px] p-10 mr-2 mb-12 justify-between items-center bg-accentSecondaryEducator">
+                  <div
+                    className="overflow-auto mb-5  scrollbar-thin scrollbar-thumb-bgeducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
+                    style={{ maxHeight: "300px" }}
+                  >
+                    <Text
+                      text={[battle.description]}
+                      size="text-[16px] "
+                      className={"leading-normal text-start"}
+                      fontColor="text-white"
+                      fontType="font-normal"
+                    />
+                  </div>
+                  <Button name="Go to Github" />
+                </div>
               </div>
             </div>
             {/* Lado Derecho */}
@@ -186,10 +302,7 @@ export const BattleDetails = ({}) => {
                       fontType="font-bold"
                     />
                   </div>
-                  <div
-                    onWheel={handleWheel}
-                    className="bg-bgeducator flex-col rounded-l-[36px] w-full h-[90%] flex overflow-y-auto overflow-x-hidden scrollbar-thumb-accentSecondaryEducator scrollbar-thin"
-                  >
+                  <div className="bg-bgeducator flex-col rounded-l-[36px] w-full h-[90%] flex overflow-y-auto overflow-x-hidden scrollbar-thumb-accentSecondaryEducator scrollbar-thin">
                     <TeamLeaderboard
                       rank={"1"}
                       icon={TigerUser}

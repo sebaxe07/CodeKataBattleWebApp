@@ -18,7 +18,9 @@ export const TourDescript = ({ name, description }) => {
         size="text-[16px]"
         fontColor="text-accentprimary"
         fontType="font-normal"
-        className={"mt-[3px] leading-tight "}
+        className={
+          "mt-[3px] leading-tight max-h-[50px] overflow-auto  scrollbar-thin scrollbar-thumb-bgaccent scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
+        }
       />
     </div>
   );

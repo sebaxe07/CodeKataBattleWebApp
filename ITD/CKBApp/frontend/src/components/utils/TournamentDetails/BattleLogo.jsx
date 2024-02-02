@@ -10,7 +10,7 @@ export const BattleLogo = ({
   shouldTranslate = true,
 }) => {
   const innerSize = (size / 60) * 74;
-  const imgSize = (size / 70) * 52;
+  const imgSize = (size / 70) * 50;
 
   switch (BattleIcon) {
     case "python.svg":

@@ -69,7 +69,10 @@ class TeamAddMember(APIView):
             
             team.members.add(student)
             team.save()
-            return Response({"message": "Student added to the team successfully"}, status=status.HTTP_200_OK)
+             # Serialize the team
+            team_serializer = TeamSerializer(team)
+
+            return Response({"message": "Student added to the team successfully", "team": team_serializer.data}, status=status.HTTP_200_OK)
         except Team.DoesNotExist:
             return Response({"error": "Team not found"}, status=status.HTTP_404_NOT_FOUND)
         except StudentProfile.DoesNotExist:
