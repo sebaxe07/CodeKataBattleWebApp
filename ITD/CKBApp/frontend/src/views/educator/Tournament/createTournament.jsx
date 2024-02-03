@@ -59,6 +59,7 @@ export const CreateTournament = () => {
     event.preventDefault();
 
     const validName = name.length > 0;
+    const nameLength = name.length < 70;
     const validDescription = description.length > 0;
     const validDateStart = dateStart !== null;
     const validDateEnd = dateEnd !== null;
@@ -67,6 +68,10 @@ export const CreateTournament = () => {
     // Set error messages if needed
     const conditions = [
       { isValid: validName, message: "Please enter a valid name." },
+      {
+        isValid: nameLength,
+        message: "The name is too long (70 characters max).",
+      },
       {
         isValid: validDescription,
         message: "Please enter a valid description.",

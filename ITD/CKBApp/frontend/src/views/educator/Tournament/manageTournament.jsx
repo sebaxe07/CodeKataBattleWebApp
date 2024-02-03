@@ -227,7 +227,7 @@ export const ManageTournament = () => {
           </div>
           <div className="flex h-full rounded-[36px] w-full flex-row">
             {/* Lado Izquierdo */}
-            <div className="flex flex-col h-full rounded-bl-[36px] w-full justify-center items-center bg-bgprimary">
+            <div className="flex flex-col h-full rounded-bl-[36px] w-[50%] justify-center items-center bg-bgprimary">
               <div className="flex flex-row  -space-y-1  items-center justify-evenly h-full w-full ">
                 <TopDecorator
                   LanguageIcon={tournament.picture}
@@ -304,7 +304,7 @@ export const ManageTournament = () => {
               ) : null}
             </div>
             {/* Lado Derecho */}
-            <div className="flex flex-col h-full rounded-br-[36px] w-full  bg-[#413e97]">
+            <div className="flex flex-col h-full rounded-br-[36px] w-[50%]  bg-[#413e97]">
               {/* Created Battles */}
               <div className="flex flex-col w-full h-full justify-center basis-2/4	 ">
                 <Text

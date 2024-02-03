@@ -73,7 +73,7 @@ export const BgIconCard = ({
         active == null
           ? `rounded-full ${bgIcon} flex justify-center items-center`
           : `flex justify-center items-center rounded-[36px] ${
-              active ? bgColor : `bg-shadowbox`
+              active ? bgIcon : `bg-shadowbox`
             }`
       }
       style={{ width: `${innerSize}px`, height: `${innerSize}px` }}

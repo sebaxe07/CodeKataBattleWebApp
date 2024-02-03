@@ -136,223 +136,232 @@ export const BattleDetails = ({}) => {
           right: 30,
         }}
       />
-      <div className="select-none relative rounded-[36px] bg-accentSecondaryEducator w-[1500px] m-10 mr-2 mt-20 h-[76%] flex justify-center">
-        <div className="rounded-[36px] bg-bgeducator w-[1480px] h-[97%]">
-          <TopDecorator LanguageIcon={tournamentData.picture} size={250} />
-          <img
-            src={Back}
-            className=" relative w-[40px] h-[40px] translate-x-10 translate-y-10  rounded-[100%] cursor-pointer"
-            onClick={() => {
-              navigate(-1);
-            }}
-          />
-          <EducatorName
-            SenseiImg={Sensei}
-            SenseiName={firstName}
-            bg={"bg-[#359673]"}
-          />
-          <div className="flex h-full rounded-[36px] flex-row -mt-10">
+      <div className="select-none relative rounded-[36px] bg-accentSecondaryEducator w-[1500px] m-10 ml-20 mt-20 h-[75%] max-h-[75%]  flex justify-start">
+        <div className="flex flex-col h-[98%] w-[99%]">
+          <div className="flex flex-row items-center ml-10">
+            <TopDecorator LanguageIcon={tournamentData.picture} size={250} />
+            <EducatorName
+              SenseiImg={Sensei}
+              SenseiName={firstName}
+              bg={"bg-[#359673]"}
+            />
+          </div>
+          <div className="flex h-full rounded-[36px] w-full flex-row ">
             {/* Lado Izquierdo */}
-            <div className="flex flex-row h-[682px] w-[720px] gap-8 ml-4 pt-10 justify-center items-center">
-              <div className="flex flex-col -space-y-2  items-start mt-20">
-                <BattleLogo
-                  BattleIcon={battle.picture}
-                  shouldTranslate={false}
-                  size={100}
+            <div className="flex flex-col h-full  w-full items-center justify-evenly bg-bgeducator rounded-l-[36px]">
+              <div className="flex basis-1/8 mt-5 w-[100%] items-center">
+                <ReactSVG
+                  src={Back}
+                  beforeInjection={(svg) => {
+                    svg.setAttribute("style", "width: 40px; height: 40px");
+                  }}
+                  className="cursor-pointer text-accenteducator ml-10"
+                  onClick={() => {
+                    navigate(-1);
+                  }}
                 />
-                <div className="flex flex-col -space-y-2">
-                  <Text
-                    text={[battle.name]}
-                    size="text-[32px]"
-                    fontColor="text-white"
-                    className={
-                      "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[150px]"
-                    }
-                    fontType="font-bold"
-                  />
-                  <Text
-                    text={[tournamentData.name]}
-                    size="text-[16px]"
-                    fontColor="text-white"
-                    className={
-                      "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[150px]"
-                    }
-                    fontType="font-normal"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <MiniDetails
-                    context={"b"}
-                    title={"Team Size"}
-                    icon={"Students"}
-                    msg={teamSize}
-                  />
-                  <MiniDetails
-                    context={"b"}
-                    title={"Started"}
-                    icon={"Calendar"}
-                    msg={new Date(battle.start_date).toLocaleDateString()}
-                  />
-                  <MiniDetails
-                    context={"b"}
-                    title={"Ends"}
-                    icon={"Calendar"}
-                    msg={new Date(battle.end_date).toLocaleDateString()}
-                  />
-                  <MiniDetails
-                    context={"b"}
-                    title={"Battle Status"}
-                    icon={"Calendar"}
-                    msg={battle.status.toUpperCase()}
-                  />
-                </div>
               </div>
-              <div className="flex flex-col w-[390px] h-[90%]  rounded-[26px]  justify-center items-center">
-                <div className="flex items-center justify-evenly w-[100%] h-[50%]">
-                  <Text
-                    text={["My team"]}
-                    size="text-[20px]"
-                    fontColor="text-white"
-                    className={"text-start"}
-                    fontType="font-bold"
+              <div className="flex flex-row -space-y-2 basis-7/8 w-full h-full justify-evenly items-center">
+                <div className="flex flex-col">
+                  <BattleLogo
+                    BattleIcon={battle.picture}
+                    shouldTranslate={false}
+                    size={120}
                   />
-                  <Text
-                    text={[team.name]}
-                    size="text-[20px]"
-                    fontColor="text-white"
-                    className={
-                      "text-start bg-accentSecondaryEducator rounded-[40px] py-2  px-5 ml-2"
-                    }
-                    fontType="font-bold"
-                  />
-                  <Text
-                    text={["Invite Code:", team.code]}
-                    size="text-[16px]"
-                    fontColor="text-white"
-                    className={"text-center leading-tight"}
-                    fontType="font-bold"
-                  />
-                </div>
-                <div className="flex flex-col w-[390px] h-full rounded-[26px] p-10 mr-2 mb-12 justify-between items-center bg-accentSecondaryEducator">
-                  <div
-                    className="overflow-auto mb-5  scrollbar-thin scrollbar-thumb-bgeducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
-                    style={{ maxHeight: "300px" }}
-                  >
+                  <div className="flex flex-col -space-y-2">
                     <Text
-                      text={[battle.description]}
-                      size="text-[16px] "
-                      className={"leading-normal text-start"}
+                      text={[battle.name]}
+                      size="text-[32px]"
                       fontColor="text-white"
+                      className={
+                        "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[150px]"
+                      }
+                      fontType="font-bold"
+                    />
+                    <Text
+                      text={[tournamentData.name]}
+                      size="text-[16px]"
+                      fontColor="text-white"
+                      className={
+                        "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[150px]"
+                      }
                       fontType="font-normal"
                     />
                   </div>
-                  {battle.status === "active" && (
-                    <a
-                      href={`https://github.com/CodeKataBattleHUB/${battle.name.replace(
-                        /\s/g,
-                        "-"
-                      )}-${battle.id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  <div className="flex flex-col gap-2">
+                    <MiniDetails
+                      context={"b"}
+                      title={"Team Size"}
+                      icon={"Students"}
+                      msg={teamSize}
+                    />
+                    <MiniDetails
+                      context={"b"}
+                      title={"Started"}
+                      icon={"Calendar"}
+                      msg={new Date(battle.start_date).toLocaleDateString()}
+                    />
+                    <MiniDetails
+                      context={"b"}
+                      title={"Ends"}
+                      icon={"Calendar"}
+                      msg={new Date(battle.end_date).toLocaleDateString()}
+                    />
+                    <MiniDetails
+                      context={"b"}
+                      title={"Battle Status"}
+                      icon={"Calendar"}
+                      msg={battle.status.toUpperCase()}
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col w-[390px] h-[90%]  rounded-[26px]  justify-center items-center">
+                  <div className="flex items-center justify-evenly w-[100%] h-[50%]">
+                    <Text
+                      text={["My team"]}
+                      size="text-[20px]"
+                      fontColor="text-white"
+                      className={"text-start"}
+                      fontType="font-bold"
+                    />
+                    <Text
+                      text={[team.name]}
+                      size="text-[20px]"
+                      fontColor="text-white"
+                      className={
+                        "text-start bg-accentSecondaryEducator rounded-[40px] py-2  px-5 ml-2"
+                      }
+                      fontType="font-bold"
+                    />
+                    <Text
+                      text={["Invite Code:", team.code]}
+                      size="text-[16px]"
+                      fontColor="text-white"
+                      className={"text-center leading-tight"}
+                      fontType="font-bold"
+                    />
+                  </div>
+                  <div className="flex flex-col w-[390px] h-full rounded-[26px] p-10 mr-2 mb-12 justify-between items-center bg-accentSecondaryEducator">
+                    <div
+                      className="overflow-auto mb-5  scrollbar-thin scrollbar-thumb-bgeducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
+                      style={{ maxHeight: "300px" }}
                     >
-                      <Button name="Go to Github" />
-                    </a>
-                  )}
+                      <Text
+                        text={[battle.description]}
+                        size="text-[16px] "
+                        className={"leading-normal text-start"}
+                        fontColor="text-white"
+                        fontType="font-normal"
+                      />
+                    </div>
+                    {battle.status === "active" && (
+                      <a
+                        href={`https://github.com/CodeKataBattleHUB/${battle.name.replace(
+                          /\s/g,
+                          "-"
+                        )}-${battle.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button name="Go to Github" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
             {/* Lado Derecho */}
-            <div className="flex flex-row h-full w-[730px] ml-4 justify-center items-center rounded-r-[36px] mb-10 pt-10  bg-[#2A926E]">
-              <div className="flex flex-col h-full -space-y-2  justify-around items-center">
-                <div className="flex flex-col justify-between items-center">
+            <div className="flex flex-col h-full w-full justify-center items-center rounded-r-[36px] bg-[#2F8F6F]">
+              <div className="flex flex-col h-[40%] w-full justify-start items-center">
+                <Text
+                  text={["Leaderboard"]}
+                  size="text-[24px]"
+                  fontColor="text-white"
+                  className={"text-start"}
+                  fontType="font-bold"
+                />
+                <div className="flex flex-row justify-center items-end relative top-[20%]">
+                  <TopScore
+                    users={["Pablo", "Juan", "Sebas"]}
+                    score={["100", "50", "25"]}
+                    icons={[ElephantUser, PiggyUser, BearUser]}
+                  />
+                  <YouScore userIcon={TigerUser} position={"80"} score={"10"} />
+                </div>
+              </div>
+              <div className="w-full h-[42%]">
+                <div className="flex flex-row justify-around">
                   <Text
-                    text={["Leaderboard"]}
-                    size="text-[24px]"
+                    text={["#"]}
+                    size="text-[16px]"
                     fontColor="text-white"
                     className={"text-start"}
                     fontType="font-bold"
                   />
-                  <div className="flex flex-row justify-center items-end relative top-[20%]">
-                    <TopScore
-                      users={["Pablo", "Juan", "Sebas"]}
-                      score={["100", "50", "25"]}
-                      icons={[ElephantUser, PiggyUser, BearUser]}
-                    />
-                    <YouScore
-                      userIcon={TigerUser}
-                      position={"80"}
-                      score={"10"}
-                    />
-                  </div>
+                  <Text
+                    text={["Leaderboard"]}
+                    size="text-[16px]"
+                    fontColor="text-white"
+                    className={"text-start"}
+                    fontType="font-bold"
+                  />
+                  <Text
+                    text={["XP"]}
+                    size="text-[16px]"
+                    fontColor="text-white"
+                    className={"text-start"}
+                    fontType="font-bold"
+                  />
                 </div>
-                <div className="w-full h-[40%]">
-                  <div className="flex flex-row justify-between ml-20 mr-20">
-                    <Text
-                      text={["#"]}
-                      size="text-[16px]"
-                      fontColor="text-white"
-                      className={"text-start"}
-                      fontType="font-bold"
-                    />
-                    <Text
-                      text={["Leaderboard"]}
-                      size="text-[16px]"
-                      fontColor="text-white"
-                      className={"text-start"}
-                      fontType="font-bold"
-                    />
-                    <Text
-                      text={["XP"]}
-                      size="text-[16px]"
-                      fontColor="text-white"
-                      className={"text-start"}
-                      fontType="font-bold"
-                    />
-                  </div>
-                  <div className="bg-bgeducator flex-col rounded-l-[36px] w-full h-[90%] flex overflow-y-auto overflow-x-hidden scrollbar-thumb-accentSecondaryEducator scrollbar-thin">
-                    <TeamLeaderboard
-                      rank={"1"}
-                      icon={TigerUser}
-                      iconBg={"bg-[#FFC700]"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"2"}
-                      icon={TigerUser}
-                      iconBg={"bg-[#FFC700]"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"3"}
-                      icon={TigerUser}
-                      iconBg={"bg-[#FFC700]"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"4"}
-                      icon={TigerUser}
-                      iconBg={"bg-[#FFC700]"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"5"}
-                      icon={TigerUser}
-                      iconBg={"bg-[#FFC700]"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"6"}
-                      icon={TigerUser}
-                      iconBg={"bg-[#FFC700]"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                  </div>
+                <div className="bg-bgeducator flex-col w-full h-full flex overflow-y-auto overflow-x-hidden scrollbar-thumb-accentSecondaryEducator scrollbar-thin">
+                  <TeamLeaderboard
+                    context={"b"}
+                    rank={"1"}
+                    icon={TigerUser}
+                    iconBg={"bg-[#FFC700]"}
+                    name={"Juanito"}
+                    exp={"100"}
+                  />
+                  <TeamLeaderboard
+                    context={"b"}
+                    rank={"2"}
+                    icon={TigerUser}
+                    iconBg={"bg-[#FFC700]"}
+                    name={"Juanito"}
+                    exp={"100"}
+                  />
+                  <TeamLeaderboard
+                    context={"b"}
+                    rank={"3"}
+                    icon={TigerUser}
+                    iconBg={"bg-[#FFC700]"}
+                    name={"Juanito"}
+                    exp={"100"}
+                  />
+                  <TeamLeaderboard
+                    context={"b"}
+                    rank={"4"}
+                    icon={TigerUser}
+                    iconBg={"bg-[#FFC700]"}
+                    name={"Juanito"}
+                    exp={"100"}
+                  />
+                  <TeamLeaderboard
+                    context={"b"}
+                    rank={"5"}
+                    icon={TigerUser}
+                    iconBg={"bg-[#FFC700]"}
+                    name={"Juanito"}
+                    exp={"100"}
+                  />
+                  <TeamLeaderboard
+                    context={"b"}
+                    rank={"6"}
+                    icon={TigerUser}
+                    iconBg={"bg-[#FFC700]"}
+                    name={"Juanito"}
+                    exp={"100"}
+                  />
                 </div>
               </div>
             </div>

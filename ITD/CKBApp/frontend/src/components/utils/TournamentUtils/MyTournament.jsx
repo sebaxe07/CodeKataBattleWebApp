@@ -66,7 +66,7 @@ export const MyTournament = ({
           size={150}
         />
         <div className="flex flex-row justify-between items-center   min-h-[100px] ml-[140px] mr-[200px]">
-          <div className="flex flex-col justify-center items-start  w-[397px] max-h-[110px] my-2  grow -space-y-2">
+          <div className="flex flex-col justify-center items-start gap-2  w-[397px] max-h-[110px] my-2  grow -space-y-2">
             <Text
               text={[`${name}`]}
               size="text-[25px]"
@@ -79,7 +79,7 @@ export const MyTournament = ({
               size="text-[19px]"
               fontColor={`${colorScheme.label}`}
               fontType="font-normal"
-              className="text-start leading-tight overflow-y-scroll w-full scrollbar scrollbar-hide"
+              className="text-start leading-tight overflow-y-scroll w-full h-[80px] scrollbar scrollbar-hide"
             />
           </div>
 
