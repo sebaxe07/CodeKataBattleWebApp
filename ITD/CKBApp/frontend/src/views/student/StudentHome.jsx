@@ -128,14 +128,22 @@ export const StudentHome = () => {
               }}
             />
           </div>
-          {tournaments.filter((tournament) => tournament.active).length > 0 ? (
+          {tournaments.filter(
+            (tournament) =>
+              tournament.status === "active" ||
+              tournament.status === "registration"
+          ).length > 0 ? (
             <div className="fadeScroll1 w-full h-full">
               <div
                 className="overflow-auto  scrollbar-thin scrollbar-thumb-bgprimary scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
                 style={{ maxHeight: "300px", minHeight: "300px" }}
               >
                 {tournaments
-                  .filter((tournament) => tournament.active)
+                  .filter(
+                    (tournament) =>
+                      tournament.status === "active" ||
+                      tournament.status === "registration"
+                  )
                   .sort((a, b) => new Date(a.end_date) - new Date(b.end_date))
                   .map((tournament) => (
                     <TournamentCard
@@ -175,14 +183,16 @@ export const StudentHome = () => {
             fontColor="text-accentprimary"
             fontType="font-bold"
           />
-          {tournaments.filter((tournament) => !tournament.active).length > 0 ? (
+          {tournaments.filter((tournament) => tournament.status === "completed")
+            .length > 0 ? (
             <div className="fadeScroll1 w-full h-full">
               <div
                 className="overflow-auto  scrollbar-thin scrollbar-thumb-bgprimary scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
                 style={{ maxHeight: "300px", minHeight: "300px" }}
               >
                 {tournaments
-                  .filter((tournament) => !tournament.active)
+                  .filter((tournament) => tournament.status === "completed")
+                  .sort((a, b) => new Date(b.end_date) - new Date(a.end_date))
                   .map((tournament) => (
                     <PastTournamentCard
                       key={tournament.id}

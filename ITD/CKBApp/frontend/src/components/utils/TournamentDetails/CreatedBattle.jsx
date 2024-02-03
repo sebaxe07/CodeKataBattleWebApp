@@ -50,7 +50,7 @@ export const CreatedBattle = ({ context = "", icon, name, state, bid }) => {
         />
 
         <Text
-          text={[state ? "Active" : "Inactive"]}
+          text={[state.toUpperCase()]}
           size="text-[16px]"
           fontColor="text-white"
           fontType="font-bold"

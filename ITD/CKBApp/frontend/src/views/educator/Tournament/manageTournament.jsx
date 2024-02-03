@@ -19,7 +19,7 @@ import { TextField } from "../../../components/common/textfield";
 import { useNavigate } from "react-router-dom";
 import { LoadingScreen } from "../../../services/LoadingScreen";
 import RefreshG from "../../../assets/icons/refreshB.svg";
-
+import { useToast } from "@chakra-ui/react";
 import {
   Modal,
   ModalOverlay,
@@ -39,6 +39,7 @@ export const ManageTournament = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
   const [battles, setBattles] = useState([]);
+  const toast = useToast();
   const { activeUser, setActiveUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -92,6 +93,55 @@ export const ManageTournament = () => {
 
   const refresh = () => {
     fetchBattles();
+  };
+
+  const handleEarlyStart = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.patch(
+        `/tms/tournaments/start/${id}/`,
+        {},
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+      console.log(response.data);
+
+      tournament.start_date = new Date();
+      tournament.status = "active";
+      // Get the current tournaments data from local storage
+      let tournaments = JSON.parse(localStorage.getItem("tournaments"));
+
+      // Find the index of the tournament with the matching ID
+      const tourID = Number(id);
+      let tournamentIndex = tournaments.findIndex((t) => t.id === tourID);
+
+      // Update the necessary fields
+      tournaments[tournamentIndex].start_date = new Date();
+      tournaments[tournamentIndex].status = "active";
+
+      // Save the updated tournaments data back to local storage
+      localStorage.setItem("tournaments", JSON.stringify(tournaments));
+
+      toast({
+        title: "Tournament started",
+        description: "The tournament has been started",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Failed to start tournament:", error);
+      toast({
+        title: "Failed to start tournament",
+        description: "An error occurred while starting the tournament",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -241,14 +291,17 @@ export const ManageTournament = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-center items-center w-full h-full">
-                <Button
-                  name="Edit Tournament"
-                  onClick={() => {
-                    navigate("edit");
-                  }}
-                />
-              </div>
+              {tournament.status === "registration" ? (
+                <div className="flex justify-center items-center w-full h-full gap-5">
+                  <Button
+                    name="Edit Tournament"
+                    onClick={() => {
+                      navigate("edit");
+                    }}
+                  />
+                  <Button name="Early start" onClick={handleEarlyStart} />
+                </div>
+              ) : null}
             </div>
             {/* Lado Derecho */}
             <div className="flex flex-col h-full rounded-br-[36px] w-full  bg-[#413e97]">
@@ -271,7 +324,7 @@ export const ManageTournament = () => {
                         key={battle.id}
                         bid={battle.id}
                         name={battle.name}
-                        state={battle.active}
+                        state={battle.status}
                         icon={"swords.svg"}
                       />
                     ))}

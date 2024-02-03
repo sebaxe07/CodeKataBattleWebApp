@@ -16,6 +16,8 @@ import Back from "../../../assets/icons/backArrow.svg";
 import Sensei from "../../../assets/icons/UsersIcons/BearSensei.svg";
 import TeamLeaderboard from "../../../components/utils/TournamentDetails/TeamLeaderboard";
 import Add from "../../../assets/icons/add.svg";
+import axios from "../../../services/api";
+import { useToast } from "@chakra-ui/react";
 
 export const ManageBattle = () => {
   const [battles, setBattles] = useState([]);
@@ -23,9 +25,20 @@ export const ManageBattle = () => {
   const { id, bid } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [tournament, setTournament] = useState([{ status: "registration" }]);
   const [teamSize, setTeamSize] = useState(0);
+  const { activeUser, setActiveUser } = useContext(UserContext);
+  const toast = useToast();
 
   useEffect(() => {
+    console.log(id);
+    const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
+    const tournamentId = Number(id); // Convert id to number
+    setTournament(
+      storedTournaments.filter(
+        (tournament) => tournament.id === tournamentId
+      )[0]
+    );
     console.log(id);
     const storedBattles = JSON.parse(localStorage.getItem(`battle${id}`));
     const battleid = Number(bid); // Convert id to number
@@ -43,8 +56,67 @@ export const ManageBattle = () => {
     }
   }, [battles]);
 
+  const handleEarlyStart = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.patch(
+        `/tms/battles/start/${bid}/`,
+        {},
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+      console.log(response.data);
+
+      const runBattle = await axios.post(
+        `/tgms/battles/start/${bid}/`,
+        {},
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+      console.log(runBattle.data);
+
+      battles.start_date = new Date().toLocaleDateString();
+      battles.status = "active";
+
+      let battle = JSON.parse(localStorage.getItem(`battle${id}`));
+
+      // Find the index of the tournament with the matching ID
+      const batID = Number(bid);
+      let battleIndex = battle.findIndex((b) => b.id === bid);
+
+      // Update the necessary fields
+      battle[battleIndex].start_date = new Date();
+      battle[battleIndex].status = "active";
+
+      // Save the updated tournaments data back to local storage
+      localStorage.setItem(`battle${id}`, JSON.stringify(battle));
+
+      toast({
+        title: "Battle started",
+        description: "The Battle has started, emails have been sent",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Failed to start Battle:", error);
+      toast({
+        title: "Failed to start Battle",
+        description: "An error occurred while starting the Battle",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="bg-[#19362D] flex flex-col justify-center items-center  h-screen w-screen">
+      {isLoading && <LoadingScreen />}
       <ReactSVG
         src={Logo}
         beforeInjection={(svg) => {
@@ -144,12 +216,20 @@ export const ManageBattle = () => {
                 </div>
               </div>
               <div className="flex justify-center items-center h-full w-full  ">
-                <Button
-                  name="Edit Battle"
-                  onClick={() => {
-                    navigate("edit");
-                  }}
-                />
+                {battles.status === "registration" && (
+                  <div>
+                    <Button
+                      name="Edit Battle"
+                      onClick={() => {
+                        navigate("edit");
+                      }}
+                      className={"mr-5"}
+                    />
+                    {tournament.status === "active" && (
+                      <Button name="Early start" onClick={handleEarlyStart} />
+                    )}
+                  </div>
+                )}
                 <div className="flex flex-row gap-3 items-center justify-center">
                   <Text
                     text={["Team Size"]}

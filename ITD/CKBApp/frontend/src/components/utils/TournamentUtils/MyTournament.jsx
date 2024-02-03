@@ -72,6 +72,7 @@ export const MyTournament = ({
               size="text-[25px]"
               fontColor={`${colorScheme.text}`}
               fontType="font-bold"
+              className="text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-full"
             />
             <Text
               text={[`${description}`]}

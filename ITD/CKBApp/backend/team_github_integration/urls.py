@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import TeamRemoveMember, TeamListCreateView, TeamRetrieveUpdateDestroyView, UserTeamsListView, TeamMembersListView, PublicTeamsListView, TeamAddMember
+from .views import StartBattleView, TeamRemoveMember, TeamListCreateView, TeamRetrieveUpdateDestroyView, UserTeamsListView, TeamMembersListView, PublicTeamsListView, TeamAddMember
 
 urlpatterns = [
     path('teams/', TeamListCreateView.as_view(), name='team-list-create'),
@@ -9,6 +9,7 @@ urlpatterns = [
     path('teams/battle/public/<int:battle_id>/', PublicTeamsListView.as_view(), name='public-teams-list'),
     path('teams/join/<str:code>/<int:student_id>/<int:battle_id>/', TeamAddMember.as_view(), name='team-add-member'),
     path('teams/leave/<str:code>/<int:student_id>/', TeamRemoveMember.as_view(), name='team-remove-member'),
+    path('battles/start/<int:battle_id>/', StartBattleView.as_view(), name='start_battle'),
 
 
     # path('teams/add-member/<int:team_id>/<int:user_id>/', TeamAddMember.as_view(), name='team-add-member'),

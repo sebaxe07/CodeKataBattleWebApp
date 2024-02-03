@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'scoring_system',
     'notification_system',
     'djoser',
+    'django_celery_beat',
 
 ]
 
@@ -146,7 +147,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Github API 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
+GITHUB_ACCESS_TOKEN = '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'
 
 
 # Internationalization

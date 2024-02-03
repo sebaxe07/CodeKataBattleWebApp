@@ -40,7 +40,7 @@ const defaultTournamentData = {
 };
 
 const defaultBattle = {
-  active: true,
+  status: "active",
   created_by: {
     user_profile: {
       user: { id: 10, first_name: "Sebastian" },
@@ -201,13 +201,9 @@ export const BattleDetails = ({}) => {
                   />
                   <MiniDetails
                     context={"b"}
-                    title={"Seito Suscribed"}
+                    title={"Battle Status"}
                     icon={"Calendar"}
-                    msg={
-                      tournamentData.subscribed_Students
-                        ? tournamentData.subscribed_Students.length
-                        : 0
-                    }
+                    msg={battle.status.toUpperCase()}
                   />
                 </div>
               </div>
@@ -250,7 +246,18 @@ export const BattleDetails = ({}) => {
                       fontType="font-normal"
                     />
                   </div>
-                  <Button name="Go to Github" />
+                  {battle.status === "active" && (
+                    <a
+                      href={`https://github.com/CodeKataBattleHUB/${battle.name.replace(
+                        /\s/g,
+                        "-"
+                      )}-${battle.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button name="Go to Github" />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

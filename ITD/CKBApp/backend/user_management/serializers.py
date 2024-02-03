@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import UserProfile, EducatorProfile, StudentProfile
-
-
+from github import Github, UnknownObjectException
+from django.conf import settings
 
 class EducatorProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,6 +18,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ('id', 'role', 'school', 'profile_icon', 'github_username')
+        
+
 
 class UserSerializer(serializers.ModelSerializer):
     user_profile = serializers.SerializerMethodField()
@@ -29,14 +31,29 @@ class UserSerializer(serializers.ModelSerializer):
     def get_user_profile(self, obj):
         return UserProfileSerializer(obj.user_profile).data
     
+class UserProfileRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ('id', 'role', 'school', 'profile_icon', 'github_username')
 
+    def validate_github_username(self, value):
+        github_token = settings.GITHUB_ACCESS_TOKEN
+
+        g = Github(github_token)  
+        try:
+            g.get_user(value)
+        except UnknownObjectException:
+            raise serializers.ValidationError("The GitHub username is not valid.")
+        return value
 
 class UserRegisterSerializer(serializers.ModelSerializer):
-    user_profile = UserProfileSerializer(write_only=True)
+    user_profile = UserProfileRegisterSerializer(write_only=True)
     
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password', 'first_name', 'last_name', 'user_profile')
+
+    
 
     def create(self, validated_data):
         user_profile_data = validated_data.pop('user_profile')

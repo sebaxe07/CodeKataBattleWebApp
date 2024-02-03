@@ -101,7 +101,7 @@ export const EducatorHome = () => {
                 description={tournament.description}
                 startDate={new Date(tournament.start_date).toLocaleDateString()}
                 endDate={new Date(tournament.end_date).toLocaleDateString()}
-                active={tournament.active}
+                active={tournament.status === "completed" ? false : true}
                 picture={tournament.picture}
               />
             ))}
