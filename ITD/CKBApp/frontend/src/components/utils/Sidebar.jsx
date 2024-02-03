@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 import HomeIcon from "../../assets/icons/home.svg";
 import Logout from "../../assets/icons/logout.svg";
+import search from "../../assets/icons/search.svg";
 import BgIconCard from "../common/bgIconCard";
 import Button from "../common/Button";
 import { NavLink, Outlet } from "react-router-dom";
@@ -20,6 +21,15 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
+const colorSchemes = [
+  {
+    background: "bg-bgaccent",
+  },
+  {
+    background: "bg-shadowboxeducator",
+  },
+];
+
 const Sidebar = () => {
   const navigate = useNavigate();
   const toast = useToast();
@@ -27,6 +37,18 @@ const Sidebar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
+
+  const [colorScheme, setColorScheme] = useState(colorSchemes[0]);
+  const [educator, setEducator] = useState(false);
+
+  useEffect(() => {
+    if (activeUser) {
+      if (activeUser.user_profile.role === "educator") {
+        setColorScheme(colorSchemes[1]);
+        setEducator(true);
+      }
+    }
+  }, [activeUser]);
 
   const handleLogout = async () => {
     setIsLoading(true);
@@ -57,6 +79,14 @@ const Sidebar = () => {
         localStorage.removeItem("user");
       }
 
+      if (localStorage.getItem("tournaments")) {
+        localStorage.removeItem("tournaments");
+      }
+
+      const keys = Object.keys(localStorage);
+      const battleKeys = keys.filter((key) => key.startsWith("battle"));
+      battleKeys.forEach((key) => localStorage.removeItem(key));
+
       // Remove the user object from the global context
       setActiveUser(null);
 
@@ -78,29 +108,46 @@ const Sidebar = () => {
   return (
     <>
       {isLoading && <LoadingScreen />}
-      <div className="bg-bgaccent text-white h-screen w-[120px] fixed top-0 left-0 overflow-y-auto ">
+      <div
+        className={`${colorScheme.background} text-white h-screen w-[120px] fixed top-0 left-0 overflow-y-auto `}
+      >
         {/* Sidebar content */}
         <div className="flex flex-col justify-start py-[30px] h-1/2 space-y-7">
-          <NavLink to="/student/home" className=" flex justify-center">
+          <NavLink
+            to={educator ? "/educator/home" : "/student/home"}
+            className=" flex justify-center"
+          >
             <ReactSVG
               src={HomeIcon}
               beforeInjection={(svg) => {
-                svg.setAttribute("style", "width: 40px; height: 35px");
+                svg.setAttribute("style", "width: 40px; height: 35px;");
               }}
+              className={educator ? "text-bgeducator" : "text-[#BAAFFF]"}
             />
           </NavLink>
           <NavLink
-            to="/student/studentProfile"
+            to={educator ? "/educator/profile" : "/student/profile"}
             className=" flex justify-center "
           >
             <BgIconCard
               icon={activeUser.user_profile.profile_icon}
-              iWidth={"40px"}
-              iHeight={"40px"}
+              size={55}
               classname={`w-[55px] h-[55px] rounded-[36px]`}
-              classname={"bg-[#EE8361] w-[55px] h-[50px] rounded-[36px]"}
             />
           </NavLink>
+          {!educator ? (
+            <NavLink
+              to="/student/joinTournament"
+              className=" flex justify-center "
+            >
+              <ReactSVG
+                src={search}
+                beforeInjection={(svg) => {
+                  svg.setAttribute("style", "width: 40px; height: 35px;");
+                }}
+              />
+            </NavLink>
+          ) : null}
 
           <div
             onClick={onOpen}
@@ -111,6 +158,7 @@ const Sidebar = () => {
               beforeInjection={(svg) => {
                 svg.setAttribute("style", "width: 40px; height: 35px");
               }}
+              className={educator ? "text-bgeducator" : "text-[#BAAFFF]"}
             />
           </div>
           <AlertDialog

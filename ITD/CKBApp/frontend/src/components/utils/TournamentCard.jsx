@@ -26,49 +26,53 @@ const colorSchemes = [
   },
 ];
 
-const TournamentCard = ({ name, description, position, score, select }) => {
+const TournamentCard = ({
+  name,
+  description,
+  position,
+  icon,
+  score,
+  select,
+  onClick,
+}) => {
   const [colorScheme, setColorScheme] = useState(colorSchemes[0]);
-  const [selected, setSelected] = useState(false);
 
   useEffect(() => {
-    setSelected(select);
     setColorScheme(colorSchemes[select ? 1 : 0]);
   }, [select]);
-
-  useEffect(() => {
-    setColorScheme(colorSchemes[selected ? 1 : 0]);
-  }, [selected]);
-
-  const handleClick = () => {
-    setSelected(!selected);
-  };
 
   return (
     <div
       className="relative flex items-center justify-center my-[13px] transform active:scale-95 "
-      onClick={handleClick}
       style={{ userSelect: "none" }}
+      onClick={onClick}
     >
       <div
         className={`relative ${colorScheme.shadow}  h-[84px] w-[758px] rounded-[29px]`}
       >
         <div
-          className={`relative ${colorScheme.background} hover:border-[4px] hover:border-shadowbox  h-[78px] w-[754px] rounded-[29px] shadow-xl`}
+          className={`relative ${colorScheme.background} hover:ring-4 hover:ring-shadowbox  h-[78px] w-[754px] rounded-[29px] shadow-xl transition-all`}
         >
-          <IconCard background={colorScheme.icon} />
-          <div className="flex flex-row justify-between items-center h-[78px] ml-[140px] mr-[78px]">
+          <IconCard icon={icon} background={colorScheme.icon} />
+          <div className="flex flex-row justify-between items-center h-[78px] ml-[90px] mr-[78px]">
             <div className="flex flex-col justify-center items-start  -space-y-4">
               <Text
                 text={[`${name}`]}
                 size="text-[20px]"
                 fontColor={`${colorScheme.text}`}
                 fontType="font-bold"
+                className={
+                  " whitespace-nowrap overflow-ellipsis overflow-hidden w-[250px] text-start"
+                }
               />
               <Text
                 text={[`${description}`]}
                 size="text-[16px]"
                 fontColor={`${colorScheme.label}`}
                 fontType="font-normal"
+                className={
+                  " whitespace-nowrap overflow-ellipsis overflow-hidden w-[250px] text-start"
+                }
               />
             </div>
 

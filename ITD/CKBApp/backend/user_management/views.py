@@ -1,8 +1,10 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
-from .serializers import UserRegisterSerializer, UserSerializer
+from django.shortcuts import get_object_or_404
+from .serializers import UserRegisterSerializer, UserSerializer, EducatorProfileSerializer, StudentProfileSerializer
+from .models import EducatorProfile, StudentProfile
 from rest_framework import status
 
 class UserRegistrationView(generics.CreateAPIView):
@@ -22,7 +24,24 @@ class UserRegistrationView(generics.CreateAPIView):
             else:
                 # Handle the validation error
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+class EducatorProfileDetailView(generics.RetrieveAPIView):
+    queryset = EducatorProfile.objects.all()
+    serializer_class = EducatorProfileSerializer
 
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset, user_profile_id=self.kwargs["pk"])
+        return obj
+    
+class StudentProfileDetailView(generics.RetrieveAPIView):
+    queryset = StudentProfile.objects.all()
+    serializer_class = StudentProfileSerializer
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset, user_profile_id=self.kwargs["pk"])
+        return obj
 
 class UserDetailView(generics.RetrieveAPIView):
     serializer_class = UserSerializer

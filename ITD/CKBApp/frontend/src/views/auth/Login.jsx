@@ -34,6 +34,7 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [autoLog, setAutoLog] = useState(false);
 
   const { activeUser, setActiveUser } = useContext(UserContext);
   const [passwordType, setPasswordType] = useState("password");
@@ -57,7 +58,7 @@ export const Login = () => {
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
       fetchUserData(authToken);
-
+      setAutoLog(true);
       toast({
         title: "Welcome back!",
         status: "success",
@@ -69,11 +70,16 @@ export const Login = () => {
 
   useEffect(() => {
     // Check if activeUser is not null or undefined
-    if (activeUser) {
+    console.log("Active User:", activeUser);
+    if (activeUser && autoLog) {
       // Navigate to the new page
-      navigate("/student");
+      if (activeUser.user_profile.role === "educator") {
+        navigate("/educator");
+      } else {
+        navigate("/student");
+      }
     }
-  }, [activeUser]);
+  }, [activeUser, autoLog]);
 
   async function resendActivationEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -135,6 +141,7 @@ export const Login = () => {
         // Save the token in local storage if "Remember Me" is checked
         localStorage.setItem("authToken", authToken);
       }
+      setAutoLog(true);
       toast({
         title: "Welcome back!",
         status: "success",

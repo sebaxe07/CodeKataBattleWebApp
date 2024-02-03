@@ -11,7 +11,7 @@ const colorSchemes = [
   {
     background: "bg-[#265F4C]",
     hover: "bg-[#19362D]",
-    bgIcon: "bg-bgstudent",
+    bgIcon: "bg-bgeducator",
   },
 ];
 

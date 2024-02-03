@@ -14,6 +14,7 @@ import { RegisterContext } from "../../services/contexts/RegisterContext";
 import { Slide } from "react-awesome-reveal";
 import { useToast } from "@chakra-ui/react";
 import { useFetchUserData } from "../../services/useFetchUserData";
+import { LoadingScreen } from "../../services/LoadingScreen";
 
 import {
   Step,
@@ -44,7 +45,7 @@ const colorSchemes = [
   },
   {
     background: "bg-[#19362D]",
-    menu: "bg-bgstudent",
+    menu: "bg-bgeducator",
     shadow: "bg-[#265F4C]",
     stepper: "colorEducator",
   },
@@ -67,6 +68,7 @@ export const SignUpSlides = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const fetchUserData = useFetchUserData();
+  const [isLoading, setIsLoading] = useState(false);
 
   const showToast = (title) => {
     toast({
@@ -82,6 +84,7 @@ export const SignUpSlides = () => {
   }
 
   const [colorScheme, setColorScheme] = useState(colorSchemes[0]);
+  const [slideDirection, setDirection] = useState("right");
 
   useEffect(() => {
     setColorScheme(colorScheme[0]);
@@ -196,7 +199,7 @@ export const SignUpSlides = () => {
     if (event) {
       event.preventDefault();
     }
-
+    setIsLoading(true);
     const {
       eMail,
       firstName,
@@ -217,7 +220,6 @@ export const SignUpSlides = () => {
       last_name: lastName,
       user_profile: {
         role: userType,
-
         school: school,
         profile_icon: avatar,
         github_username: githubacc,
@@ -230,8 +232,6 @@ export const SignUpSlides = () => {
 
       // Send activation email
       await axios.post("/auth/users/resend_activation/", { email: eMail });
-
-      navigate("/");
       toast({
         title: "User registered successfully, please login",
         description: "Please check your email to confirm your account",
@@ -239,6 +239,7 @@ export const SignUpSlides = () => {
         duration: 3000,
         isClosable: true,
       });
+      navigate("/");
     } catch (error) {
       console.error("Error Registering user:", error);
 
@@ -246,13 +247,35 @@ export const SignUpSlides = () => {
       let errorMessage = null;
       if (error.response && error.response.data) {
         const errors = error.response.data;
-        for (const key in errors) {
-          if (errors[key] instanceof Array) {
-            errorMessage = errors[key].join(" ");
-          } else {
-            errorMessage = errors[key];
+        if (typeof errors === "string") {
+          // If errors is a stringified JSON, parse it
+          try {
+            const parsedErrors = JSON.parse(errors);
+            if (
+              parsedErrors.user_profile &&
+              parsedErrors.user_profile.github_username
+            ) {
+              errorMessage = parsedErrors.user_profile.github_username[0];
+            } else {
+              errorMessage = errors;
+            }
+          } catch (e) {
+            errorMessage = errors;
+          }
+        } else if (errors.user_profile && errors.user_profile.github_username) {
+          errorMessage = errors.user_profile.github_username[0];
+        } else {
+          for (const key in errors) {
+            if (errors[key] instanceof Array) {
+              errorMessage = errors[key].join(" ");
+            } else {
+              errorMessage = errors[key];
+            }
           }
         }
+      }
+      if (typeof errorMessage === "object") {
+        errorMessage = JSON.stringify(errorMessage);
       }
       toast({
         title: "Error Creating account! Please try again.",
@@ -261,10 +284,13 @@ export const SignUpSlides = () => {
         duration: 5000,
         isClosable: true,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleNextClick = () => {
+    setDirection("right");
     if (slide < screens.length) {
       if (screens[slide].validate()) {
         if (slide === screens.length - 1) {
@@ -301,6 +327,7 @@ export const SignUpSlides = () => {
   };
 
   const handleBackClick = () => {
+    setDirection("left");
     if (slide > 0) {
       setSlide(slide - 1);
     }
@@ -316,6 +343,7 @@ export const SignUpSlides = () => {
     <div
       className={`${colorScheme.background} transition-colors duration-1000 flex flex-col justify-center items-center h-screen w-screen`}
     >
+      {isLoading && <LoadingScreen />}
       <Logo />
       <div
         className={`mt-[22px] w-[770px] h-[526px] ${colorScheme.shadow} transition-colors duration-1000 rounded-[36px]`}
@@ -324,7 +352,7 @@ export const SignUpSlides = () => {
           className={`w-[760px] h-[520px] ${colorScheme.menu} transition-colors duration-1000 rounded-[36px] flex flex-col justify-center items-center space-y-5`}
         >
           <div className="flex h-[430px] w-full items-center justify-center overflow-hidden">
-            <Slide key={slide} direction="right">
+            <Slide key={slide} direction={slideDirection}>
               {screens[slide].component}
             </Slide>
           </div>
@@ -359,7 +387,13 @@ export const SignUpSlides = () => {
                 </ColorModeProvider>
               </ChakraProvider>
             </div>
-            <Button name="Back" onClick={() => handleBackClick()} />
+            {slide > 0 ? (
+              <Button
+                name="Back"
+                backg={"bg-[#BAAFFF]"}
+                onClick={() => handleBackClick()}
+              />
+            ) : null}
             <Button name="Next" onClick={() => handleNextClick()} />
           </div>
         </div>

@@ -8,9 +8,9 @@ import CalendarB from "../../../assets/icons/calendarB.svg";
 import StudentsB from "../../../assets/icons/icon-students.svg";
 
 export const MiniDetails = ({ context, icon, title, msg }) => {
-  const bgcolor = context == "b" ? "bg-bgstudentsecondary" : "bg-bgaccent";
+  const bgcolor = context == "b" ? "bg-accentSecondaryEducator" : "bg-bgaccent";
   const textColor =
-    context == "b" ? "text-accentstudent" : "text-accentprimary";
+    context == "b" ? "text-accenteducator" : "text-accentprimary";
   const textBoldness = context == "b" ? "font-medium" : "font-medium";
   const Calendar = context == "b" ? CalendarB : CalendarT;
   const Students = context == "b" ? StudentsB : StudentsT;

@@ -25,7 +25,6 @@ export const Text = ({
     <div
       onClick={onClick}
       className={`${size} ${fontType} ${fontColor} text-center leading-10 ${className}`}
-      onClick={onClick}
     >
       {text.map((line, index) => (
         <React.Fragment key={index}>
