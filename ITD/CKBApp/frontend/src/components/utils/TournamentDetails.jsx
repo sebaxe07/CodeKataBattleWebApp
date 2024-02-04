@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ReactSVG } from "react-svg";
 import { Text } from "../common/text";
 import Fire from "../../assets/icons/fire.svg";
@@ -37,6 +37,7 @@ export const TournamentDetails = ({
   onSeeMoreClick,
   onBattleSelect,
   teams,
+  scoreData,
 }) => {
   const [topScore, setTopScore] = useState(null);
 
@@ -58,6 +59,10 @@ export const TournamentDetails = ({
     });
   };
 
+  useEffect(() => {
+    console.log("scoreData ", scoreData[0]);
+  }, [scoreData]);
+
   return (
     <div className="select-none relative rounded-[36px] bg-shadowbox w-[765px] h-[76%] flex justify-center">
       <div className="relative rounded-[36px] bg-bgprimary w-[747px] h-[97%]">
@@ -77,18 +82,34 @@ export const TournamentDetails = ({
 
           <div className="flex flex-row justify-center items-end relative top-[35%]">
             <TopScore
-              users={topScore ? topScore.map((score) => score.team.name) : []}
+              users={
+                scoreData[0].top_tournament_scores
+                  ? scoreData[0].top_tournament_scores.map(
+                      (score) => score.student.user_profile.user.first_name
+                    )
+                  : ["a", "b", "c"]
+              }
               score={
-                topScore
-                  ? topScore.map((score) => score.total_score.toString())
+                scoreData[0].top_tournament_scores
+                  ? scoreData[0].top_tournament_scores.map((score) =>
+                      score.total_score.toString()
+                    )
                   : []
               }
-              icons={["sword.svg", "sword.svg", "sword.svg"]}
+              icons={
+                scoreData[0].top_tournament_scores
+                  ? scoreData[0].top_tournament_scores.map(
+                      (score) => score.student.user_profile.profile_icon
+                    )
+                  : [BearUser, ElephantUser, PiggyUser]
+              }
             />
             <YouScore
               userIcon={activeUser.user_profile.profile_icon}
-              position={"80"}
-              score={"10"}
+              position={
+                scoreData[0].total_score !== 0 ? scoreData[0].position : "-"
+              }
+              score={scoreData[0].total_score}
             />
           </div>
         </div>
@@ -98,18 +119,25 @@ export const TournamentDetails = ({
           className="relative bg-bgaccent w-full h-[30%] flex flex-row justify-start items-center overflow-auto scrollbar-thin scrollbar-thumb-bgprimary scrollbar-track-transparent"
         >
           {tournamentData.battles.length > 0 ? (
-            tournamentData.battles.map((battle) => (
-              <BattleComp
-                key={battle.id}
-                battleName={battle.name}
-                languageIcon={battle.picture}
-                battleXP={"100"}
-                battleData={battle}
-                onSeeMoreClick={onSeeMoreClick}
-                onBattleSelect={onBattleSelect}
-                partOf={teams.some((team) => team.battle === battle.id)}
-              />
-            ))
+            tournamentData.battles.map((battle) => {
+              const battleScore = scoreData[0].battle_scores.find(
+                (score) => score.battle === battle.id
+              );
+              const battleXP = battleScore ? battleScore.total_score : 0;
+
+              return (
+                <BattleComp
+                  key={battle.id}
+                  battleName={battle.name}
+                  languageIcon={battle.picture}
+                  battleXP={battleXP}
+                  battleData={battle}
+                  onSeeMoreClick={onSeeMoreClick}
+                  onBattleSelect={onBattleSelect}
+                  partOf={teams.some((team) => team.battle === battle.id)}
+                />
+              );
+            })
           ) : (
             <div className="flex flex-row items-center justify-center w-full mx-5 h-[50%]  bg-bgprimary rounded-[36px]">
               <Text

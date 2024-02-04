@@ -25,11 +25,18 @@ export const StudentHome = () => {
   const [selectedTournament, setSelectedTournament] = useState(null);
   const [selectedBattle, setSelectedBattle] = useState(null);
   const [teams, setTeams] = useState([]);
+  const [tourBattleScore, setTourBattleScore] = useState(null);
+
   const selectedTournamentData = tournaments.find(
     (tournament) => tournament.id === selectedTournament
   );
 
   // Handle click event for "See More" button
+
+  const selectedTournamentScore = tourBattleScore?.filter(
+    (score) => score.tournament === selectedTournament
+  );
+
   const handleSeeMoreClick = () => {
     setPreview(true);
   };
@@ -84,6 +91,17 @@ export const StudentHome = () => {
         console.log(teamsResponse.data);
         setTeams(teamsResponse.data);
         localStorage.setItem("teams", JSON.stringify(teamsResponse.data));
+
+        const scoreResponse = await axios.get(
+          `/ss/scoring/student/${activeUser.roleid}`,
+          {
+            headers: { Authorization: `Token ${activeUser.authToken}` },
+          }
+        );
+
+        console.log(scoreResponse.data);
+        setTourBattleScore(scoreResponse.data);
+        localStorage.setItem("scores", JSON.stringify(scoreResponse.data));
       }
     } catch (error) {
       console.log(error);
@@ -92,17 +110,67 @@ export const StudentHome = () => {
       setIsSpinning(false);
     }
   };
+  const backgroundfetch = async () => {
+    try {
+      const response = await axios.get(
+        `/tms/tournaments/subscribed/${activeUser.roleid}`,
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
 
+      console.log(response.data);
+      if (response.data.length === 0) {
+        console.log("No tournaments");
+        navigate("/student/joinTournament");
+      } else {
+        console.log("Tournaments");
+        setTournaments(response.data);
+        // Sort the tournaments by end date
+
+        // Set the selected tournament to the one with the end date closest to now
+        localStorage.setItem("tournaments", JSON.stringify(response.data));
+
+        const teamsResponse = await axios.get(
+          `/tgms/teams/student/${activeUser.roleid}`,
+          {
+            headers: { Authorization: `Token ${activeUser.authToken}` },
+          }
+        );
+
+        console.log(teamsResponse.data);
+        setTeams(teamsResponse.data);
+        localStorage.setItem("teams", JSON.stringify(teamsResponse.data));
+
+        const scoreResponse = await axios.get(
+          `/ss/scoring/student/${activeUser.roleid}`,
+          {
+            headers: { Authorization: `Token ${activeUser.authToken}` },
+          }
+        );
+
+        console.log(scoreResponse.data);
+        setTourBattleScore(scoreResponse.data);
+        localStorage.setItem("scores", JSON.stringify(scoreResponse.data));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // Load data on component mount or retrieve from local storage if available
   useEffect(() => {
     const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
     const storedTeams = JSON.parse(localStorage.getItem("teams"));
-    if (storedTournaments && storedTeams) {
+    const storedScores = JSON.parse(localStorage.getItem("scores"));
+    if (storedTournaments && storedTeams && storedScores) {
       setTournaments(storedTournaments);
       setTeams(storedTeams);
+      setTourBattleScore(storedScores);
     } else {
       fetchData();
     }
+    const intervalId = setInterval(backgroundfetch, 5000); // Fetch new data every minute
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
@@ -164,21 +232,39 @@ export const StudentHome = () => {
                       tournament.status === "registration"
                   )
                   .sort((a, b) => new Date(a.end_date) - new Date(b.end_date))
-                  .map((tournament) => (
-                    <TournamentCard
-                      key={tournament.id}
-                      name={tournament.name}
-                      description={tournament.description}
-                      icon={tournament.picture}
-                      position={"1"}
-                      score={"100"}
-                      select={tournament.id === selectedTournament}
-                      onClick={() => {
-                        setSelectedTournament(tournament.id);
-                        handleBackClick();
-                      }}
-                    />
-                  ))}
+                  .map((tournament) => {
+                    const tournamentScoreData = tourBattleScore
+                      ? tourBattleScore.find(
+                          (score) => score.tournament === tournament.id
+                        )
+                      : null;
+
+                    const score = tournamentScoreData
+                      ? tournamentScoreData.total_score
+                      : "-";
+                    const position =
+                      score === 0
+                        ? "-"
+                        : tournamentScoreData
+                        ? tournamentScoreData.position
+                        : "-";
+
+                    return (
+                      <TournamentCard
+                        key={tournament.id}
+                        name={tournament.name}
+                        description={tournament.description}
+                        icon={tournament.picture}
+                        position={position.toString()}
+                        score={score.toString()}
+                        select={tournament.id === selectedTournament}
+                        onClick={() => {
+                          setSelectedTournament(tournament.id);
+                          handleBackClick();
+                        }}
+                      />
+                    );
+                  })}
               </div>
             </div>
           ) : (
@@ -217,17 +303,37 @@ export const StudentHome = () => {
                 {tournaments
                   .filter((tournament) => tournament.status === "completed")
                   .sort((a, b) => new Date(b.end_date) - new Date(a.end_date))
-                  .map((tournament) => (
-                    <PastTournamentCard
-                      key={tournament.id}
-                      name={tournament.name}
-                      description={tournament.description}
-                      position={"1"}
-                      score={"100"}
-                      select={tournament.id === selectedTournament}
-                      onClick={() => setSelectedTournament(tournament.id)}
-                    />
-                  ))}
+                  .map((tournament) => {
+                    const tournamentScoreData = tourBattleScore.find(
+                      (score) => score.tournament === tournament.id
+                    );
+
+                    const score = tournamentScoreData
+                      ? tournamentScoreData.total_score
+                      : "-";
+                    const position =
+                      score === 0
+                        ? "-"
+                        : tournamentScoreData
+                        ? tournamentScoreData.position
+                        : "-";
+
+                    return (
+                      <PastTournamentCard
+                        key={tournament.id}
+                        name={tournament.name}
+                        description={tournament.description}
+                        icon={tournament.picture}
+                        position={position.toString()}
+                        score={score.toString()}
+                        select={tournament.id === selectedTournament}
+                        onClick={() => {
+                          setSelectedTournament(tournament.id);
+                          handleBackClick();
+                        }}
+                      />
+                    );
+                  })}
               </div>
             </div>
           ) : (
@@ -262,6 +368,7 @@ export const StudentHome = () => {
             onSeeMoreClick={handleSeeMoreClick}
             onBattleSelect={setSelectedBattle}
             teams={teams}
+            scoreData={selectedTournamentScore}
           />
         ) : (
           // Display message if no tournament is selected

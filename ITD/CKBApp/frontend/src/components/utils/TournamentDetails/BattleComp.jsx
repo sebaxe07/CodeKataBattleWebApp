@@ -54,21 +54,42 @@ export const BattleComp = ({
           className={""}
         />
       </div>
-      <Button
-        name={partOf ? "CONTINUE" : "SEE MORE"}
-        className={
-          "transform  absolute bottom-0 translate-y-[40%] -translate-x-[20%] "
-        }
-        onClick={() => {
-          if (partOf) {
-            props.onBattleSelect(battleData);
-            navigate(`/student/battle/${battleData.id}`);
-          } else {
-            props.onSeeMoreClick();
-            props.onBattleSelect(battleData);
+      {(partOf || battleData.status === "registration") && (
+        <Button
+          name={
+            partOf
+              ? battleData.status === "registration"
+                ? "SEE MORE"
+                : battleData.status === "active"
+                ? "CONTINUE"
+                : "SEE RESULTS"
+              : "SEE MORE"
           }
-        }}
-      />
+          className={
+            "transform  absolute bottom-0 translate-y-[40%] -translate-x-[20%] "
+          }
+          onClick={() => {
+            const buttonText = partOf
+              ? battleData.status === "registration"
+                ? "SEE MORE"
+                : battleData.status === "active"
+                ? "CONTINUE"
+                : "SEE RESULTS"
+              : "SEE MORE";
+
+            if (buttonText === "SEE MORE") {
+              props.onSeeMoreClick();
+              props.onBattleSelect(battleData);
+            } else if (
+              buttonText === "CONTINUE" ||
+              buttonText === "SEE RESULTS"
+            ) {
+              props.onBattleSelect(battleData);
+              navigate(`/student/battle/${battleData.id}`);
+            }
+          }}
+        />
+      )}
       {partOf && (
         <div className="flex absolute bottom-[18px] right-[16px] justify-center items-center bg-accentprimary w-[15%]  h-[35%] rounded-[13px]">
           <Text

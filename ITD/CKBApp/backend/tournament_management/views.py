@@ -4,7 +4,7 @@ from rest_framework import generics, status
 from django.http import Http404
 from .models import Tournament, Battle
 from user_management.models import StudentProfile
-from .serializers import TournamentSerializer, BattleSerializer, TournamentWithBattlesSerializer, BattleEducatorSerializer
+from .serializers import TournamentSerializer, BattleSerializer, TournamentWithBattlesSerializer, BattleEducatorSerializer, TournameentEducatorSerializer
 from rest_framework.response import Response
 from django.core.mail import send_mass_mail
 from django.utils import timezone
@@ -41,6 +41,13 @@ class TournamentListCreateView(generics.ListCreateAPIView):
         # Send the emails
         send_mass_mail(messages)
 
+class TournamentListOngoingView(generics.ListCreateAPIView):
+    queryset = Tournament.objects.all()
+    serializer_class = TournameentEducatorSerializer
+
+    def get_queryset(self):
+        return Tournament.objects.filter(status='active')
+    
 class StartTournamentView(generics.UpdateAPIView):
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer

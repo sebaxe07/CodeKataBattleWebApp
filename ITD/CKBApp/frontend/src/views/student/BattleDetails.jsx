@@ -21,7 +21,7 @@ import ElephantUser from "../../assets/icons/UsersIcons/elephant.svg";
 import PiggyUser from "../../assets/icons/UsersIcons/piggy.svg";
 import BearUser from "../../assets/icons/UsersIcons/bear.svg";
 import TigerUser from "../../assets/icons/UsersIcons/tiger.svg";
-import TeamLeaderboard from "../../components/utils/TournamentDetails/TeamLeaderboard";
+import TeamLeaderboardStudent from "../../components/utils/TournamentDetails/TeamLeaderboardStudent";
 import axios from "../../services/api";
 import { UserContext } from "../../services/contexts/UserContext";
 
@@ -68,7 +68,7 @@ const defaultTeam = {
 };
 
 const defaultScore = { team: { id: 1, name: "Team 1" }, total_score: 100 };
-const defaultScoring = [{ total_score: 100 }]; // replace this with your actual default scoring structure
+const defaultScoring = [{ total_score: 100 }];
 const defaultMyScoreIndex = 0;
 
 const defaultMyScore = {
@@ -176,6 +176,8 @@ export const BattleDetails = ({}) => {
     setTournamentData(foundTournament);
     fechtRanking();
     setIsLoading(false);
+    const intervalId = setInterval(fechtRanking, 60000); // Fetch new data every minute
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
@@ -408,32 +410,26 @@ export const BattleDetails = ({}) => {
                     </div>
                     <div className="bg-[#2F8F6F] flex-col w-full h-full flex overflow-y-auto overflow-x-hidden scrollbar-thumb-accentSecondaryEducator scrollbar-thin">
                       {leaderboard && leaderboard.length > 0 ? (
-                        <>
-                          {/* leaderboard.map((score, index) => (
-                          <>
-                            /{" "}
-                            <TeamLeaderboard
-                              context={"b"}
-                              rank={index + 1}
-                              icon={Sword}
-                              name={score.team.name}
-                              exp={score.total_score.toString()}
-                              team={score.team}
-                            />
-                          </>
-                          )) */}
-                        </>
+                        leaderboard.map((score, index) => (
+                          <TeamLeaderboardStudent
+                            context={"b"}
+                            rank={index + 1}
+                            icon={Sword}
+                            name={score.team.name}
+                            exp={score.total_score.toString()}
+                            team={team}
+                            battle={battle}
+                          />
+                        ))
                       ) : (
                         <div className="flex flex-row justify-center bg-[#2F8F6F] items-center w-full h-full">
-                          {leaderboard === null ? null : (
-                            <Text
-                              text={["No scores available"]}
-                              size="text-[32px]"
-                              fontColor="text-white"
-                              className={"text-start"}
-                              fontType="font-bold"
-                            />
-                          )}
+                          <Text
+                            text={["No scores available"]}
+                            size="text-[32px]"
+                            fontColor="text-white"
+                            className={"text-start"}
+                            fontType="font-bold"
+                          />
                         </div>
                       )}
                     </div>

@@ -37,6 +37,7 @@ export const JoinTournament = () => {
                 (storedTournament) => storedTournament.id === tournament.id
               )
           );
+          console.log("newTournaments", newTournaments);
         }
         setTournaments(newTournaments);
       } catch (error) {

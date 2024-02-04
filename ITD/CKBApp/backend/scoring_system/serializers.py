@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import BattleScore
+from .models import BattleScore, TournamentScore
 from team_github_integration.models import Team
 from automated_evaluation.models import Repository
 from user_management.models import StudentProfile, UserProfile
@@ -42,4 +42,11 @@ class BattleScoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BattleScore
+        fields = '__all__'
+
+class TournamentScoreSerializer(serializers.ModelSerializer):
+    student = StudentProfileSerializer(read_only=True)
+
+    class Meta:
+        model = TournamentScore
         fields = '__all__'

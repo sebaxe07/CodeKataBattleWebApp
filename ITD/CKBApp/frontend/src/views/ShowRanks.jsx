@@ -4,7 +4,7 @@ import { Text } from "../components/common/text";
 import { EducatorName } from "../components/utils/TournamentDetails/EducatorName";
 import { TopDecorator } from "../components/utils/TournamentDetails//TopDecorator";
 import { TourDescript } from "../components/utils/TournamentDetails/TourDescript";
-import { TeamLeaderboard } from "../components/utils/TournamentDetails/TeamLeaderboard";
+import { TeamLeaderboardEducator } from "../components/utils/TournamentDetails/TeamLeaderboardEducator";
 import { UserContext } from "../services/contexts/UserContext";
 
 const defaultTournamentData = {
@@ -24,12 +24,19 @@ const defaultTournamentData = {
   },
 };
 
+const defaultScore = {
+  id: 1,
+  student: { id: 1, user_profile: {} },
+  total_score: 100,
+  tournament: 1,
+};
+
 export const ShowRanks = ({
   context,
   tournamentData = defaultTournamentData,
+  scoreData = defaultScore,
   onSeeMoreClick,
   onBattleSelect,
-  teams,
 }) => {
   const colorSchemes = [
     {
@@ -47,6 +54,9 @@ export const ShowRanks = ({
       fadescroll: "fadeScroll",
     },
   ];
+  const filteredScores = scoreData.filter(
+    (score) => score.tournament === tournamentData.id
+  );
 
   const [colorScheme, setColorScheme] = useState(colorSchemes[0]);
 
@@ -127,90 +137,15 @@ export const ShowRanks = ({
                   paddingBottom: "10px",
                 }}
               >
-                <TeamLeaderboard
-                  context={""}
-                  rank={"1"}
-                  icon="tiger.svg"
-                  name={"Juanito"}
-                  exp={"100"}
-                />
-                <TeamLeaderboard
-                  context={""}
-                  rank={"2"}
-                  icon="tiger.svg"
-                  name={"Juanito"}
-                  exp={"100"}
-                />
-                <TeamLeaderboard
-                  context={""}
-                  rank={"3"}
-                  icon="tiger.svg"
-                  name={"Juanito"}
-                  exp={"100"}
-                />
-                <TeamLeaderboard
-                  context={""}
-                  rank={"4"}
-                  icon="tiger.svg"
-                  name={"Juanito"}
-                  exp={"100"}
-                />
-                <TeamLeaderboard
-                  context={""}
-                  rank={"5"}
-                  icon="tiger.svg"
-                  name={"Juanito"}
-                  exp={"100"}
-                />
-                <TeamLeaderboard
-                  context={""}
-                  rank={"6"}
-                  icon="tiger.svg"
-                  name={"Juanito"}
-                  exp={"100"}
-                />
-                <TeamLeaderboard
-                  context={""}
-                  rank={"1"}
-                  icon="tiger.svg"
-                  name={"Juanito"}
-                  exp={"100"}
-                />
-                <TeamLeaderboard
-                  context={""}
-                  rank={"2"}
-                  icon="tiger.svg"
-                  name={"Juanito"}
-                  exp={"100"}
-                />
-                <TeamLeaderboard
-                  context={""}
-                  rank={"3"}
-                  icon="tiger.svg"
-                  name={"Juanito"}
-                  exp={"100"}
-                />
-                <TeamLeaderboard
-                  context={""}
-                  rank={"4"}
-                  icon="tiger.svg"
-                  name={"Juanito"}
-                  exp={"100"}
-                />
-                <TeamLeaderboard
-                  context={""}
-                  rank={"5"}
-                  icon="tiger.svg"
-                  name={"Juanito"}
-                  exp={"100"}
-                />
-                <TeamLeaderboard
-                  context={""}
-                  rank={"6"}
-                  icon="tiger.svg"
-                  name={"Juanito"}
-                  exp={"100"}
-                />
+                {filteredScores.map((score, index) => (
+                  <TeamLeaderboardEducator
+                    key={score.id}
+                    rank={index + 1}
+                    icon={score.student.user_profile.profile_icon}
+                    name={score.student.user_profile.user.first_name}
+                    exp={score.total_score}
+                  />
+                ))}
               </div>
             </div>
           </div>

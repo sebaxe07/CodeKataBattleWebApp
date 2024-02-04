@@ -4,7 +4,7 @@ import axios from "../services/api";
 import { ReactSVG } from "react-svg";
 import { Text } from "../components/common/text";
 import Logo from "../assets/images/Logo.svg";
-import TournamentCard from "../components/utils/TournamentCard";
+import TournamentCardClean from "../components/utils/TournamentCardClean";
 import { useNavigate } from "react-router-dom";
 import { LoadingScreen } from "../services/LoadingScreen";
 import { UserContext } from "../services/contexts/UserContext";
@@ -29,7 +29,7 @@ export const GlobalRankings = ({ context }) => {
   const [tournaments, setTournaments] = useState([]);
   const [selectedTournament, setSelectedTournament] = useState(null);
   const [selectedBattle, setSelectedBattle] = useState(null);
-  const [teams, setTeams] = useState([]);
+  const [score, setScore] = useState([]);
   const selectedTournamentData = tournaments.find(
     (tournament) => tournament.id === selectedTournament
   );
@@ -77,20 +77,16 @@ export const GlobalRankings = ({ context }) => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(
-        `/tms/tournaments/subscribed/${activeUser.roleid}`,
-        {
-          headers: { Authorization: `Token ${activeUser.authToken}` },
-        }
-      );
+      const response = await axios.get(`/tms/tournaments/ongoing/`, {
+        headers: { Authorization: `Token ${activeUser.authToken}` },
+      });
 
       console.log(response.data);
       // If no tournaments are available, navigate to joinTournament page.
       if (response.data.length === 0) {
-        console.log("No tournaments");
-        navigate("/student/joinTournament");
+        console.log("No ongoing tournaments");
       } else {
-        console.log("Tournaments");
+        console.log("Ongoing Tournaments");
         // Update state with fetched tournament data.
         setTournaments(response.data);
         // Sort the tournaments by end date
@@ -100,20 +96,26 @@ export const GlobalRankings = ({ context }) => {
 
         // Set the selected tournament to the one with the end date closest to now.
         setSelectedTournament(sortedTournaments[0].id);
-        localStorage.setItem("tournaments", JSON.stringify(response.data));
+        localStorage.setItem(
+          "OngoingTournaments",
+          JSON.stringify(response.data)
+        );
 
         // Fetch teams for the active user.
-        const teamsResponse = await axios.get(
-          `/tgms/teams/student/${activeUser.roleid}`,
+        const scoreResponse = await axios.get(
+          `/ss/ranking/tournament/ongoing/`,
           {
             headers: { Authorization: `Token ${activeUser.authToken}` },
           }
         );
 
-        console.log(teamsResponse.data);
+        console.log(scoreResponse.data);
         // Update state with fetched team data.
-        setTeams(teamsResponse.data);
-        localStorage.setItem("teams", JSON.stringify(teamsResponse.data));
+        setScore(scoreResponse.data);
+        localStorage.setItem(
+          "ongoingScores",
+          JSON.stringify(scoreResponse.data)
+        );
       }
     } catch (error) {
       console.log(error);
@@ -126,11 +128,13 @@ export const GlobalRankings = ({ context }) => {
 
   // Effect to check if tournaments and teams are stored in local storage and fetch if not.
   useEffect(() => {
-    const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
-    const storedTeams = JSON.parse(localStorage.getItem("teams"));
-    if (storedTournaments && storedTeams) {
+    const storedTournaments = JSON.parse(
+      localStorage.getItem("OngoingTournaments")
+    );
+    const storedScores = JSON.parse(localStorage.getItem("ongoingScores"));
+    if (storedTournaments && storedScores) {
       setTournaments(storedTournaments);
-      setTeams(storedTeams);
+      setScore(storedScores);
     } else {
       fetchData();
     }
@@ -187,10 +191,10 @@ export const GlobalRankings = ({ context }) => {
             <div className={`${colorScheme.fadescroll} w-full h-full`}>
               {/* Scrollable area for ongoing tournaments. */}
               <div
-                className={`overflow-auto  scrollbar-thin scrollbar-thumb-${colorScheme.bgPrimary} scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full`}
+                className={`overflow-auto  scrollbar-thin scrollbar-thumb-fontlabel scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full`}
                 style={{ maxHeight: "650px", minHeight: "300px" }}
               >
-                {/* Render TournamentCard component for each ongoing tournament. */}
+                {/* Render TournamentCardClean component for each ongoing tournament. */}
                 {tournaments
                   .filter(
                     (tournament) =>
@@ -199,7 +203,7 @@ export const GlobalRankings = ({ context }) => {
                   )
                   .sort((a, b) => new Date(a.end_date) - new Date(b.end_date))
                   .map((tournament) => (
-                    <TournamentCard
+                    <TournamentCardClean
                       key={tournament.id}
                       name={tournament.name}
                       description={tournament.description}
@@ -237,7 +241,10 @@ export const GlobalRankings = ({ context }) => {
       <div className="flex justify-center items-center  w-full  h-full ">
         {selectedTournamentData ? (
           // ShowRanks component displaying global rankings for the selected tournament.
-          <ShowRanks tournamentData={selectedTournamentData} />
+          <ShowRanks
+            tournamentData={selectedTournamentData}
+            scoreData={score}
+          />
         ) : (
           // Message displayed when no tournament is selected.
           <div className="flex flex-row items-center justify-center w-[80%] h-[80%] bg-bgprimary rounded-[36px]">

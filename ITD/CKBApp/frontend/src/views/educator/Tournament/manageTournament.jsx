@@ -13,7 +13,6 @@ import { UserContext } from "../../../services/contexts/UserContext";
 import CreatedBattle from "../../../components/utils/TournamentDetails/CreatedBattle";
 
 import Back from "../../../assets/icons/backArrow.svg";
-import TeamLeaderboard from "../../../components/utils/TournamentDetails/TeamLeaderboard";
 import Add from "../../../assets/icons/add.svg";
 import { TextField } from "../../../components/common/textfield";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +28,7 @@ import {
   ModalBody,
   useDisclosure,
 } from "@chakra-ui/react";
+import TeamLeaderboardEducator from "../../../components/utils/TournamentDetails/TeamLeaderboardEducator";
 
 export const ManageTournament = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,6 +39,7 @@ export const ManageTournament = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
   const [battles, setBattles] = useState([]);
+  const [tournamentScores, setTournamentScores] = useState([]);
   const toast = useToast();
   const { activeUser, setActiveUser } = useContext(UserContext);
 
@@ -53,15 +54,22 @@ export const ManageTournament = () => {
     );
 
     const storedBattles = JSON.parse(localStorage.getItem(`battle${id}`));
-    if (storedBattles) {
+    const storedTournamentScores = JSON.parse(
+      localStorage.getItem(`tournamentScores${id}`)
+    );
+    if (storedBattles && storedTournamentScores) {
       setBattles(storedBattles);
+      setTournamentScores(storedTournamentScores);
     } else {
       fetchBattles();
     }
+
+    const intervalId = setInterval(backgroundfetch, 5000); // Fetch new data every minute
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
-    console.log(tournament);
+    console.log("tournament", tournament);
   }, [tournament]);
 
   useEffect(() => {
@@ -83,11 +91,58 @@ export const ManageTournament = () => {
 
       setBattles(response.data);
       console.log(response.data);
+
+      const scoreTournamentResponse = await axios.get(
+        `/ss/ranking/tournament/${id}/`,
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+
+      console.log(scoreTournamentResponse.data);
+      setTournamentScores(scoreTournamentResponse.data);
+      localStorage.setItem(
+        `tournamentScores${id}`,
+        JSON.stringify(scoreTournamentResponse.data)
+      );
     } catch (error) {
       console.error("Failed to fetch battles:", error);
     } finally {
       setIsLoading(false);
       setIsSpinning(false);
+    }
+  };
+
+  const backgroundfetch = async () => {
+    try {
+      const response = await axios.get(
+        `/tms/battles/user/${activeUser.roleid}/${id}`,
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+
+      // Save battles
+      localStorage.setItem(`battle${id}`, JSON.stringify(response.data));
+
+      setBattles(response.data);
+      console.log(response.data);
+
+      const scoreTournamentResponse = await axios.get(
+        `/ss/ranking/tournament/${id}/`,
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+
+      console.log(scoreTournamentResponse.data);
+      setTournamentScores(scoreTournamentResponse.data);
+      localStorage.setItem(
+        `tournamentScores${id}`,
+        JSON.stringify(scoreTournamentResponse.data)
+      );
+    } catch (error) {
+      console.error("Failed to fetch battles:", error);
     }
   };
 
@@ -378,7 +433,11 @@ export const ManageTournament = () => {
                       />
 
                       <Text
-                        text={["104"]}
+                        text={[
+                          tournament && tournament.subscribed_Students
+                            ? tournament.subscribed_Students.length
+                            : 0,
+                        ]}
                         size="text-[16px]"
                         fontColor={"text-white"}
                         fontType={"text-bold"}
@@ -455,7 +514,15 @@ export const ManageTournament = () => {
                           paddingBottom: "20px",
                         }}
                       >
-                        {/* Here goes the TeamLeaderboard */}
+                        {tournamentScores.map((score, index) => (
+                          <TeamLeaderboardEducator
+                            key={score.id}
+                            rank={index + 1}
+                            icon={score.student.user_profile.profile_icon}
+                            name={score.student.user_profile.user.first_name}
+                            exp={score.total_score}
+                          />
+                        ))}
                       </div>
                     </div>
                   )}
