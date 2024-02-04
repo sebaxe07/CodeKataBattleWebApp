@@ -76,6 +76,15 @@ class TeamAddMember(APIView):
             if team.members.count() >= team.battle.max_students_per_group:
                 return Response({"error": "The team is already full"}, status=status.HTTP_400_BAD_REQUEST)
             
+            if team.members.filter(id=student_id).exists():
+                return Response({"error": "The student is already part of the team"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if student.teams.filter(battle=battle).exists():
+                return Response({"error": "The student is already part of a team in this battle"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if battle.status != 'registration':
+                return Response({"error": "The battle already started"}, status=status.HTTP_400_BAD_REQUEST)
+            
             team.members.add(student)
             team.save()
              # Serialize the team

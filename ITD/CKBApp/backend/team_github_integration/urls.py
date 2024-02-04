@@ -10,12 +10,4 @@ urlpatterns = [
     path('teams/join/<str:code>/<int:student_id>/<int:battle_id>/', TeamAddMember.as_view(), name='team-add-member'),
     path('teams/leave/<str:code>/<int:student_id>/', TeamRemoveMember.as_view(), name='team-remove-member'),
     path('battles/start/<int:battle_id>/', StartBattleView.as_view(), name='start_battle'),
-
-
-    # path('teams/add-member/<int:team_id>/<int:user_id>/', TeamAddMember.as_view(), name='team-add-member'),
-    # path('teams/battles/<int:team_id>/', TeamBattlesListView.as_view(), name='team-battles-list'),
-    # path('teams/add-github-repo/<int:team_id>/<str:repo_name>', TeamAddGithubRepo.as_view(), name='team-add-github-repo'),
-    # path('teams/remove-github-repo/<int:team_id>/<str:repo_name>', TeamRemoveGithubRepo.as_view(), name='team-remove-github-repo'),
-    # path('teams/github-repos/<int:team_id>', TeamGithubReposListView.as_view(), name='team-github-repos-list'),
-
     ] 
