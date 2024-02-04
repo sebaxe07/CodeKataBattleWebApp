@@ -65,6 +65,11 @@ export const ShowRanks = ({
     setColorScheme(colorSchemes[context == "educator" ? 1 : 0]);
   }, [context]);
 
+  useEffect(() => {
+    console.log("scoreData ", scoreData[0]);
+    console.log("filteredScores ", filteredScores);
+  }, [scoreData, filteredScores]);
+
   const { activeUser, setActiveUser } = useContext(UserContext);
   const endDate = new Date(tournamentData.end_date);
   const currentDate = new Date();

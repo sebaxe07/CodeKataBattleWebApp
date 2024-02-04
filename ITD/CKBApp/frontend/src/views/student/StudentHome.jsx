@@ -131,17 +131,6 @@ export const StudentHome = () => {
         // Set the selected tournament to the one with the end date closest to now
         localStorage.setItem("tournaments", JSON.stringify(response.data));
 
-        const teamsResponse = await axios.get(
-          `/tgms/teams/student/${activeUser.roleid}`,
-          {
-            headers: { Authorization: `Token ${activeUser.authToken}` },
-          }
-        );
-
-        console.log(teamsResponse.data);
-        setTeams(teamsResponse.data);
-        localStorage.setItem("teams", JSON.stringify(teamsResponse.data));
-
         const scoreResponse = await axios.get(
           `/ss/scoring/student/${activeUser.roleid}`,
           {

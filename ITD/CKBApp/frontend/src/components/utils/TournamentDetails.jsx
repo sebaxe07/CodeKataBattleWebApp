@@ -42,7 +42,9 @@ export const TournamentDetails = ({
       total_score: 0,
       position: 0,
       battle_scores: [],
-      top_tournament_scores: [],
+      top_tournament_scores: [
+        { student: { user_profile: { user: {} } }, total_score: 0 },
+      ],
     },
   ],
 }) => {

@@ -59,11 +59,13 @@ export const BattleComp = ({
           name={
             partOf
               ? battleData.status === "registration"
-                ? "SEE MORE"
+                ? "CONTINUE"
                 : battleData.status === "active"
                 ? "CONTINUE"
                 : "SEE RESULTS"
-              : "SEE MORE"
+              : battleData.status === "registration"
+              ? "SEE MORE"
+              : null
           }
           className={
             "transform  absolute bottom-0 translate-y-[40%] -translate-x-[20%] "
@@ -71,11 +73,13 @@ export const BattleComp = ({
           onClick={() => {
             const buttonText = partOf
               ? battleData.status === "registration"
-                ? "SEE MORE"
+                ? "CONTINUE"
                 : battleData.status === "active"
                 ? "CONTINUE"
                 : "SEE RESULTS"
-              : "SEE MORE";
+              : battleData.status === "registration"
+              ? "SEE MORE"
+              : null;
 
             if (buttonText === "SEE MORE") {
               props.onSeeMoreClick();

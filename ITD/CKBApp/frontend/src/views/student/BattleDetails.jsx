@@ -24,6 +24,7 @@ import TigerUser from "../../assets/icons/UsersIcons/tiger.svg";
 import TeamLeaderboardStudent from "../../components/utils/TournamentDetails/TeamLeaderboardStudent";
 import axios from "../../services/api";
 import { UserContext } from "../../services/contexts/UserContext";
+import { background } from "@chakra-ui/react";
 
 const defaultTournamentData = {
   name: "Tournament Name",
@@ -121,6 +122,25 @@ export const BattleDetails = ({}) => {
     }
   };
 
+  const backgroundfetch = async () => {
+    const battleID = Number(id);
+    try {
+      const response = await axios.get(`/ss/ranking/${battleID}/`, {
+        headers: { Authorization: `Token ${activeUser.authToken}` },
+      });
+      console.log(response.data);
+      setScoring(response.data);
+
+      const battleResponse = await axios.get(`/tms/battles/${battleID}/`, {
+        headers: { Authorization: `Token ${activeUser.authToken}` },
+      });
+      console.log(battleResponse.data);
+      setBattle(battleResponse.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     console.log(battle);
     if (battle.min_students_per_group == battle.max_students_per_group) {
@@ -159,7 +179,17 @@ export const BattleDetails = ({}) => {
     const battleID = Number(id);
     const teams = JSON.parse(localStorage.getItem("teams")) || [];
     const foundTeam = teams.find((team) => team.battle === battleID);
-    setTeam(foundTeam);
+    if (foundTeam) {
+      setTeam(foundTeam);
+    } else {
+      const foundTeam = JSON.parse(
+        localStorage.getItem(`teamBattle${battleID}`)
+      );
+      if (foundTeam) {
+        setTeam(foundTeam);
+      }
+    }
+
     const tournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
 
     // find the battle in the tournaments
@@ -176,7 +206,7 @@ export const BattleDetails = ({}) => {
     setTournamentData(foundTournament);
     fechtRanking();
     setIsLoading(false);
-    const intervalId = setInterval(fechtRanking, 60000); // Fetch new data every minute
+    const intervalId = setInterval(backgroundfetch, 5000); // Fetch new data every minute
     return () => clearInterval(intervalId);
   }, []);
 
@@ -284,7 +314,7 @@ export const BattleDetails = ({}) => {
                       fontType="font-bold"
                     />
                     <Text
-                      text={[team.name]}
+                      text={[team ? team.name : "No team"]}
                       size="text-[20px]"
                       fontColor="text-white"
                       className={
@@ -293,7 +323,7 @@ export const BattleDetails = ({}) => {
                       fontType="font-bold"
                     />
                     <Text
-                      text={["Invite Code:", team.code]}
+                      text={["Invite Code:", team ? team.code : "No code"]}
                       size="text-[16px]"
                       fontColor="text-white"
                       className={"text-center leading-tight"}
@@ -376,10 +406,14 @@ export const BattleDetails = ({}) => {
                       <YouScore
                         userIcon={"swords.svg"}
                         position={
-                          myScore ? myScore.position.toString() : "Loading..."
+                          myScore && myScore.score
+                            ? myScore.position.toString()
+                            : "-"
                         }
                         score={
-                          myScore ? myScore.score.total_score.toString() : ""
+                          myScore && myScore.score
+                            ? myScore.score.total_score.toString()
+                            : "0"
                         }
                       />
                     </div>
