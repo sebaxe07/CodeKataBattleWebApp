@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { ReactSVG } from "react-svg";
-import { ProfileCard } from "../.../../../components/common/profileCard";
+import { ProfileCard } from "../../components/common/profileCard";
 import { SuscribedTournaments } from "../.../../../components/utils/SuscribedTournaments";
 import { UserContext } from "../../services/contexts/UserContext";
 import Logo from "../../assets/images/Logo.svg";

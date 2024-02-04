@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 import ActiveTournamentCard from "../../components/utils/ActiveTournamentCard";
-import { Text } from "../.../../../components/common/text";
+import { Text } from "../../components/common/text";
 import { ReactSVG } from "react-svg";
 import Logo from "../../assets/images/Logo.svg";
 import { useNavigate } from "react-router-dom";
