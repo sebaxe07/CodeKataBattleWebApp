@@ -97,7 +97,7 @@ export const TeamLeaderboard = ({
 
   return (
     <div
-      className={`flex w-full h-[60px] items-center  justify-around p-2 cursor-pointer ${
+      className={`flex w-full h-[60px] items-center  justify-between px-20 p-2 cursor-pointer ${
         rank % 2 == 0 ? colorScheme.even : colorScheme.uneven
       }`}
       onClick={onOpen}

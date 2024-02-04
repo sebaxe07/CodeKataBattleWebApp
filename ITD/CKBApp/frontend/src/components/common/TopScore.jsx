@@ -32,21 +32,42 @@ export const TopScore = ({
           </div>
         </div>
         <div className="flex flex-col justify-center items-start ml-[10px] -space-y-5">
-          <Text
-            text={[users[0]]}
-            size="text-[16px]"
-            fontColor="text-white"
-            fontType="font-bold"
-            className={
-              "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[80px]"
-            }
-          />
-          <Text
-            text={[score[0] + " XP"]}
-            size="text-[16px]"
-            fontColor="text-bgsecondary"
-            fontType="font-bold"
-          />
+          {users[0] != null ? (
+            <Text
+              text={[users[0]]}
+              size="text-[16px]"
+              fontColor="text-white"
+              fontType="font-bold"
+              className={
+                "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[80px]"
+              }
+            />
+          ) : (
+            <Text
+              text={["No Team"]}
+              size="text-[16px]"
+              fontColor="text-white"
+              fontType="font-bold"
+              className={
+                "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[80px]"
+              }
+            />
+          )}
+          {score[0] != null ? (
+            <Text
+              text={[score[0] + " XP"]}
+              size="text-[16px]"
+              fontColor="text-bgsecondary"
+              fontType="font-bold"
+            />
+          ) : (
+            <Text
+              text={["0 XP"]}
+              size="text-[16px]"
+              fontColor="text-bgsecondary"
+              fontType="font-bold"
+            />
+          )}
         </div>
       </div>
       <div className=" rounded-[40px] bg-shadowbox w-full min-w-[157px] h-[93px] transform  -translate-y-4 flex justify-center items-center">
@@ -69,21 +90,42 @@ export const TopScore = ({
           </div>
         </div>
         <div className="flex flex-col justify-center items-start ml-[10px] -space-y-5">
-          <Text
-            text={[users[1]]}
-            size="text-[16px]"
-            fontColor="text-white"
-            fontType="font-bold"
-            className={
-              "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[80px]"
-            }
-          />
-          <Text
-            text={[score[1] + " XP"]}
-            size="text-[16px]"
-            fontColor="text-bgsecondary"
-            fontType="font-bold"
-          />
+          {users[1] != null ? (
+            <Text
+              text={[users[1]]}
+              size="text-[16px]"
+              fontColor="text-white"
+              fontType="font-bold"
+              className={
+                "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[80px]"
+              }
+            />
+          ) : (
+            <Text
+              text={["No Team"]}
+              size="text-[16px]"
+              fontColor="text-white"
+              fontType="font-bold"
+              className={
+                "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[80px]"
+              }
+            />
+          )}
+          {score[1] != null ? (
+            <Text
+              text={[score[1] + " XP"]}
+              size="text-[16px]"
+              fontColor="text-bgsecondary"
+              fontType="font-bold"
+            />
+          ) : (
+            <Text
+              text={["0 XP"]}
+              size="text-[16px]"
+              fontColor="text-bgsecondary"
+              fontType="font-bold"
+            />
+          )}
         </div>
       </div>
       <div className=" rounded-[40px] bg-shadowbox w-full min-w-[157px] h-[93px] transform  -translate-y-4 flex justify-center items-center">
@@ -106,21 +148,42 @@ export const TopScore = ({
           </div>
         </div>
         <div className="flex flex-col justify-center items-start ml-[10px] -space-y-5">
-          <Text
-            text={[users[2]]}
-            size="text-[16px]"
-            fontColor="text-white"
-            fontType="font-bold"
-            className={
-              "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[80px]"
-            }
-          />
-          <Text
-            text={[score[2] + " XP"]}
-            size="text-[16px]"
-            fontColor="text-bgsecondary"
-            fontType="font-bold"
-          />
+          {users[2] != null ? (
+            <Text
+              text={[users[2]]}
+              size="text-[16px]"
+              fontColor="text-white"
+              fontType="font-bold"
+              className={
+                "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[80px]"
+              }
+            />
+          ) : (
+            <Text
+              text={["No Team"]}
+              size="text-[16px]"
+              fontColor="text-white"
+              fontType="font-bold"
+              className={
+                "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[80px]"
+              }
+            />
+          )}
+          {score[2] != null ? (
+            <Text
+              text={[score[2] + " XP"]}
+              size="text-[16px]"
+              fontColor="text-bgsecondary"
+              fontType="font-bold"
+            />
+          ) : (
+            <Text
+              text={["0 XP"]}
+              size="text-[16px]"
+              fontColor="text-bgsecondary"
+              fontType="font-bold"
+            />
+          )}
         </div>
       </div>
     </div>

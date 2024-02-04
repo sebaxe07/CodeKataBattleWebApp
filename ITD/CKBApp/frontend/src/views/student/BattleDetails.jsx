@@ -148,9 +148,9 @@ export const BattleDetails = ({}) => {
       });
       console.log("My Score");
       console.log(scoring.find((score) => score.team.id === team.id));
-      setLeaderboard(scoring.slice(3));
+      setLeaderboard(scoring);
       console.log("Leaderboard");
-      console.log(scoring.slice(3));
+      console.log(scoring);
     }
   }, [scoring]);
 
@@ -328,85 +328,112 @@ export const BattleDetails = ({}) => {
             </div>
             {/* Lado Derecho */}
             <div className="flex flex-col h-full w-full justify-center items-center rounded-r-[36px] bg-[#2F8F6F]">
-              <div className="flex flex-col h-[40%] w-full justify-start items-center">
-                <Text
-                  text={["Leaderboard"]}
-                  size="text-[24px]"
-                  fontColor="text-white"
-                  className={"text-start"}
-                  fontType="font-bold"
-                />
-                <div className="flex flex-row justify-center items-end relative top-[20%]">
-                  <TopScore
-                    users={
-                      topScore ? topScore.map((score) => score.team.name) : []
-                    }
-                    score={
-                      topScore
-                        ? topScore.map((score) => score.total_score.toString())
-                        : []
-                    }
-                    icons={[Sword, Sword, Sword]}
-                  />
-                  <YouScore
-                    userIcon={"swords.svg"}
-                    position={
-                      myScore ? myScore.position.toString() : "Loading..."
-                    }
-                    score={myScore ? myScore.score.total_score.toString() : ""}
-                  />
-                </div>
-              </div>
-              <div className="w-full h-[42%]">
-                <div className="flex flex-row justify-around">
+              {battle.status === "registration" ? (
+                <div className="flex flex-col justify-center items-center w-full h-full">
                   <Text
-                    text={["#"]}
-                    size="text-[16px]"
+                    text={["Battle yet to start"]}
+                    size="text-[32px]"
                     fontColor="text-white"
                     className={"text-start"}
                     fontType="font-bold"
                   />
                   <Text
-                    text={["Leaderboard"]}
-                    size="text-[16px]"
-                    fontColor="text-white"
-                    className={"text-start"}
-                    fontType="font-bold"
-                  />
-                  <Text
-                    text={["XP"]}
-                    size="text-[16px]"
+                    text={["No scores for teams available"]}
+                    size="text-[24px]"
                     fontColor="text-white"
                     className={"text-start"}
                     fontType="font-bold"
                   />
                 </div>
-                <div className="bg-bgeducator flex-col w-full h-full flex overflow-y-auto overflow-x-hidden scrollbar-thumb-accentSecondaryEducator scrollbar-thin">
-                  {leaderboard && leaderboard.length > 0 ? (
-                    leaderboard.map((score, index) => (
-                      <TeamLeaderboard
-                        context={"b"}
-                        rank={index + 4}
-                        icon={Sword}
-                        name={score.team.name}
-                        exp={score.total_score.toString()}
+              ) : (
+                <>
+                  <div className="flex flex-col h-[40%] w-full justify-start items-center">
+                    <Text
+                      text={["Leaderboard"]}
+                      size="text-[24px]"
+                      fontColor="text-white"
+                      className={"text-start"}
+                      fontType="font-bold"
+                    />
+                    <div className="flex flex-row justify-center items-end relative top-[20%]">
+                      <TopScore
+                        users={
+                          topScore
+                            ? topScore.map((score) => score.team.name)
+                            : []
+                        }
+                        score={
+                          topScore
+                            ? topScore.map((score) =>
+                                score.total_score.toString()
+                              )
+                            : []
+                        }
+                        icons={[Sword, Sword, Sword]}
                       />
-                    ))
-                  ) : (
-                    <div className="flex flex-row justify-center items-center w-full h-full">
-                      {leaderboard === null ? null : (
-                        <Text
-                          text={["No teams to show"]}
-                          size="text-[16px]"
-                          fontColor="text-white"
-                          className={"text-center bg-[#2F8F6F] w-full h-full"}
-                          fontType="font-bold"
-                        />
+                      <YouScore
+                        userIcon={"swords.svg"}
+                        position={
+                          myScore ? myScore.position.toString() : "Loading..."
+                        }
+                        score={
+                          myScore ? myScore.score.total_score.toString() : ""
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full h-[42%]">
+                    <div className="flex flex-row justify-around">
+                      <Text
+                        text={["#"]}
+                        size="text-[16px]"
+                        fontColor="text-white"
+                        className={"text-start"}
+                        fontType="font-bold"
+                      />
+                      <Text
+                        text={["Leaderboard"]}
+                        size="text-[16px]"
+                        fontColor="text-white"
+                        className={"text-start"}
+                        fontType="font-bold"
+                      />
+                      <Text
+                        text={["XP"]}
+                        size="text-[16px]"
+                        fontColor="text-white"
+                        className={"text-start"}
+                        fontType="font-bold"
+                      />
+                    </div>
+                    <div className="bg-[#2F8F6F] flex-col w-full h-full flex overflow-y-auto overflow-x-hidden scrollbar-thumb-accentSecondaryEducator scrollbar-thin">
+                      {leaderboard && leaderboard.length > 0 ? (
+                        leaderboard.map((score, index) => (
+                          <TeamLeaderboard
+                            context={"b"}
+                            rank={index + 1}
+                            icon={Sword}
+                            name={score.team.name}
+                            exp={score.total_score.toString()}
+                          />
+                        ))
+                      ) : (
+                        <div className="flex flex-row justify-center bg-[#2F8F6F] items-center w-full h-full">
+                          {leaderboard === null ? null : (
+                            <Text
+                              text={["No scores available"]}
+                              size="text-[32px]"
+                              fontColor="text-white"
+                              className={"text-start"}
+                              fontType="font-bold"
+                            />
+                          )}
+                        </div>
                       )}
                     </div>
-                  )}
-                </div>
-              </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

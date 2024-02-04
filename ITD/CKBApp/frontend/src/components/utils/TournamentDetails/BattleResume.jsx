@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "../../../services/api";
+import { ReactSVG } from "react-svg";
 import { Text } from "../../common/text";
 import Button from "../../common/Button";
 import { EducatorName } from "./../TournamentDetails/EducatorName";
@@ -198,9 +199,9 @@ export const BattleResume = ({ onBackClick, selectedBattle, tourData }) => {
       <div className="relative rounded-[36px] bg-bgeducator w-[747px] h-[97%]">
         <div className=" relative w-full h-full  ">
           <TopDecorator LanguageIcon={tourData.picture} size={230} />
-          <img
+          <ReactSVG
             src={Back}
-            className=" relative w-[40px] h-[40px] translate-x-10 translate-y-10  rounded-[100%] cursor-pointer"
+            className=" relative w-[40px] h-[40px] translate-x-10 translate-y-10  rounded-[100%] cursor-pointer text-accenteducator"
             onClick={onBackClick}
           />
           <EducatorName
