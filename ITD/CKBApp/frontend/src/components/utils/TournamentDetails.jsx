@@ -11,10 +11,6 @@ import { BattleComp } from "./TournamentDetails/BattleComp";
 import { Dates } from "./TournamentDetails/Dates";
 import { UserContext } from "../../services/contexts/UserContext";
 
-import BearUser from "../../assets/icons/UsersIcons/bear.svg";
-import ElephantUser from "../../assets/icons/UsersIcons/elephant.svg";
-import PiggyUser from "../../assets/icons/UsersIcons/piggy.svg";
-
 const defaultTournamentData = {
   name: "Tournament Name",
   description: "Tournament description",

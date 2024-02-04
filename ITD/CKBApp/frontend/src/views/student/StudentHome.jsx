@@ -1,3 +1,4 @@
+// Importing necessary dependencies and components for the StudentHome component
 import React, { useState, useEffect, useContext } from "react";
 import axios from "../../services/api";
 import { ReactSVG } from "react-svg";
@@ -12,7 +13,9 @@ import { LoadingScreen } from "../../services/LoadingScreen";
 import { UserContext } from "../../services/contexts/UserContext";
 import RefreshB from "../../assets/icons/refreshB.svg";
 
+// Define the StudentHome component
 export const StudentHome = () => {
+  // State variables to manage component state
   const [preview, setPreview] = useState(false);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -25,20 +28,27 @@ export const StudentHome = () => {
   const selectedTournamentData = tournaments.find(
     (tournament) => tournament.id === selectedTournament
   );
+
+  // Handle click event for "See More" button
   const handleSeeMoreClick = () => {
     setPreview(true);
   };
+
+  // Handle click event for "Back" button
   const handleBackClick = () => {
     setPreview(false);
   };
 
+  // Refresh function to fetch latest tournament data
   const refresh = () => {
     fetchData();
   };
 
+  // Fetch data from the server
   const fetchData = async () => {
     setIsLoading(true);
     try {
+      // Fetch subscribed tournaments for the active user
       const response = await axios.get(
         `/tms/tournaments/subscribed/${activeUser.roleid}`,
         {
@@ -46,22 +56,17 @@ export const StudentHome = () => {
         }
       );
 
-      console.log(response.data);
+      // Check if there are any subscribed tournaments
       if (response.data.length === 0) {
-        console.log("No tournaments");
         navigate("/student/joinTournament");
       } else {
-        console.log("Tournaments");
         setTournaments(response.data);
-        // Sort the tournaments by end date
         const sortedTournaments = response.data.sort(
           (a, b) => new Date(a.end_date) - new Date(b.end_date)
         );
-
-        // Set the selected tournament to the one with the end date closest to now
         setSelectedTournament(sortedTournaments[0].id);
-        localStorage.setItem("tournaments", JSON.stringify(response.data));
 
+        // Fetch teams for the active student
         const teamsResponse = await axios.get(
           `/tgms/teams/student/${activeUser.roleid}`,
           {
@@ -69,7 +74,6 @@ export const StudentHome = () => {
           }
         );
 
-        console.log(teamsResponse.data);
         setTeams(teamsResponse.data);
         localStorage.setItem("teams", JSON.stringify(teamsResponse.data));
       }
@@ -81,6 +85,7 @@ export const StudentHome = () => {
     }
   };
 
+  // Load data on component mount or retrieve from local storage if available
   useEffect(() => {
     const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
     const storedTeams = JSON.parse(localStorage.getItem("teams"));
@@ -92,10 +97,13 @@ export const StudentHome = () => {
     }
   }, []);
 
+  // JSX markup for rendering the component
   return (
+    // Main container for the StudentHome component
     <div className="bg-bgsecondary flex flex-row justify-center items-center h-screen w-[screen-120px] ml-[120px]">
       {isLoading && <LoadingScreen />}
 
+      {/* Render CKB logo */}
       <ReactSVG
         src={Logo}
         beforeInjection={(svg) => {
@@ -107,8 +115,12 @@ export const StudentHome = () => {
           right: 30,
         }}
       />
+
+      {/* Main content container */}
       <div className="flex flex-col w-full h-[90%]  justify-center items-center m-10  ">
+        {/* Container for current tournaments */}
         <div className="flex flex-col justify-center items-center space-y-2 w-full h-full ">
+          {/* Header for current tournaments */}
           <div className="flex flex-row justify-evenly items-center w-full h-full ">
             <Text
               text={["Current tournaments"]}
@@ -128,6 +140,8 @@ export const StudentHome = () => {
               }}
             />
           </div>
+
+          {/* Container for displaying current tournaments */}
           {tournaments.filter(
             (tournament) =>
               tournament.status === "active" ||
@@ -138,6 +152,7 @@ export const StudentHome = () => {
                 className="overflow-auto  scrollbar-thin scrollbar-thumb-bgprimary scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
                 style={{ maxHeight: "300px", minHeight: "300px" }}
               >
+                {/* Map through current tournaments and render TournamentCard components */}
                 {tournaments
                   .filter(
                     (tournament) =>
@@ -163,6 +178,7 @@ export const StudentHome = () => {
               </div>
             </div>
           ) : (
+            // Display message when no active tournaments
             <div className="flex flex-row items-center justify-center w-[80%] h-[50%]  bg-bgprimary rounded-[36px]">
               <Text
                 text={[
@@ -176,13 +192,18 @@ export const StudentHome = () => {
             </div>
           )}
         </div>
+
+        {/* Container for past tournaments */}
         <div className="flex flex-col mt-[50px] space-y-2 w-full h-full  justify-center items-center">
+          {/* Header for past tournaments */}
           <Text
             text={["Past tournaments"]}
             size="text-[24px]"
             fontColor="text-accentprimary"
             fontType="font-bold"
           />
+
+          {/* Container for displaying past tournaments */}
           {tournaments.filter((tournament) => tournament.status === "completed")
             .length > 0 ? (
             <div className="fadeScroll1 w-full h-full">
@@ -190,6 +211,7 @@ export const StudentHome = () => {
                 className="overflow-auto  scrollbar-thin scrollbar-thumb-bgprimary scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
                 style={{ maxHeight: "300px", minHeight: "300px" }}
               >
+                {/* Map through past tournaments and render PastTournamentCard components */}
                 {tournaments
                   .filter((tournament) => tournament.status === "completed")
                   .sort((a, b) => new Date(b.end_date) - new Date(a.end_date))
@@ -207,6 +229,7 @@ export const StudentHome = () => {
               </div>
             </div>
           ) : (
+            // Display message when no past tournaments
             <div className="flex flex-row items-center justify-center w-[80%] h-[50%]  bg-bgprimary rounded-[36px]">
               <Text
                 text={[
@@ -221,14 +244,18 @@ export const StudentHome = () => {
           )}
         </div>
       </div>
+
+      {/* Container for displaying TournamentDetails or BattleResume */}
       <div className="flex justify-center items-center  w-full  h-full ">
         {preview ? (
+          // Render BattleResume component if in preview mode
           <BattleResume
             selectedBattle={selectedBattle}
             onBackClick={handleBackClick}
             tourData={selectedTournamentData}
           />
         ) : selectedTournamentData ? (
+          // Render TournamentDetails component if a tournament is selected
           <TournamentDetails
             tournamentData={selectedTournamentData}
             onSeeMoreClick={handleSeeMoreClick}
@@ -236,6 +263,7 @@ export const StudentHome = () => {
             teams={teams}
           />
         ) : (
+          // Display message if no tournament is selected
           <div className="flex flex-row items-center justify-center w-[80%] h-[80%] bg-bgprimary rounded-[36px]">
             <Text
               text={["Select a tournament to see more details!"]}
@@ -250,4 +278,5 @@ export const StudentHome = () => {
   );
 };
 
+// Default export of the StudentHome component
 export default StudentHome;

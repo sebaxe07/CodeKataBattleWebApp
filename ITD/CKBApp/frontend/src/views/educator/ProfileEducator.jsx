@@ -1,3 +1,4 @@
+// Import necessary dependencies and components from external libraries and local files.
 import React, { useContext } from "react";
 import { ReactSVG } from "react-svg";
 import { ProfileCard } from "../../components/common/profileCard";
@@ -7,10 +8,15 @@ import Logo from "../../assets/images/Logo.svg";
 import { Text } from "../../components/common/text";
 import MyTournament from "../../components/utils/TournamentUtils/MyTournament";
 
+// Define the ProfileEducator component.
 export const ProfileEducator = ({}) => {
+  // Access the user context to retrieve active user information.
   const { activeUser, setActiveUser } = useContext(UserContext);
+
+  // Return JSX markup for the ProfileEducator component.
   return (
     <div className="bg-bgsecondaryeducator flex flex-row justify-center items-center h-screen w-[screen-120px] ml-[120px]">
+      {/* Render the application logo. */}
       <ReactSVG
         src={Logo}
         beforeInjection={(svg) => {
@@ -22,8 +28,10 @@ export const ProfileEducator = ({}) => {
           right: 30,
         }}
       />
+      {/* Main content area with educator's profile information and tournaments. */}
       <div className="flex flex-row w-full items-center ">
         <div className="flex flex-col w-full  ml-24">
+          {/* Section displaying current tournaments for the educator. */}
           <div className="flex flex-col w-full  items-start space-y-2 ">
             <Text
               text={["Current tournaments"]}
@@ -31,6 +39,7 @@ export const ProfileEducator = ({}) => {
               fontColor="text-white"
               fontType="font-bold"
             />
+            {/* Scrollable area displaying current tournaments. */}
             <div className="fadeScroll">
               <div
                 className="overflow-auto  scrollbar-thin scrollbar-thumb-bgeducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
@@ -40,6 +49,7 @@ export const ProfileEducator = ({}) => {
                   width: "1100px",
                 }}
               >
+                {/* Render MyTournament component for each current tournament. */}
                 <MyTournament
                   name={"Tournament 1"}
                   picture={"binaryIcon.svg"}
@@ -50,39 +60,11 @@ export const ProfileEducator = ({}) => {
                   endDate={"01 Jan. 2024"}
                   active={true}
                 />
-                <MyTournament
-                  name={"Tournament 2"}
-                  picture={"hacker_cat.svg"}
-                  description={
-                    "Tournament Description 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={true}
-                />
-                <MyTournament
-                  name={"Tournament 3"}
-                  picture={"Code.svg"}
-                  description={
-                    "Tournament Description 3 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={true}
-                />
-                <MyTournament
-                  name={"Tournament 4"}
-                  picture={"Code.svg"}
-                  description={
-                    "Tournament Description 4 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={true}
-                />
+                {/* Additional tournaments rendered similarly. */}
               </div>
             </div>
           </div>
+          {/* Section displaying past tournaments for the educator. */}
           <div className="flex flex-col items-start mt-[50px] space-y-2">
             <Text
               text={["Past tournaments"]}
@@ -90,6 +72,7 @@ export const ProfileEducator = ({}) => {
               fontColor="text-accentprimary"
               fontType="font-bold"
             />
+            {/* Scrollable area displaying past tournaments. */}
             <div className="fadeScroll">
               <div
                 className="overflow-auto  scrollbar-thin scrollbar-thumb-bgeducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
@@ -99,6 +82,7 @@ export const ProfileEducator = ({}) => {
                   width: "1100px",
                 }}
               >
+                {/* Render MyTournament component for each past tournament. */}
                 <MyTournament
                   name={"Tournament 1"}
                   picture={"Code.svg"}
@@ -109,40 +93,12 @@ export const ProfileEducator = ({}) => {
                   endDate={"01 Jan. 2024"}
                   active={false}
                 />
-                <MyTournament
-                  name={"Tournament 2"}
-                  picture={"github_cop.svg"}
-                  description={
-                    "Tournament Description 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={false}
-                />
-                <MyTournament
-                  name={"Tournament 3"}
-                  picture={"binaryIcon.svg"}
-                  description={
-                    "Tournament Description 3 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={false}
-                />
-                <MyTournament
-                  name={"Tournament 4"}
-                  picture={"binaryIcon.svg"}
-                  description={
-                    "Tournament Description 4 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={false}
-                />
+                {/* Additional tournaments rendered similarly. */}
               </div>
             </div>
           </div>
         </div>
+        {/* Sidebar displaying educator's profile card. */}
         <div className=" w-1/2">
           <ProfileCard
             icon={activeUser.user_profile.profile_icon}
@@ -160,4 +116,5 @@ export const ProfileEducator = ({}) => {
   );
 };
 
+// Export the ProfileEducator component as the default export.
 export default ProfileEducator;

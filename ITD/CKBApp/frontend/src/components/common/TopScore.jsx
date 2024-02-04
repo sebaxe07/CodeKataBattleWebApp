@@ -1,5 +1,6 @@
 import React from "react";
 import { ReactSVG } from "react-svg";
+import BgIconCard from "./bgIconCard";
 import { Text } from "./text";
 import Trophy1 from "../../assets/icons/Trophy/Trophy1.svg";
 import Trophy2 from "../../assets/icons/Trophy/Trophy2.svg";
@@ -23,12 +24,7 @@ export const TopScore = ({
         </div>
         <div className=" rounded-[50%] bg-white w-[62px] h-[62px] flex   justify-center items-center">
           <div className=" rounded-[50%] bg-accentprimary w-[55px] h-[55px] flex  justify-center items-center">
-            <ReactSVG
-              src={icons[0]}
-              beforeInjection={(svg) => {
-                svg.setAttribute("style", "width: 40px; height: 40px");
-              }}
-            />
+            <BgIconCard icon={icons[0]} size={40} />
           </div>
         </div>
         <div className="flex flex-col justify-center items-start ml-[10px] -space-y-5">
@@ -81,12 +77,7 @@ export const TopScore = ({
         </div>
         <div className=" rounded-[50%] bg-white w-[62px] h-[62px] flex   justify-center items-center">
           <div className=" rounded-[50%] bg-accentprimary w-[55px] h-[55px] flex  justify-center items-center">
-            <ReactSVG
-              src={icons[1]}
-              beforeInjection={(svg) => {
-                svg.setAttribute("style", "width: 40px; height: 40px");
-              }}
-            />
+            <BgIconCard icon={icons[1]} size={40} />
           </div>
         </div>
         <div className="flex flex-col justify-center items-start ml-[10px] -space-y-5">
@@ -139,12 +130,7 @@ export const TopScore = ({
         </div>
         <div className=" rounded-[50%] bg-white w-[62px] h-[62px] flex   justify-center items-center">
           <div className=" rounded-[50%] bg-accentprimary w-[55px] h-[55px] flex  justify-center items-center">
-            <ReactSVG
-              src={icons[2]}
-              beforeInjection={(svg) => {
-                svg.setAttribute("style", "width: 40px; height: 40px");
-              }}
-            />
+            <BgIconCard icon={icons[2]} size={40} />
           </div>
         </div>
         <div className="flex flex-col justify-center items-start ml-[10px] -space-y-5">
