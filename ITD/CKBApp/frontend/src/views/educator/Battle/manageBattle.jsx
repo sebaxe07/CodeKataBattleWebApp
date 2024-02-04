@@ -450,47 +450,28 @@ export const ManageBattle = () => {
                 </div>
               </div>
               <div className="flex flex-col h-full w-full rounded-br-[36px]  ">
-                {battles.status == "active" ? (
-                  <div className="overflow-hidden rounded-br-[36px] fadeScroll h-full w-full">
-                    <div
-                      className="flex flex-col h-full overflow-auto scrollbar-thin scrollbar-thumb-shadowboxeducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
-                      style={{
-                        maxHeight: "600px",
-                        minHeight: "300px",
-                        paddingBottom: "20px",
-                      }}
-                    >
-                      {scoring.map((team, index) => (
-                        <TeamLeaderboard
-                          context={"b"}
-                          rank={index + 1}
-                          icon={"swords.svg"}
-                          name={team.team.name}
-                          exp={team.total_score}
-                          team={team}
-                          battle={battles}
-                        />
-                      ))}
-                    </div>
+                <div className="overflow-hidden rounded-br-[36px] fadeScroll h-full w-full">
+                  <div
+                    className="flex flex-col h-full overflow-auto scrollbar-thin scrollbar-thumb-shadowboxeducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
+                    style={{
+                      maxHeight: "600px",
+                      minHeight: "300px",
+                      paddingBottom: "20px",
+                    }}
+                  >
+                    {scoring.map((team, index) => (
+                      <TeamLeaderboard
+                        context={"b"}
+                        rank={index + 1}
+                        icon={"swords.svg"}
+                        name={team.team.name}
+                        exp={team.total_score}
+                        team={team}
+                        battle={battles}
+                      />
+                    ))}
                   </div>
-                ) : (
-                  <div className="flex flex-col justify-center items-center w-full h-full">
-                    <Text
-                      text={["Battle yet to start"]}
-                      size="text-[32px]"
-                      fontColor="text-white"
-                      className={"text-start"}
-                      fontType="font-bold"
-                    />
-                    <Text
-                      text={["No scores for teams available"]}
-                      size="text-[24px]"
-                      fontColor="text-white"
-                      className={"text-start"}
-                      fontType="font-bold"
-                    />
-                  </div>
-                )}
+                </div>
               </div>
             </div>
           </div>

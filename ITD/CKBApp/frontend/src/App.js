@@ -37,15 +37,10 @@ import GlobalRankings from "./views/GlobalRankings";
 
 function App() {
   return (
-    // Chakra UI Provider for styling
     <ChakraProvider>
-      {/* User Provider for managing user state */}
       <UserProvider>
-        {/* Router for handling navigation */}
         <Router>
-          {/* Routes for different views */}
           <Routes>
-            {/* Public Routes */}
             <Route path="/" element={<Login />} />
             <Route path="/passwordreset" element={<PasswordReset />} />
             <Route path="/activate/:uid/:token/" element={<ActivationPage />} />
@@ -53,7 +48,6 @@ function App() {
               path="/newpassword/:uid/:token/"
               element={<PasswordConfirm />}
             />
-            {/* User Registration Route */}
             <Route
               path="/signup"
               element={
@@ -62,9 +56,7 @@ function App() {
                 </RegisterProvider>
               }
             />
-            {/* Protected Routes Group */}
             <Route element={<ProtectedRouteGroup />}>
-              {/* Student Routes */}
               <Route path="/student" element={<Sidebar />}>
                 <Route index element={<Navigate to="home" />} />
                 <Route path="home" element={<StudentHome />} />
@@ -74,7 +66,6 @@ function App() {
                 <Route path="rankings" element={<GlobalRankings />} />
                 <Route path="*" element={<Navigate to="home" />} />
               </Route>
-              {/* Educator Routes */}
               <Route path="/educator" element={<Sidebar />}>
                 <Route index element={<Navigate to="home" />} />
                 <Route path="home" element={<EducatorHome />} />
