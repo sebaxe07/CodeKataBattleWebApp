@@ -1,0 +1,54 @@
+name: Run tests and notify backend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - name: Install dependencies
+        run: |
+          npm install
+      - name: Run tests
+        id: tests
+        continue-on-error: true
+        run: |
+          output=$(npm test 2>&1 || true)
+          echo "Test output: $output"
+          if [[ $(echo "$output" | grep 'Tests:' | awk '{print $5}') == "passed," ]]; then
+            passed=$(echo "$output" | grep 'Tests:' | awk '{print $4}')
+            total=$(echo "$output" | grep 'Tests:' | awk '{print $6}')
+          elif [[ $(echo "$output" | grep 'Tests:' | awk '{print $3}') == "passed," ]]; then
+            passed=$(echo "$output" | grep 'Tests:' | awk '{print $2}')
+            total=$(echo "$output" | grep 'Tests:' | awk '{print $4}')
+          else
+            failed=$(echo "$output" | grep 'Tests:' | awk '{print $2}')
+            total=$(echo "$output" | grep 'Tests:' | awk '{print $4}')
+            passed=$((total - failed))
+          fi
+          echo "Passed tests: $passed"
+          echo "Total tests: $total"
+          echo "PASSED=$passed" >> $GITHUB_ENV
+          echo "TOTAL=$total" >> $GITHUB_ENV
+          echo "$output"
+      - name: Notify backend
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{
+            "commit_sha":"${{ github.sha }}",
+            "branch":"${{ github.ref }}",
+            "commit_message":"${{ github.event.head_commit.message }}",
+            "author":"${{ github.actor }}",
+            "repo":"${{ github.repository }}",
+            "tests_passed":${{ env.PASSED }},
+            "tests_total":${{ env.TOTAL }}
+          }' \
+          https://dl529nfz-8000.euw.devtunnels.ms/aes/webhook-endpoint

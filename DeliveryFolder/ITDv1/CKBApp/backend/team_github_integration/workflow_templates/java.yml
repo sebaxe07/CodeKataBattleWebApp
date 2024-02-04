@@ -1,0 +1,57 @@
+name: Run tests and notify backend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: "adopt"
+          java-version: "11"
+      - name: Regenerate Gradle Wrapper
+        run: |
+          curl -s "https://get.sdkman.io" | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk install gradle 7.2
+          gradle wrapper
+      - name: Grant execute permissions for gradlew
+        run: chmod +x gradlew
+      - name: Run tests
+        id: tests
+        continue-on-error: true
+        run: |
+          output=$(./gradlew test 2>&1 || true)
+          echo "Test output: $output"
+          failed=$(echo "$output" | grep -oP '(\d+)(?=\s+failed)' | tail -1)
+          total=$(echo "$output" | grep -oP '(\d+)(?=\s+tests completed)' | tail -1)
+          if [ -z "$total" ]; then
+            total=$(grep -r '^ *[@]Test' . --include='*.java' | wc -l)            
+            passed=$total
+          else
+            passed=$((total - failed))
+          fi
+          echo "Failed tests: $failed"
+          echo "Total tests: $total"
+          echo "PASSED=$passed" >> $GITHUB_ENV
+          echo "TOTAL=$total" >> $GITHUB_ENV
+          echo "$output"
+      - name: Notify backend
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{
+            "commit_sha":"${{ github.sha }}",
+            "branch":"${{ github.ref }}",
+            "commit_message":"${{ github.event.head_commit.message }}",
+            "author":"${{ github.actor }}",
+            "repo":"${{ github.repository }}",
+            "tests_passed":${{ env.PASSED }},
+            "tests_total":${{ env.TOTAL }}
+          }' \
+          https://dl529nfz-8000.euw.devtunnels.ms/aes/webhook-endpoint
