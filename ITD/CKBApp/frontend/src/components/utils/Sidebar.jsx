@@ -71,6 +71,10 @@ const Sidebar = () => {
           headers: { Authorization: `Token ${authToken}` },
         }
       );
+    } catch (error) {
+      console.error("Failed to log out:", error);
+    } finally {
+      setIsLoading(false);
 
       // Remove the auth token from local storage
       if (localStorage.getItem("authToken")) {
@@ -99,8 +103,10 @@ const Sidebar = () => {
 
       const keys = Object.keys(localStorage);
       const battleKeys = keys.filter((key) => key.startsWith("battle"));
+      const tournamentKeys = keys.filter((key) => key.startsWith("tournament"));
       const teamKeys = keys.filter((key) => key.startsWith("team"));
       battleKeys.forEach((key) => localStorage.removeItem(key));
+      tournamentKeys.forEach((key) => localStorage.removeItem(key));
       teamKeys.forEach((key) => localStorage.removeItem(key));
 
       // Remove the user object from the global context
@@ -115,10 +121,6 @@ const Sidebar = () => {
 
       // Redirect the user to the login page
       navigate("/");
-    } catch (error) {
-      console.error("Failed to log out:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
   return (

@@ -150,6 +150,55 @@ export const ManageTournament = () => {
     fetchBattles();
   };
 
+  const handleTournamentEnd = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.patch(
+        `/tms/tournaments/end/${id}/`,
+        {},
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+      console.log(response.data);
+
+      tournament.end_date = new Date();
+      tournament.status = "completed";
+      // Get the current tournaments data from local storage
+      let tournaments = JSON.parse(localStorage.getItem("tournaments"));
+
+      // Find the index of the tournament with the matching ID
+      const tourID = Number(id);
+      let tournamentIndex = tournaments.findIndex((t) => t.id === tourID);
+
+      // Update the necessary fields
+      tournaments[tournamentIndex].end_date = new Date();
+      tournaments[tournamentIndex].status = "completed";
+
+      // Save the updated tournaments data back to local storage
+      localStorage.setItem("tournaments", JSON.stringify(tournaments));
+
+      toast({
+        title: "Tournament ended",
+        description: "The tournament has ended",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Failed to end tournament:", error);
+      toast({
+        title: "Failed to end tournament",
+        description: "An error occurred while ending the tournament",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleEarlyStart = async () => {
     setIsLoading(true);
     try {
@@ -180,7 +229,7 @@ export const ManageTournament = () => {
 
       toast({
         title: "Tournament started",
-        description: "The tournament has been started",
+        description: "The tournament has started",
         status: "success",
         duration: 9000,
         isClosable: true,
@@ -357,6 +406,12 @@ export const ManageTournament = () => {
                   <Button name="Early start" onClick={handleEarlyStart} />
                 </div>
               ) : null}
+              {tournament.status === "active" &&
+              battles.every((battle) => battle.status === "completed") ? (
+                <div className="flex justify-center items-center w-full h-full gap-5">
+                  <Button name="End tournament" onClick={handleTournamentEnd} />
+                </div>
+              ) : null}
             </div>
             {/* Lado Derecho */}
             <div className="flex flex-col h-full rounded-br-[36px] w-[50%]  bg-[#413e97]">
@@ -487,24 +542,9 @@ export const ManageTournament = () => {
                         fontType="font-bold"
                       />
                     </div>
-                  ) : battles.map((battle) => battle.status === "active") ? (
-                    <div className="flex flex-col justify-start items-center w-full h-full">
-                      <Text
-                        text={["Battles yet to start"]}
-                        size="text-[32px]"
-                        fontColor="text-white"
-                        className={"text-start"}
-                        fontType="font-bold"
-                      />
-                      <Text
-                        text={["No scores for teams available"]}
-                        size="text-[24px]"
-                        fontColor="text-white"
-                        className={"text-start"}
-                        fontType="font-bold"
-                      />
-                    </div>
-                  ) : (
+                  ) : battles.some(
+                      (battle) => battle.status === "completed"
+                    ) ? (
                     <div className="overflow-hidden rounded-br-[36px] fadeScroll1">
                       <div
                         className="overflow-auto flex flex-col items-center scrollbar-thin scrollbar-thumb-bgaccent scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
@@ -524,6 +564,23 @@ export const ManageTournament = () => {
                           />
                         ))}
                       </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col justify-start items-center w-full h-full">
+                      <Text
+                        text={["Battles yet to start"]}
+                        size="text-[32px]"
+                        fontColor="text-white"
+                        className={"text-start"}
+                        fontType="font-bold"
+                      />
+                      <Text
+                        text={["No scores for teams available"]}
+                        size="text-[24px]"
+                        fontColor="text-white"
+                        className={"text-start"}
+                        fontType="font-bold"
+                      />
                     </div>
                   )}
                 </div>

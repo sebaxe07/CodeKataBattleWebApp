@@ -20,7 +20,14 @@ const colorSchemes = [
   },
 ];
 
-const PastTournamentCard = ({ name, description, position, score, select }) => {
+const PastTournamentCard = ({
+  name,
+  description,
+  position,
+  score,
+  select,
+  onClick,
+}) => {
   const [colorScheme, setColorScheme] = useState(colorSchemes[0]);
   const [selected, setSelected] = useState(false);
 
@@ -40,8 +47,8 @@ const PastTournamentCard = ({ name, description, position, score, select }) => {
   return (
     <div
       className="relative flex items-center justify-center my-[13px] transform active:scale-95"
-      onClick={handleClick}
       style={{ userSelect: "none" }}
+      onClick={onClick}
     >
       <div
         className={`relative ${colorScheme.shadow}  h-[84px] w-[758px] rounded-[29px]`}
@@ -59,12 +66,18 @@ const PastTournamentCard = ({ name, description, position, score, select }) => {
                 size="text-[20px]"
                 fontColor={`${colorScheme.text}`}
                 fontType="font-bold"
+                className={
+                  " whitespace-nowrap overflow-ellipsis overflow-hidden w-[250px] text-start"
+                }
               />
               <Text
                 text={[`${description}`]}
                 size="text-[16px]"
                 fontColor={`${colorScheme.label}`}
                 fontType="font-normal"
+                className={
+                  " whitespace-nowrap overflow-ellipsis overflow-hidden w-[250px] text-start"
+                }
               />
             </div>
 

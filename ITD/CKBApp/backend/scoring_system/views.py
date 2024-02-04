@@ -4,7 +4,7 @@ from team_github_integration.models import Team
 from tournament_management.models import Tournament
 from user_management.models import StudentProfile
 from .serializers import BattleScoreSerializer, TeamSerializer, TournamentScoreSerializer
-from .models import update_battle_score
+from .models import update_battle_score, update_tournament_score, notify_tournament_score
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status

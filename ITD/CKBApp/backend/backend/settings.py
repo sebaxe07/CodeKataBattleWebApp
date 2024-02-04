@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'team_github_integration',
     'automated_evaluation',
     'scoring_system',
-    'notification_system',
     'djoser',
     'django_celery_beat',
 

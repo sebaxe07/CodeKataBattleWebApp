@@ -110,6 +110,7 @@ export const StudentHome = () => {
       setIsSpinning(false);
     }
   };
+
   const backgroundfetch = async () => {
     try {
       const response = await axios.get(
@@ -127,6 +128,23 @@ export const StudentHome = () => {
         console.log("Tournaments");
         setTournaments(response.data);
         // Sort the tournaments by end date
+
+        // Fetch teams for the active student
+        const teamsResponse = await axios.get(
+          `/tgms/teams/student/${activeUser.roleid}`,
+          {
+            headers: { Authorization: `Token ${activeUser.authToken}` },
+          }
+        );
+
+        console.log(teamsResponse.data);
+        // Check if the team data has changed
+        const oldTeams = JSON.parse(localStorage.getItem("teams") || "[]");
+        if (JSON.stringify(oldTeams) !== JSON.stringify(teamsResponse.data)) {
+          // Update the team storage and context only if the team data has changed
+          setTeams(teamsResponse.data);
+          localStorage.setItem("teams", JSON.stringify(teamsResponse.data));
+        }
 
         // Set the selected tournament to the one with the end date closest to now
         localStorage.setItem("tournaments", JSON.stringify(response.data));
@@ -293,20 +311,24 @@ export const StudentHome = () => {
                   .filter((tournament) => tournament.status === "completed")
                   .sort((a, b) => new Date(b.end_date) - new Date(a.end_date))
                   .map((tournament) => {
-                    const tournamentScoreData = tourBattleScore.find(
-                      (score) => score.tournament === tournament.id
-                    );
+                    let score = "-";
+                    let position = "-";
 
-                    const score = tournamentScoreData
-                      ? tournamentScoreData.total_score
-                      : "-";
-                    const position =
-                      score === 0
-                        ? "-"
-                        : tournamentScoreData
-                        ? tournamentScoreData.position
+                    if (tourBattleScore) {
+                      const tournamentScoreData = tourBattleScore.find(
+                        (score) => score.tournament === tournament.id
+                      );
+
+                      score = tournamentScoreData
+                        ? tournamentScoreData.total_score
                         : "-";
-
+                      position =
+                        score === 0
+                          ? "-"
+                          : tournamentScoreData
+                          ? tournamentScoreData.position
+                          : "-";
+                    }
                     return (
                       <PastTournamentCard
                         key={tournament.id}

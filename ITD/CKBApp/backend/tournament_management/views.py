@@ -59,6 +59,18 @@ class StartTournamentView(generics.UpdateAPIView):
         tournament.save()
 
         return Response({'status': 'Tournament started'}, status=status.HTTP_200_OK)
+
+class EndTournamentView(generics.UpdateAPIView):
+    queryset = Tournament.objects.all()
+    serializer_class = TournamentSerializer
+
+    def update(self, request, *args, **kwargs):
+        tournament = self.get_object()
+        tournament.end_date = timezone.now()
+        tournament.status = 'completed'
+        tournament.save()
+
+        return Response({'status': 'Tournament ended'}, status=status.HTTP_200_OK)
     
 class TournamentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tournament.objects.all()

@@ -57,7 +57,7 @@ export const ManageBattle = () => {
     const battleid = Number(bid); // Convert id to number
     setBattles(storedBattles.filter((battle) => battle.id === battleid)[0]);
     fechtRanking();
-    const intervalId = setInterval(fechtRanking, 60000); // Fetch new data every minute
+    const intervalId = setInterval(fechtRanking, 5000); // Fetch new data every 5 seconds
     return () => clearInterval(intervalId);
   }, []);
 

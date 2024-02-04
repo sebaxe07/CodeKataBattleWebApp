@@ -14,6 +14,7 @@ from github import Github, InputGitTreeElement
 from django.conf import settings
 from django.core.mail import send_mail
 from pathlib import Path
+from django.db import transaction
 import os
 import zipfile
 import tempfile
@@ -118,6 +119,24 @@ class StartBattleView(APIView):
         # Get the battle and the teams
         battle = Battle.objects.get(id=battle_id)
         teams = battle.teams.all()
+        min_students = battle.min_students_per_group
+
+        for team in teams:
+            if team.members.count() < min_students:
+                with transaction.atomic():
+                    # Notify team members
+                    for student in team.members.all():
+                        print(f'Sending email to student: {student.user_profile.user.email}')
+                        send_mail(
+                            'Team removed from battle',
+                            f'Your team {team.name} did not meet the minimum requirements and was removed from the battle {battle.name}.\n\n'
+                            f'Goog luck in the next one!',
+                            settings.DEFAULT_FROM_EMAIL,
+                            [student.user_profile.user.email],
+                            fail_silently=False,
+                        )
+                    # Delete team from battle and respective models
+                    team.delete()
 
         logger = logging.getLogger(__name__)
 
@@ -205,33 +224,34 @@ class StartBattleView(APIView):
 
                 # Send an email to each team member
                 for team in teams:
-                    # Construct the fork URL
-                    fork_url = f'https://github.com/{repo.owner.login}/{repo.name}/fork'
+                    if Team.objects.filter(id=team.id).exists():
+                        # Construct the fork URL
+                        fork_url = f'https://github.com/{repo.owner.login}/{repo.name}/fork'
 
-                    # Construct the list of team member usernames
-                    team_members = ', '.join(student.user_profile.github_username for student in team.members.all())
+                        # Construct the list of team member usernames
+                        team_members = ', '.join(student.user_profile.github_username for student in team.members.all())
 
-                    # Send the email
-                    for student in team.members.all():
-                        print(f'Sending email to student: {student.user_profile.user.email}')
-                        send_mail(
-                            f'Battle {battle.name} Started',
-                            f'Hello {student.user_profile.user.first_name}!,\n\n'
-                            f'The battle {battle.name} has started. You are part of the team {team.name}.\n'
-                            f'Please invite the following team members to your fork: {team_members}\n'
-                            f'Make sure to only create the fork of the repository once.\n\n'
-                            f'Here is the link to fork the repository: {fork_url}\n\n'
-                            f'To activate the GitHub Actions workflow, follow these steps:\n'
-                            f'1. Go to your forked repository.\n'
-                            f'2. Click on the "Actions" tab.\n'
-                            f'3. If you see a message saying "Workflows aren’t being run on this repository", click on "I understand my workflows, go ahead and enable them".\n'
-                            f'4. If you see a list of workflows, they are already enabled.\n\n'
-                            f'Do not forget to push your changes to the repository so that your project is evaluated automatically.\n\n'
-                            f'Note: Please do not change the repository name or the workflow file when creating the fork.\n\n',
-                            settings.DEFAULT_FROM_EMAIL,
-                            [student.user_profile.user.email],  
-                            fail_silently=False,
-                        )
+                        # Send the email
+                        for student in team.members.all():
+                            print(f'Sending email to student: {student.user_profile.user.email}')
+                            send_mail(
+                                f'Battle {battle.name} Started',
+                                f'Hello {student.user_profile.user.first_name}!,\n\n'
+                                f'The battle {battle.name} has started. You are part of the team {team.name}.\n'
+                                f'Please invite the following team members to your fork: {team_members}\n'
+                                f'Make sure to only create the fork of the repository once.\n\n'
+                                f'Here is the link to fork the repository: {fork_url}\n\n'
+                                f'To activate the GitHub Actions workflow, follow these steps:\n'
+                                f'1. Go to your forked repository.\n'
+                                f'2. Click on the "Actions" tab.\n'
+                                f'3. If you see a message saying "Workflows aren’t being run on this repository", click on "I understand my workflows, go ahead and enable them".\n'
+                                f'4. If you see a list of workflows, they are already enabled.\n\n'
+                                f'Do not forget to push your changes to the repository so that your project is evaluated automatically.\n\n'
+                                f'Note: Please do not change the repository name or the workflow file when creating the fork.\n\n',
+                                settings.DEFAULT_FROM_EMAIL,
+                                [student.user_profile.user.email],  
+                                fail_silently=False,
+                            )
 
         except github.GithubException as e:
             logger.error(f"An error occurred with the GitHub API: {e}")

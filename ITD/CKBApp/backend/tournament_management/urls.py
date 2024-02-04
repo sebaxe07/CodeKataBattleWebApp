@@ -1,11 +1,12 @@
 from django.urls import path
-from .views import TournamentListCreateView, TournamentListOngoingView, ConsolidateBattleView, EndBattleView, StartTournamentView, StartBattleView , TournamentRetrieveUpdateDestroyView, BattleListCreateView, BattleRetrieveUpdateDestroyView, UserTournamentsListView, UserBattlesListView, UserBattlesListView, StudentSubscribedTournamentsListView, StudentSubscribeTournament
+from .views import TournamentListCreateView, TournamentListOngoingView, EndTournamentView,  ConsolidateBattleView, EndBattleView, StartTournamentView, StartBattleView , TournamentRetrieveUpdateDestroyView, BattleListCreateView, BattleRetrieveUpdateDestroyView, UserTournamentsListView, UserBattlesListView, UserBattlesListView, StudentSubscribedTournamentsListView, StudentSubscribeTournament
 
 urlpatterns = [
     path('tournaments/', TournamentListCreateView.as_view(), name='tournament-list-create'),
     path('tournaments/<int:pk>/', TournamentRetrieveUpdateDestroyView.as_view(), name='tournament-retrieve-update-destroy'),
     path('tournaments/user/<int:user_id>/', UserTournamentsListView.as_view(), name='user-tournaments-list'),
     path('tournaments/start/<int:pk>/', StartTournamentView.as_view(), name='start-tournament'),
+    path('tournaments/end/<int:pk>/', EndTournamentView.as_view(), name='end-tournament'),
     path('tournaments/ongoing/', TournamentListOngoingView.as_view(), name='tournament-list-ongoing'),
 
     path('battles/', BattleListCreateView.as_view(), name='battle-list-create'),

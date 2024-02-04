@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from user_management.models import EducatorProfile, StudentProfile
 from django.utils import timezone
@@ -6,6 +7,10 @@ from team_github_integration.models import Team
 from automated_evaluation.models import Evaluation
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.db.models import Window, F
+from django.db.models.functions import Rank
+from django.core.mail import send_mail
+
 
 @receiver(post_save, sender=Evaluation)
 def update_battle_score(sender, instance, created, **kwargs):
@@ -51,12 +56,71 @@ def update_tournament_score(sender, instance, **kwargs):
     elif instance.status == "completed":
         print("Updating TournamentScore for", instance.tournament)
         for team in instance.teams.all():
-            print("Updating TournamentScore for", team.name)  
+            print("Updating TournamentScore for", team.name) 
             for student in team.members.all():
                 print("Updating TournamentScore for", student.user_profile.user.username)
                 tournament_score, created = TournamentScore.objects.get_or_create(student=student, tournament=instance.tournament)
                 tournament_score.update_score()
-    
+
+        for team in instance.teams.all():
+            for student in team.members.all():
+                print("Notificating battle score for", student.user_profile.user.username)
+                battle_score = BattleScore.objects.filter(team=team, battle=instance).first()
+
+                if tournament_score is None or battle_score is None:
+                    print(f"No score for {student.user_profile.user.username}")
+                    send_mail(
+                        f'Battle "{instance.name}" has ended!',
+                        f'The battle "{instance.name}" has ended in the tournament "{instance.tournament.name}"!\n\n'
+                        f'You did not participate in this battle so there is no score for you!.\n\n'
+                        f'Login to CKB and find out more!',
+                        settings.DEFAULT_FROM_EMAIL,
+                        [student.user_profile.user.email],
+                        fail_silently=False,
+                    )
+                    continue
+
+                print("Sending email to", student.user_profile.user.email)
+                send_mail(
+                    f'Battle "{instance.name}" has ended!',
+                    f'The battle "{instance.name}" has ended in the tournament "{instance.tournament.name}"!\n\n'
+                    f'Your final battle score is {battle_score.total_score} and your current tournament score is {tournament_score.total_score}.\n'
+                    f'Login to CKB to find out your positon!',
+                    settings.DEFAULT_FROM_EMAIL,
+                    [student.user_profile.user.email],
+                    fail_silently=False,
+                )
+
+@receiver(post_save, sender=Tournament)
+def notify_tournament_score(sender, instance, **kwargs):
+        if instance.status == "completed":
+            print("Tournament has ended:", instance.name)
+
+            for student in instance.subscribed_Students.all():
+                print("Notificating tournament score for", student.user_profile.user.username)
+                tournament_score = TournamentScore.objects.filter(student=student, tournament=instance).first()
+                if tournament_score is None:
+                    print(f"No tournament score for {student.user_profile.user.username}")
+                    send_mail(
+                        f'Tournament "{instance.name}" has ended!',
+                        f'The tournament "{instance.name}" has ended!\n\n'
+                        f'You did not participate in any battle of this tournament so there is no score for you!.\n\n'
+                        f'Login to CKB and find out more!',
+                        settings.DEFAULT_FROM_EMAIL,
+                        [student.user_profile.user.email],
+                        fail_silently=False,
+                    )
+                    continue
+                print("Sending email to", student.user_profile.user.email)
+                send_mail(
+                    f'Tournament "{instance.name}" has ended!',
+                    f'The tournament "{instance.name}" has ended!\n\n'
+                    f'Your final score is {tournament_score.total_score}!\n\n'
+                    f'Login to CKB to find out your positon!',
+                    settings.DEFAULT_FROM_EMAIL,
+                    [student.user_profile.user.email],
+                    fail_silently=False,
+                )
 
 class BattleScore(models.Model):
     battle = models.ForeignKey(Battle, on_delete=models.CASCADE, related_name='battle_scores')

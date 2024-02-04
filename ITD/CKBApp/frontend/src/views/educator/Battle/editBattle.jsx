@@ -111,6 +111,11 @@ export const EditBattle = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    if (!file) {
+      showToast("No file selected");
+      return;
+    }
+
     const validMimeTypes = [
       "application/zip",
       "application/x-zip-compressed",
