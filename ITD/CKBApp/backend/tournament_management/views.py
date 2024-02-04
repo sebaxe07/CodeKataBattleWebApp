@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework import generics, status
 from django.http import Http404
 from .models import Tournament, Battle
@@ -121,6 +121,14 @@ class UserTournamentsListView(generics.ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         return Tournament.objects.filter(created_by_id=user_id)
+    
+
+class InvitedTournamentsListView(generics.ListAPIView):
+    serializer_class = TournamentSerializer
+
+    def get_queryset(self):
+        educator = get_object_or_404(EducatorProfile, id=self.kwargs['educator_id'])
+        return Tournament.objects.filter(invited_Educators=educator)
     
 # Battles views
     

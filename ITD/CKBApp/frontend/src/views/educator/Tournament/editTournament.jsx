@@ -70,11 +70,20 @@ export const EditTournament = () => {
   useEffect(() => {
     const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
     const tournamentId = Number(id); // Convert id to number
-    setTournament(
-      storedTournaments.filter(
-        (tournament) => tournament.id === tournamentId
-      )[0]
+    const storedInvitedTournaments = JSON.parse(
+      localStorage.getItem("invitedTournaments")
     );
+    const tournament =
+      storedTournaments.find((t) => t.id === tournamentId) ||
+      storedInvitedTournaments.find((t) => t.id === tournamentId);
+
+    if (tournament) {
+      setTournament(tournament);
+    } else {
+      console.error(
+        `Tournament with ID ${tournamentId} not found in storedTournaments or storedInvitedTournaments`
+      );
+    }
     const storedBattles = JSON.parse(localStorage.getItem(`battle${id}`));
     setBattles(storedBattles);
   }, []);
@@ -160,16 +169,50 @@ export const EditTournament = () => {
         headers: { Authorization: `Token ${activeUser.authToken}` },
       });
 
-      const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
+      const storedTournaments =
+        JSON.parse(localStorage.getItem("tournaments")) || [];
+      const storedInvitedTournaments =
+        JSON.parse(localStorage.getItem("invitedTournaments")) || [];
+
       const tournamentId = Number(id); // Convert id to number
-      const index = storedTournaments.findIndex(
-        (tournament) => tournament.id === tournamentId
+
+      let tournamentIndex = storedTournaments.findIndex(
+        (t) => t.id === tournamentId
       );
-      if (index !== -1) {
-        storedTournaments[index] = { ...storedTournaments[index], ...payload };
-        console.log("Tournament updated in local storage.");
+      let isInvitedTournament = false;
+
+      if (tournamentIndex === -1) {
+        tournamentIndex = storedInvitedTournaments.findIndex(
+          (t) => t.id === tournamentId
+        );
+        isInvitedTournament = true;
       }
-      localStorage.setItem("tournaments", JSON.stringify(storedTournaments));
+
+      if (tournamentIndex !== -1) {
+        if (isInvitedTournament) {
+          storedInvitedTournaments[tournamentIndex] = {
+            ...storedInvitedTournaments[tournamentIndex],
+            ...payload,
+          };
+          localStorage.setItem(
+            "invitedTournaments",
+            JSON.stringify(storedInvitedTournaments)
+          );
+        } else {
+          storedTournaments[tournamentIndex] = {
+            ...storedTournaments[tournamentIndex],
+            ...payload,
+          };
+          localStorage.setItem(
+            "tournaments",
+            JSON.stringify(storedTournaments)
+          );
+        }
+      } else {
+        console.error(
+          `Tournament with ID ${tournamentId} not found in storedTournaments or storedInvitedTournaments`
+        );
+      }
 
       toast({
         title: "Tournament updated successfully.",

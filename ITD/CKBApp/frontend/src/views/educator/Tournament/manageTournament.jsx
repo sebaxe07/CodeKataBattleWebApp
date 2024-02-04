@@ -38,6 +38,7 @@ export const ManageTournament = () => {
   const [tournament, setTournament] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [invitedTournaments, setInvitedTournaments] = useState([]);
   const [battles, setBattles] = useState([]);
   const [tournamentScores, setTournamentScores] = useState([]);
   const toast = useToast();
@@ -47,11 +48,22 @@ export const ManageTournament = () => {
     console.log(id);
     const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
     const tournamentId = Number(id); // Convert id to number
-    setTournament(
-      storedTournaments.filter(
-        (tournament) => tournament.id === tournamentId
-      )[0]
+
+    const storedInvitedTournaments = JSON.parse(
+      localStorage.getItem("invitedTournaments")
     );
+
+    const tournament =
+      storedTournaments.find((t) => t.id === tournamentId) ||
+      storedInvitedTournaments.find((t) => t.id === tournamentId);
+
+    if (tournament) {
+      setTournament(tournament);
+    } else {
+      console.error(
+        `Tournament with ID ${tournamentId} not found in storedTournaments or storedInvitedTournaments`
+      );
+    }
 
     const storedBattles = JSON.parse(localStorage.getItem(`battle${id}`));
     const storedTournamentScores = JSON.parse(
@@ -285,48 +297,16 @@ export const ManageTournament = () => {
               />
             </div>
             <div className="flex gap-5 flex-row  items-center justify-center mr-10">
-              <div className="flex flex-row gap-3">
-                <div className="flex bg-white rounded-[100%] justify-center items-center w-[50px] h-[50px]">
-                  <BgIconCard icon={"elephant.svg"} size={40} />
-                </div>
-                <div className="flex bg-white rounded-[100%] justify-center items-center w-[50px] h-[50px]">
-                  <BgIconCard icon={"tiger.svg"} size={40} />
-                </div>
-              </div>
-              <div className="flex flex-row gap-3 cursor-pointer">
-                <ReactSVG
-                  src={Add}
-                  beforeInjection={(svg) => {
-                    svg.setAttribute("style", "width: 25px; height: 25px");
-                  }}
-                  className="cursor-pointer text-accentprimary"
-                  onClick={onOpen}
-                />
-              </div>
-              <Modal isOpen={isOpen} onClose={onClose} isCentered>
-                <ModalOverlay />
-                <ModalContent borderRadius="36px">
-                  <ModalHeader>Invite Educators</ModalHeader>
-                  <ModalBody>
-                    <TextField
-                      type={"text"}
-                      placeholder="Email Address"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </ModalBody>
-
-                  <ModalFooter>
-                    <Button
-                      name="Close"
-                      onClick={onClose}
-                      className={"mx-4"}
-                      backg={"bg-accentprimary"}
-                    />
-                    <Button name="Invite" />
-                  </ModalFooter>
-                </ModalContent>
-              </Modal>
+              <Text
+                text={[
+                  "Invited senseis: " +
+                    (tournament?.invited_Educators?.length || 0),
+                ]}
+                size="text-[20px] "
+                className={"leading-normal text-start ml-5"}
+                fontColor="text-white"
+                fontType="font-bold"
+              />
             </div>
           </div>
           <div className="flex h-full rounded-[36px] w-full flex-row">
@@ -429,15 +409,34 @@ export const ManageTournament = () => {
                     className="overflow-auto flex flex-col items-center scrollbar-thin scrollbar-thumb-bgaccent scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
                     style={{ maxHeight: "200px", minHeight: "200px" }}
                   >
-                    {battles.map((battle) => (
-                      <CreatedBattle
-                        key={battle.id}
-                        bid={battle.id}
-                        name={battle.name}
-                        state={battle.status}
-                        icon={"swords.svg"}
-                      />
-                    ))}
+                    {battles.length > 0 ? (
+                      battles.map((battle) => (
+                        <CreatedBattle
+                          key={battle.id}
+                          bid={battle.id}
+                          name={battle.name}
+                          state={battle.status}
+                          icon={"swords.svg"}
+                        />
+                      ))
+                    ) : (
+                      <div className="flex flex-col justify-center items-center w-full h-full  mt-10">
+                        <Text
+                          text={["You have not created any battles yet"]}
+                          size="text-[32px]"
+                          fontColor="text-white"
+                          className={"text-start"}
+                          fontType="font-bold"
+                        />
+                        <Text
+                          text={["Create one now!"]}
+                          size="text-[24px]"
+                          fontColor="text-white"
+                          className={"text-start"}
+                          fontType="font-bold"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="ml-16 my-5 flex flex-row   justify-around ">
@@ -525,7 +524,7 @@ export const ManageTournament = () => {
                 </div>
                 {/* Leaderboard Information */}
                 <div className="flex flex-col h-full w-full rounded-br-[36px] ">
-                  {battles.length == 0 ? (
+                  {tournament.status === "registration" ? (
                     <div className="flex flex-col justify-start items-center w-full h-full">
                       <Text
                         text={["Tournament yet to start"]}
@@ -542,9 +541,7 @@ export const ManageTournament = () => {
                         fontType="font-bold"
                       />
                     </div>
-                  ) : battles.some(
-                      (battle) => battle.status === "completed"
-                    ) ? (
+                  ) : tournamentScores.length > 0 ? (
                     <div className="overflow-hidden rounded-br-[36px] fadeScroll1">
                       <div
                         className="overflow-auto flex flex-col items-center scrollbar-thin scrollbar-thumb-bgaccent scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"

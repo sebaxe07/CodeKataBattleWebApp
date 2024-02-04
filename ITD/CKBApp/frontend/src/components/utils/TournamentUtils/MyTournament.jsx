@@ -44,6 +44,7 @@ export const MyTournament = ({
   startDate,
   endDate,
   active,
+  invite = true,
 }) => {
   const navigate = useNavigate();
   const [colorScheme, setColorScheme] = useState(colorSchemes[0]);
@@ -198,11 +199,13 @@ export const MyTournament = ({
                   className={"min-w-[137px]"}
                   onClick={() => navigate(`/educator/tournament/manage/${id}`)}
                 />
-                <Button
-                  name="Inivte"
-                  className={"min-w-[137px]"}
-                  onClick={onOpen}
-                />
+                {invite && (
+                  <Button
+                    name="Inivte"
+                    className={"min-w-[137px]"}
+                    onClick={onOpen}
+                  />
+                )}
               </div>
             </>
           )}

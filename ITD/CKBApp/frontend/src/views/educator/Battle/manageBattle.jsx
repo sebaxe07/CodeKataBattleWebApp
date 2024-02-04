@@ -47,11 +47,20 @@ export const ManageBattle = () => {
     console.log(id);
     const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
     const tournamentId = Number(id); // Convert id to number
-    setTournament(
-      storedTournaments.filter(
-        (tournament) => tournament.id === tournamentId
-      )[0]
+    const storedInvitedTournaments = JSON.parse(
+      localStorage.getItem("invitedTournaments")
     );
+    const tournament =
+      storedTournaments.find((t) => t.id === tournamentId) ||
+      storedInvitedTournaments.find((t) => t.id === tournamentId);
+
+    if (tournament) {
+      setTournament(tournament);
+    } else {
+      console.error(
+        `Tournament with ID ${tournamentId} not found in storedTournaments or storedInvitedTournaments`
+      );
+    }
     console.log(id);
     const storedBattles = JSON.parse(localStorage.getItem(`battle${id}`));
     const battleid = Number(bid); // Convert id to number
