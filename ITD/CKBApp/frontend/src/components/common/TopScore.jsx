@@ -40,7 +40,7 @@ export const TopScore = ({
             />
           ) : (
             <Text
-              text={["No Team"]}
+              text={["-"]}
               size="text-[16px]"
               fontColor="text-white"
               fontType="font-bold"
@@ -93,7 +93,7 @@ export const TopScore = ({
             />
           ) : (
             <Text
-              text={["No Team"]}
+              text={["-"]}
               size="text-[16px]"
               fontColor="text-white"
               fontType="font-bold"
@@ -146,7 +146,7 @@ export const TopScore = ({
             />
           ) : (
             <Text
-              text={["No Team"]}
+              text={["-"]}
               size="text-[16px]"
               fontColor="text-white"
               fontType="font-bold"

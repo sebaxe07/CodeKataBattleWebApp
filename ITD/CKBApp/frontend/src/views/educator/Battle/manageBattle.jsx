@@ -252,6 +252,8 @@ export const ManageBattle = () => {
         }}
       />
       <AlertDialog
+        borderRadius="36px "
+        bg={"#39b58b"}
         motionPreset="slideInBottom"
         leastDestructiveRef={cancelRef}
         onClose={onClose}
@@ -450,7 +452,7 @@ export const ManageBattle = () => {
                 </div>
               </div>
               <div className="flex flex-col h-full w-full rounded-br-[36px]  ">
-                {battles.status == "active" ? (
+                {battles.status !== "registration" ? (
                   <div className="overflow-hidden rounded-br-[36px] fadeScroll h-full w-full">
                     <div
                       className="flex flex-col h-full overflow-auto scrollbar-thin scrollbar-thumb-shadowboxeducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"

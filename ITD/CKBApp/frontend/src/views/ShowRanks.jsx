@@ -96,65 +96,86 @@ export const ShowRanks = ({
       <div
         className={`relative flex flex-col rounded-[36px] ${colorScheme.bgPrimary} w-[747px] h-[97%]`}
       >
-        <div className=" relative flex  w-full h-full justify-center  ">
+        <div className=" relative flex  w-full h-full justify-center items-start ">
           <TopDecorator LanguageIcon={tournamentData.picture} size={230} />
           <EducatorName
             SenseiImg={tournamentData.created_by.user_profile.profile_icon}
             SenseiName={firstName}
             bg={"bg-bgaccent"}
           />
-          <TourDescript
-            name={tournamentData.name}
-            description={tournamentData.description}
-          />
-        </div>
-        <div className="w-full h-full">
-          <div className="flex flex-row justify-around">
-            <Text
-              text={["#"]}
-              size="text-[16px]"
-              fontColor="text-white"
-              className={"text-start"}
-              fontType="font-bold"
-            />
-            <Text
-              text={["Leaderboard"]}
-              size="text-[16px]"
-              fontColor="text-white"
-              className={"text-start"}
-              fontType="font-bold"
-            />
-            <Text
-              text={["XP"]}
-              size="text-[16px]"
-              fontColor="text-white"
-              className={"text-start"}
-              fontType="font-bold"
+          <div className="flex justify-center items-start mt-8 h-full ">
+            <TourDescript
+              name={tournamentData.name}
+              description={tournamentData.description}
             />
           </div>
-          <div className="flex flex-col h-full w-full">
-            <div className=" h-full ] fadeScroll1">
-              <div
-                className={`overflow-y-auto overflow-x-hidden flex flex-col items-center scrollbar-thin rounded-b-[36px] scrollbar-thumb-${colorScheme.bgAccent} scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full`}
-                style={{
-                  maxHeight: "500px",
-                  minHeight: "300px",
-                  paddingBottom: "10px",
-                }}
-              >
-                {filteredScores.map((score, index) => (
-                  <TeamLeaderboardEducator
-                    key={score.id}
-                    rank={index + 1}
-                    icon={score.student.user_profile.profile_icon}
-                    name={score.student.user_profile.user.first_name}
-                    exp={score.total_score}
-                  />
-                ))}
+        </div>
+        {filteredScores.length > 0 ? (
+          <div className="w-full h-full">
+            <div className="flex flex-row justify-around">
+              <Text
+                text={["#"]}
+                size="text-[16px]"
+                fontColor="text-white"
+                className={"text-start"}
+                fontType="font-bold"
+              />
+              <Text
+                text={["Leaderboard"]}
+                size="text-[16px]"
+                fontColor="text-white"
+                className={"text-start"}
+                fontType="font-bold"
+              />
+              <Text
+                text={["XP"]}
+                size="text-[16px]"
+                fontColor="text-white"
+                className={"text-start"}
+                fontType="font-bold"
+              />
+            </div>
+            <div className="flex flex-col h-full w-full rounded-b-[36px]">
+              <div className=" h-[92%] overflow-x-clip rounded-b-[36px] fadeScroll1">
+                <div
+                  className={`overflow-y-auto overflow-x-hidden flex flex-col items-center scrollbar-thin rounded-b-[36px] scrollbar-thumb-fontlabel scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full`}
+                  style={{
+                    maxHeight: "500px",
+                    minHeight: "300px",
+                    paddingBottom: "10px",
+                  }}
+                >
+                  {filteredScores.map((score, index) => (
+                    <TeamLeaderboardEducator
+                      key={score.id}
+                      rank={index + 1}
+                      icon={score.student.user_profile.profile_icon}
+                      name={score.student.user_profile.user.first_name}
+                      exp={score.total_score}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex flex-col justify-start items-center w-full h-full">
+            <Text
+              text={["Rankings not Available"]}
+              size="text-[32px]"
+              fontColor="text-white"
+              className={"text-start"}
+              fontType="font-bold"
+            />
+            <Text
+              text={["No scores to show"]}
+              size="text-[24px]"
+              fontColor="text-white"
+              className={"text-start"}
+              fontType="font-bold"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

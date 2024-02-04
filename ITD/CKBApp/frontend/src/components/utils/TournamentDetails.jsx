@@ -90,29 +90,33 @@ export const TournamentDetails = ({
           />
 
           <div className="flex flex-row justify-center items-end relative top-[35%]">
-            <TopScore
-              users={
-                scoreData[0].top_tournament_scores
-                  ? scoreData[0].top_tournament_scores.map(
-                      (score) => score.student.user_profile.user.first_name
-                    )
-                  : ["a", "b", "c"]
-              }
-              score={
-                scoreData[0].top_tournament_scores
-                  ? scoreData[0].top_tournament_scores.map((score) =>
-                      score.total_score.toString()
-                    )
-                  : []
-              }
-              icons={
-                scoreData[0].top_tournament_scores
-                  ? scoreData[0].top_tournament_scores.map(
-                      (score) => score.student.user_profile.profile_icon
-                    )
-                  : [BearUser, ElephantUser, PiggyUser]
-              }
-            />
+            {tournamentData.battles.length > 0 ? (
+              <>
+                <TopScore
+                  users={
+                    scoreData[0].top_tournament_scores
+                      ? scoreData[0].top_tournament_scores.map(
+                          (score) => score.student.user_profile.user.first_name
+                        )
+                      : ["a", "b", "c"]
+                  }
+                  score={
+                    scoreData[0].top_tournament_scores
+                      ? scoreData[0].top_tournament_scores.map((score) =>
+                          score.total_score.toString()
+                        )
+                      : []
+                  }
+                  icons={
+                    scoreData[0].top_tournament_scores
+                      ? scoreData[0].top_tournament_scores.map(
+                          (score) => score.student.user_profile.profile_icon
+                        )
+                      : [BearUser, ElephantUser, PiggyUser]
+                  }
+                />
+              </>
+            ) : null}
             <YouScore
               userIcon={activeUser.user_profile.profile_icon}
               position={
