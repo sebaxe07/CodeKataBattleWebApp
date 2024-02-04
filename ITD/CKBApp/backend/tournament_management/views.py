@@ -140,6 +140,18 @@ class StudentSubscribeTournament(generics.UpdateAPIView):
         student_id = self.kwargs['student_id']
         tournament_id = self.kwargs['tournament_id']
         if student_id is not None and tournament_id is not None:
+
+            if StudentProfile.objects.filter(id=student_id).exists() == False:
+                raise Http404("Student ID not found")
+            if Tournament.objects.filter(id=tournament_id).exists() == False:
+                raise Http404("Tournament ID not found")
+            
+            if StudentProfile.objects.get(id=student_id).subscribed_tournaments.filter(id=tournament_id).exists():
+                return Response("Student already subscribed to this tournament", status=200)
+            
+            if Tournament.objects.get(id=tournament_id).status != 'registration':
+                return Response("Tournament is not in registration status", status=200)
+
             student = StudentProfile.objects.get(id=student_id)
             tournament = Tournament.objects.get(id=tournament_id)
             tournament.subscribed_Students.add(student)

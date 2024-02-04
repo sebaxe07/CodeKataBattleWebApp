@@ -5,6 +5,7 @@ import BearUser from "../../assets/icons/UsersIcons/bear.svg";
 import TigerUser from "../../assets/icons/UsersIcons/tiger.svg";
 import ElephantUser from "../../assets/icons/UsersIcons/elephant.svg";
 import PiggyUser from "../../assets/icons/UsersIcons/piggy.svg";
+import Sword from "../../assets/icons/swords.svg";
 
 export const YouScore = ({ userIcon, position, score }) => {
   switch (userIcon) {
@@ -19,6 +20,9 @@ export const YouScore = ({ userIcon, position, score }) => {
       break;
     case "piggy.svg":
       userIcon = PiggyUser;
+      break;
+    case "swords.svg":
+      userIcon = Sword;
       break;
     default:
       userIcon = BearUser;

@@ -11,7 +11,7 @@ export const TopScore = ({
   icons, // array of icon objects
 }) => {
   return (
-    <div className="relative flex flex-row  justify-center items-center rounded-[40px] bg-bgaccent w-[473px] h-[87px] space-x-1 mx-[20px]">
+    <div className="relative flex flex-row  justify-center items-center rounded-[40px] bg-bgaccent w-[500px] h-[87px] space-x-1 mx-[20px]">
       <div className=" rounded-[40px] bg-accentsecondary w-full min-w-[157px] h-[93px] transform  -translate-y-4 flex  justify-center items-center">
         <div className="absolute transform  -translate-y-[68px]">
           <ReactSVG
@@ -37,6 +37,9 @@ export const TopScore = ({
             size="text-[16px]"
             fontColor="text-white"
             fontType="font-bold"
+            className={
+              "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[80px]"
+            }
           />
           <Text
             text={[score[0] + " XP"]}
@@ -71,6 +74,9 @@ export const TopScore = ({
             size="text-[16px]"
             fontColor="text-white"
             fontType="font-bold"
+            className={
+              "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[80px]"
+            }
           />
           <Text
             text={[score[1] + " XP"]}
@@ -105,6 +111,9 @@ export const TopScore = ({
             size="text-[16px]"
             fontColor="text-white"
             fontType="font-bold"
+            className={
+              "text-start whitespace-nowrap overflow-hidden overflow-ellipsis w-[80px]"
+            }
           />
           <Text
             text={[score[2] + " XP"]}

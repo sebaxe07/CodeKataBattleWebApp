@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { ReactSVG } from "react-svg";
 import { useParams } from "react-router-dom";
 import { Text } from "../../components/common/text";
@@ -16,18 +16,21 @@ import Python from "../../assets/icons/python.svg";
 import Binary from "../../assets/icons/binaryIcon.svg";
 import Back from "../../assets/icons/backArrow.svg";
 import Sensei from "../../assets/icons/UsersIcons/BearSensei.svg";
+import Sword from "../../assets/icons/swords.svg";
 import ElephantUser from "../../assets/icons/UsersIcons/elephant.svg";
 import PiggyUser from "../../assets/icons/UsersIcons/piggy.svg";
 import BearUser from "../../assets/icons/UsersIcons/bear.svg";
 import TigerUser from "../../assets/icons/UsersIcons/tiger.svg";
 import TeamLeaderboard from "../../components/utils/TournamentDetails/TeamLeaderboard";
+import axios from "../../services/api";
+import { UserContext } from "../../services/contexts/UserContext";
 
 const defaultTournamentData = {
   name: "Tournament Name",
   description: "Tournament description",
   start_date: "2021-05-25",
   end_date: "2021-05-25",
-  picture: "python.svg",
+  picture: "hacker_cat.svg",
   battles: [],
   created_by: {
     user_profile: {
@@ -64,6 +67,15 @@ const defaultTeam = {
   members: [],
 };
 
+const defaultScore = { team: { id: 1, name: "Team 1" }, total_score: 100 };
+const defaultScoring = [{ total_score: 100 }]; // replace this with your actual default scoring structure
+const defaultMyScoreIndex = 0;
+
+const defaultMyScore = {
+  score: defaultScoring[defaultMyScoreIndex],
+  position: defaultMyScoreIndex + 1,
+};
+
 export const BattleDetails = ({}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [team, setTeam] = useState(defaultTeam);
@@ -72,6 +84,12 @@ export const BattleDetails = ({}) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [teamSize, setTeamSize] = useState(0);
+  const { activeUser, setActiveUser } = useContext(UserContext);
+  const [leaderboard, setLeaderboard] = useState(null);
+  const [scoring, setScoring] = useState(null);
+  const [topScore, setTopScore] = useState(null);
+  const [myScore, setMyScore] = useState(null);
+
   const firstName =
     tournamentData.created_by.user_profile.user.first_name.split(" ")[0];
 
@@ -87,6 +105,22 @@ export const BattleDetails = ({}) => {
     });
   };
 
+  const fechtRanking = async () => {
+    setIsLoading(true);
+    const battleID = Number(id);
+    try {
+      const response = await axios.get(`/ss/ranking/${battleID}/`, {
+        headers: { Authorization: `Token ${activeUser.authToken}` },
+      });
+      console.log(response.data);
+      setScoring(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     console.log(battle);
     if (battle.min_students_per_group == battle.max_students_per_group) {
@@ -97,6 +131,28 @@ export const BattleDetails = ({}) => {
       );
     }
   }, [battle]);
+
+  useEffect(() => {
+    if (scoring && scoring.length > 0) {
+      console.log("scoring");
+      console.log(scoring);
+      setTopScore(scoring.slice(0, 3));
+      console.log("Top Score");
+      console.log(scoring.slice(0, 3));
+      const myScoreIndex = scoring.findIndex(
+        (score) => score.team.id === team.id
+      );
+      setMyScore({
+        score: scoring[myScoreIndex],
+        position: myScoreIndex + 1,
+      });
+      console.log("My Score");
+      console.log(scoring.find((score) => score.team.id === team.id));
+      setLeaderboard(scoring.slice(3));
+      console.log("Leaderboard");
+      console.log(scoring.slice(3));
+    }
+  }, [scoring]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -118,6 +174,7 @@ export const BattleDetails = ({}) => {
       }
     });
     setTournamentData(foundTournament);
+    fechtRanking();
     setIsLoading(false);
   }, []);
 
@@ -282,11 +339,23 @@ export const BattleDetails = ({}) => {
                 />
                 <div className="flex flex-row justify-center items-end relative top-[20%]">
                   <TopScore
-                    users={["Pablo", "Juan", "Sebas"]}
-                    score={["100", "50", "25"]}
-                    icons={[ElephantUser, PiggyUser, BearUser]}
+                    users={
+                      topScore ? topScore.map((score) => score.team.name) : []
+                    }
+                    score={
+                      topScore
+                        ? topScore.map((score) => score.total_score.toString())
+                        : []
+                    }
+                    icons={[Sword, Sword, Sword]}
                   />
-                  <YouScore userIcon={TigerUser} position={"80"} score={"10"} />
+                  <YouScore
+                    userIcon={"swords.svg"}
+                    position={
+                      myScore ? myScore.position.toString() : "Loading..."
+                    }
+                    score={myScore ? myScore.score.total_score.toString() : ""}
+                  />
                 </div>
               </div>
               <div className="w-full h-[42%]">
@@ -314,48 +383,31 @@ export const BattleDetails = ({}) => {
                   />
                 </div>
                 <div className="bg-bgeducator flex-col w-full h-full flex overflow-y-auto overflow-x-hidden scrollbar-thumb-accentSecondaryEducator scrollbar-thin">
-                  <TeamLeaderboard
-                    context={"b"}
-                    rank={"1"}
-                    icon="tiger.svg"
-                    name={"Juanito"}
-                    exp={"100"}
-                  />
-                  <TeamLeaderboard
-                    context={"b"}
-                    rank={"2"}
-                    icon="tiger.svg"
-                    name={"Juanito"}
-                    exp={"100"}
-                  />
-                  <TeamLeaderboard
-                    context={"b"}
-                    rank={"3"}
-                    icon="tiger.svg"
-                    name={"Juanito"}
-                    exp={"100"}
-                  />
-                  <TeamLeaderboard
-                    context={"b"}
-                    rank={"4"}
-                    icon="tiger.svg"
-                    name={"Juanito"}
-                    exp={"100"}
-                  />
-                  <TeamLeaderboard
-                    context={"b"}
-                    rank={"5"}
-                    icon="tiger.svg"
-                    name={"Juanito"}
-                    exp={"100"}
-                  />
-                  <TeamLeaderboard
-                    context={"b"}
-                    rank={"6"}
-                    icon="tiger.svg"
-                    name={"Juanito"}
-                    exp={"100"}
-                  />
+                  {leaderboard && leaderboard.length > 0 ? (
+                    leaderboard.map((score, index) => (
+                      <TeamLeaderboard
+                        context={"b"}
+                        rank={index + 4}
+                        icon={Sword}
+                        name={score.team.name}
+                        exp={score.total_score.toString()}
+                      />
+                    ))
+                  ) : (
+                    <div className="flex flex-row justify-center items-center w-full h-full">
+                      {leaderboard === null ? (
+                        <LoadingScreen />
+                      ) : (
+                        <Text
+                          text={["No teams to show"]}
+                          size="text-[16px]"
+                          fontColor="text-white"
+                          className={"text-center bg-[#2F8F6F] w-full h-full"}
+                          fontType="font-bold"
+                        />
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
