@@ -313,10 +313,9 @@ export const BattleDetails = ({}) => {
                     </div>
                     {battle.status === "active" && (
                       <a
-                        href={`https://github.com/CodeKataBattleHUB/${battle.name.replace(
-                          /\s/g,
-                          "-"
-                        )}-${battle.id}`}
+                        href={
+                          myScore ? myScore.score.team.repository[0].url : ""
+                        }
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -395,9 +394,7 @@ export const BattleDetails = ({}) => {
                     ))
                   ) : (
                     <div className="flex flex-row justify-center items-center w-full h-full">
-                      {leaderboard === null ? (
-                        <LoadingScreen />
-                      ) : (
+                      {leaderboard === null ? null : (
                         <Text
                           text={["No teams to show"]}
                           size="text-[16px]"

@@ -23,17 +23,17 @@ export const TopDecorator = ({
     case "hacker_cat.svg":
       console.log("LanguageIcon", LanguageIcon);
       LanguageIcon = HackerCat;
-
       break;
     case "Code.svg":
       console.log("LanguageIcon", LanguageIcon);
       LanguageIcon = Code;
-
       break;
     case "github_cop.svg":
       console.log("LanguageIcon", LanguageIcon);
       LanguageIcon = Copilot;
-
+      break;
+    default:
+      LanguageIcon = Binary;
       break;
   }
 

@@ -35,6 +35,19 @@ def update_battle_score(sender, instance, created, **kwargs):
         new_manual_score = 0  
         battle_score.update_score(new_functional_score, new_timeliness_score, new_manual_score)
 
+
+@receiver(post_save, sender=Battle)
+def update_tournament_score(sender, instance, **kwargs):
+    if instance.status == "completed":
+        print("Updating TournamentScore for", instance.tournament)
+        for team in instance.teams.all():
+            print("Updating TournamentScore for", team.name)  
+            for student in team.members.all():
+                print("Updating TournamentScore for", student.user_profile.user.username)
+                tournament_score, created = TournamentScore.objects.get_or_create(student=student, tournament=instance.tournament)
+                tournament_score.update_score()
+
+
 class BattleScore(models.Model):
     battle = models.ForeignKey(Battle, on_delete=models.CASCADE, related_name='battle_scores')
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team_scores')

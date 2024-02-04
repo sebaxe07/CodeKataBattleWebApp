@@ -94,6 +94,22 @@ EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = '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'
 DEFAULT_FROM_EMAIL = 'info@codekatabattle.site'
 
+# Celery settings
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Rome' 
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'update_battle_status': {
+        'task': 'tournament_management.tasks.update_battle_status',
+        'schedule': crontab(minute=0, hour=0),  # Executes every day at 00:00
+    },
+}
 
 TEMPLATES = [
     {

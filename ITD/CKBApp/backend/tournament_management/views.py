@@ -77,6 +77,29 @@ class StartBattleView(generics.UpdateAPIView):
         battle.save()
 
         return Response({'status': 'Battle started'}, status=status.HTTP_200_OK)
+    
+class ConsolidateBattleView(generics.UpdateAPIView):
+    queryset = Battle.objects.all()
+    serializer_class = BattleSerializer
+
+    def update(self, request, *args, **kwargs):
+        battle = self.get_object()
+        battle.end_date = timezone.now()
+        battle.status = 'consolidation'
+        battle.save()
+
+        return Response({'status': 'Battle consolidated'}, status=status.HTTP_200_OK)
+
+class EndBattleView(generics.UpdateAPIView):
+    queryset = Battle.objects.all()
+    serializer_class = BattleSerializer
+
+    def update(self, request, *args, **kwargs):
+        battle = self.get_object()
+        battle.status = 'completed'
+        battle.save()
+
+        return Response({'status': 'Battle ended'}, status=status.HTTP_200_OK)
 
 class UserBattlesListView(generics.ListAPIView):
     serializer_class = BattleEducatorSerializer

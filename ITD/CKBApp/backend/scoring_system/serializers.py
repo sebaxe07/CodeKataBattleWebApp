@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import BattleScore
 from team_github_integration.models import Team
+from automated_evaluation.models import Repository
 from user_management.models import StudentProfile, UserProfile
 from django.contrib.auth.models import User
 
@@ -23,12 +24,18 @@ class StudentProfileSerializer(serializers.ModelSerializer):
         model = StudentProfile
         fields = '__all__'
 
+class RepositorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Repository
+        fields = '__all__'
+
 class TeamSerializer(serializers.ModelSerializer):
     members = StudentProfileSerializer(many=True, read_only=True)
+    repository = RepositorySerializer(read_only=True, many=True, source='repository_set')  
 
     class Meta:
         model = Team
-        fields = ('id', 'name', 'members')
+        fields = ('id', 'name', 'members', 'repository')
 
 class BattleScoreSerializer(serializers.ModelSerializer):
     team = TeamSerializer(read_only=True)

@@ -24,6 +24,9 @@ export const BattleLogo = ({
     case "javascript.svg":
       BattleIcon = Javascript;
       break;
+    default:
+      BattleIcon = Python;
+      break;
   }
 
   const translateClasses = shouldTranslate

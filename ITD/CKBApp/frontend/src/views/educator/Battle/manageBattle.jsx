@@ -18,6 +18,16 @@ import TeamLeaderboard from "../../../components/utils/TournamentDetails/TeamLea
 import Add from "../../../assets/icons/add.svg";
 import axios from "../../../services/api";
 import { useToast } from "@chakra-ui/react";
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 export const ManageBattle = () => {
   const [battles, setBattles] = useState([]);
@@ -25,10 +35,13 @@ export const ManageBattle = () => {
   const { id, bid } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [scoring, setScoring] = useState([]);
   const [tournament, setTournament] = useState([{ status: "registration" }]);
   const [teamSize, setTeamSize] = useState(0);
   const { activeUser, setActiveUser } = useContext(UserContext);
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = React.useRef();
 
   useEffect(() => {
     console.log(id);
@@ -43,6 +56,9 @@ export const ManageBattle = () => {
     const storedBattles = JSON.parse(localStorage.getItem(`battle${id}`));
     const battleid = Number(bid); // Convert id to number
     setBattles(storedBattles.filter((battle) => battle.id === battleid)[0]);
+    fechtRanking();
+    const intervalId = setInterval(fechtRanking, 60000); // Fetch new data every minute
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -55,6 +71,113 @@ export const ManageBattle = () => {
       );
     }
   }, [battles]);
+
+  const fechtRanking = async () => {
+    const battleID = Number(bid);
+    try {
+      const response = await axios.get(`/ss/ranking/${battleID}/`, {
+        headers: { Authorization: `Token ${activeUser.authToken}` },
+      });
+      console.log(response.data);
+      setScoring(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEndBattle = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.patch(
+        `/tms/battles/end/${bid}/`,
+        {},
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+      console.log(response.data);
+      battles.status = "ended";
+      battles.end_date = new Date().toLocaleDateString();
+
+      let battle = JSON.parse(localStorage.getItem(`battle${id}`));
+      // Find the index of the battle with the matching ID
+      const batID = Number(bid);
+      let battleIndex = battle.findIndex((b) => b.id === batID);
+      // Update the necessary fields
+      battle[battleIndex].status = "ended";
+      battle[battleIndex].end_date = new Date();
+      // Save the updated battle data back to local storage
+      localStorage.setItem(`battle${id}`, JSON.stringify(battle));
+
+      onClose();
+
+      toast({
+        title: "Battle ended",
+        description: "The Battle has ended",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Failed to end Battle:", error);
+      toast({
+        title: "Failed to end Battle",
+        description: "An error occurred while ending the Battle",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleConsolidation = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.patch(
+        `/tms/battles/consolidate/${bid}/`,
+        {},
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+      console.log(response.data);
+      battles.status = "consolidation";
+      battles.end_date = new Date().toLocaleDateString();
+
+      let battle = JSON.parse(localStorage.getItem(`battle${id}`));
+      // Find the index of the battle with the matching ID
+      const batID = Number(bid);
+      let battleIndex = battle.findIndex((b) => b.id === batID);
+      // Update the necessary fields
+      battle[battleIndex].status = "consolidation";
+      battle[battleIndex].end_date = new Date();
+      // Save the updated battle data back to local storage
+      localStorage.setItem(`battle${id}`, JSON.stringify(battle));
+
+      onClose();
+      toast({
+        title: "Battle consolidated",
+        description:
+          "The Battle has been consolidated, proceed with manual scoring if necessary",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Failed to consolidate Battle:", error);
+      toast({
+        title: "Failed to consolidate Battle",
+        description: "An error occurred while consolidating the Battle",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleEarlyStart = async () => {
     setIsLoading(true);
@@ -128,6 +251,35 @@ export const ManageBattle = () => {
           right: 30,
         }}
       />
+      <AlertDialog
+        motionPreset="slideInBottom"
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+        isOpen={isOpen}
+        isCentered
+      >
+        <AlertDialogOverlay />
+
+        <AlertDialogContent>
+          <AlertDialogHeader>Start Battle Consolidation?</AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <AlertDialogBody>
+            Are you sure you want to consolidate the battle? This action is will
+            end the battle and start the consolidation process. Then you will be
+            able to manually score the teams by clicking on the team in the
+            leaderboard.
+          </AlertDialogBody>
+          <AlertDialogFooter className="gap-2">
+            <Button ref={cancelRef} onClick={onClose} name={"No"} />
+            <Button
+              colorScheme="red"
+              ml={3}
+              onClick={handleConsolidation}
+              name={"Yes"}
+            />
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <div className="select-none relative rounded-[36px] bg-accentSecondaryEducator w-[1500px] m-10 ml-20 mt-20 h-[85%] max-h-[85%]  flex justify-start">
         <div className="flex flex-col h-[98%] w-[99%]">
           <div className="flex rounded-t-[36px] h-[10%]  w-full justify-between items-center">
@@ -230,6 +382,16 @@ export const ManageBattle = () => {
                     )}
                   </div>
                 )}
+                {battles.status === "active" && (
+                  <div>
+                    <Button name="Consolidate battle" onClick={onOpen} />
+                  </div>
+                )}
+                {battles.status === "consolidation" && (
+                  <div>
+                    <Button name="End Battle" onClick={handleEndBattle} />
+                  </div>
+                )}
                 <div className="flex flex-row gap-3 items-center justify-center">
                   <Text
                     text={["Team Size"]}
@@ -297,83 +459,17 @@ export const ManageBattle = () => {
                       paddingBottom: "20px",
                     }}
                   >
-                    <TeamLeaderboard
-                      rank={"1"}
-                      context={"b"}
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"2"}
-                      context={"b"}
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"1"}
-                      context={"b"}
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"2"}
-                      context={"b"}
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"1"}
-                      context={"b"}
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"2"}
-                      context={"b"}
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"1"}
-                      context={"b"}
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"2"}
-                      context={"b"}
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"1"}
-                      context={"b"}
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"2"}
-                      context={"b"}
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
-                    <TeamLeaderboard
-                      rank={"1"}
-                      context={"b"}
-                      icon={"tiger.svg"}
-                      name={"Juanito"}
-                      exp={"100"}
-                    />
+                    {scoring.map((team, index) => (
+                      <TeamLeaderboard
+                        context={"b"}
+                        rank={index + 1}
+                        icon={"swords.svg"}
+                        name={team.team.name}
+                        exp={team.total_score}
+                        team={team}
+                        battle={battles}
+                      />
+                    ))}
                   </div>
                 </div>
               </div>

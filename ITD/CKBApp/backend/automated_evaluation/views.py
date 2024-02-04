@@ -50,6 +50,14 @@ class webhook(APIView):
 
             # Get the Team associated with the StudentProfile and Battle
             team = Team.objects.filter(members=student_profile, battle=battle).first()
+            
+            if not team:
+                print('Student is not part of the battle')
+                return HttpResponse('POST request')
+            
+            if battle.status != 'active':
+                print('Battle is not active')
+                return HttpResponse('POST request')
 
             print("Creating Repository, Commit and Evaluation objects for", repo_name, "by", commit_author, "with commit message:", commit_message)
             print("Team:", team)

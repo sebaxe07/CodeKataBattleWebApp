@@ -94,7 +94,7 @@ export const BgIconCard = ({
       break;
     case "swords.svg":
       icon = Sword;
-      bgColor = `bg-[${randomColor}]`;
+      bgIcon = `bg-[${randomColor}]`;
       break;
     case "rankings.svg":
       icon = Rankings;
