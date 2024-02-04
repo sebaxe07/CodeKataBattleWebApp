@@ -136,6 +136,18 @@ export const BattleDetails = ({}) => {
       });
       console.log(battleResponse.data);
       setBattle(battleResponse.data);
+
+      const tournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
+      const updatedTournaments = tournaments.map((tournament) => {
+        return {
+          ...tournament,
+          battles: tournament.battles.map((battle) =>
+            battle.id === battleID ? battleResponse.data : battle
+          ),
+        };
+      });
+      console.log("updatedTournaments ", updatedTournaments);
+      localStorage.setItem("tournaments", JSON.stringify(updatedTournaments));
     } catch (error) {
       console.log(error);
     }
@@ -346,7 +358,11 @@ export const BattleDetails = ({}) => {
                     {battle.status === "active" && (
                       <a
                         href={
-                          myScore ? myScore.score.team.repository[0].url : ""
+                          myScore &&
+                          myScore.score.team.repository[0] &&
+                          myScore.score.team.repository[0].url
+                            ? myScore.score.team.repository[0].url
+                            : "https://github.com/"
                         }
                         target="_blank"
                         rel="noopener noreferrer"

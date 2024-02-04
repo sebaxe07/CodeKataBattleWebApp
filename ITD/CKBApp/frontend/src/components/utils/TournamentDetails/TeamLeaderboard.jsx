@@ -207,12 +207,22 @@ export const TeamLeaderboard = ({
                   fontType="font-black"
                 />
                 <a
-                  href={team.team.repository[0].url}
+                  href={
+                    team &&
+                    team.team.repository[0] &&
+                    team.team.repository[0].url
+                      ? team.team.repository[0].url
+                      : "github.com"
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <Text
-                    text={[team.team.repository[0].url]}
+                    text={[
+                      team.team.repository[0] && team.team.repository[0].url
+                        ? team.team.repository[0].url
+                        : "Not forked yet",
+                    ]}
                     size="text-[16px]"
                     fontColor="text-bgsecondary"
                     fontType="font-bold"
