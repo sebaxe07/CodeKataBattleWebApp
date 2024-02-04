@@ -411,77 +411,98 @@ export const ManageTournament = () => {
                 </div>
                 {/* Leaderboard Information */}
                 <div className="flex flex-col h-full w-full rounded-br-[36px] ">
-                  <div className="overflow-hidden rounded-br-[36px] fadeScroll1">
-                    <div
-                      className="overflow-auto flex flex-col items-center scrollbar-thin scrollbar-thumb-bgaccent scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
-                      style={{
-                        maxHeight: "300px",
-                        minHeight: "300px",
-                        paddingBottom: "20px",
-                      }}
-                    >
-                      <TeamLeaderboard
-                        rank={"1"}
-                        icon={"tiger.svg"}
-                        name={"Juanito"}
-                        exp={"100"}
+                  {battles.length == 0 ? (
+                    <div className="flex flex-col justify-start items-center w-full h-full">
+                      <Text
+                        text={["Tournament yet to start"]}
+                        size="text-[32px]"
+                        fontColor="text-white"
+                        className={"text-start"}
+                        fontType="font-bold"
                       />
-                      <TeamLeaderboard
-                        rank={"2"}
-                        icon={"tiger.svg"}
-                        name={"Juanito"}
-                        exp={"100"}
-                      />
-                      <TeamLeaderboard
-                        rank={"3"}
-                        icon={"tiger.svg"}
-                        name={"Juanito"}
-                        exp={"100"}
-                      />
-                      <TeamLeaderboard
-                        rank={"4"}
-                        icon={"tiger.svg"}
-                        name={"Juanito"}
-                        exp={"100"}
-                      />
-                      <TeamLeaderboard
-                        rank={"5"}
-                        icon={"tiger.svg"}
-                        name={"Juanito"}
-                        exp={"100"}
-                      />
-                      <TeamLeaderboard
-                        rank={"6"}
-                        icon={"tiger.svg"}
-                        name={"Juanito"}
-                        exp={"100"}
-                      />
-                      <TeamLeaderboard
-                        rank={"7"}
-                        icon={"tiger.svg"}
-                        name={"Juanito"}
-                        exp={"100"}
-                      />
-                      <TeamLeaderboard
-                        rank={"8"}
-                        icon={"tiger.svg"}
-                        name={"Juanito"}
-                        exp={"100"}
-                      />
-                      <TeamLeaderboard
-                        rank={"9"}
-                        icon={"tiger.svg"}
-                        name={"Juanito"}
-                        exp={"100"}
-                      />
-                      <TeamLeaderboard
-                        rank={"10"}
-                        icon={"tiger.svg"}
-                        name={"Juanito"}
-                        exp={"100"}
+                      <Text
+                        text={["No scores for teams available"]}
+                        size="text-[24px]"
+                        fontColor="text-white"
+                        className={"text-start"}
+                        fontType="font-bold"
                       />
                     </div>
-                  </div>
+                  ) : (
+                    <>
+                      <div className="overflow-hidden rounded-br-[36px] fadeScroll1">
+                        <div
+                          className="overflow-auto flex flex-col items-center scrollbar-thin scrollbar-thumb-bgaccent scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
+                          style={{
+                            maxHeight: "300px",
+                            minHeight: "300px",
+                            paddingBottom: "20px",
+                          }}
+                        >
+                          <TeamLeaderboard
+                            rank={"1"}
+                            icon={"tiger.svg"}
+                            name={"Juanito"}
+                            exp={"100"}
+                          />
+                          <TeamLeaderboard
+                            rank={"2"}
+                            icon={"tiger.svg"}
+                            name={"Juanito"}
+                            exp={"100"}
+                          />
+                          <TeamLeaderboard
+                            rank={"3"}
+                            icon={"tiger.svg"}
+                            name={"Juanito"}
+                            exp={"100"}
+                          />
+                          <TeamLeaderboard
+                            rank={"4"}
+                            icon={"tiger.svg"}
+                            name={"Juanito"}
+                            exp={"100"}
+                          />
+                          <TeamLeaderboard
+                            rank={"5"}
+                            icon={"tiger.svg"}
+                            name={"Juanito"}
+                            exp={"100"}
+                          />
+                          <TeamLeaderboard
+                            rank={"6"}
+                            icon={"tiger.svg"}
+                            name={"Juanito"}
+                            exp={"100"}
+                          />
+                          <TeamLeaderboard
+                            rank={"7"}
+                            icon={"tiger.svg"}
+                            name={"Juanito"}
+                            exp={"100"}
+                          />
+                          <TeamLeaderboard
+                            rank={"8"}
+                            icon={"tiger.svg"}
+                            name={"Juanito"}
+                            exp={"100"}
+                          />
+                          <TeamLeaderboard
+                            rank={"9"}
+                            icon={"tiger.svg"}
+                            name={"Juanito"}
+                            exp={"100"}
+                          />
+                          <TeamLeaderboard
+                            rank={"10"}
+                            icon={"tiger.svg"}
+                            name={"Juanito"}
+                            exp={"100"}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

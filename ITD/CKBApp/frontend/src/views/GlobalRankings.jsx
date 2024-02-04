@@ -11,6 +11,13 @@ import RefreshB from "../assets/icons/refreshB.svg";
 
 import ShowRanks from "./ShowRanks";
 
+/**
+ * Component to display global rankings.
+ *
+ * @component
+ * @param {Object} context - The user's context.
+ * @returns {JSX.Element} The JSX element representing the global rankings.
+ */
 export const GlobalRankings = ({ context }) => {
   const [preview, setPreview] = useState(false);
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ReactSVG } from "react-svg";
 import { Text } from "../common/text";
 import Fire from "../../assets/icons/fire.svg";
@@ -38,6 +38,8 @@ export const TournamentDetails = ({
   onBattleSelect,
   teams,
 }) => {
+  const [topScore, setTopScore] = useState(null);
+
   const { activeUser, setActiveUser } = useContext(UserContext);
   const endDate = new Date(tournamentData.end_date);
   const currentDate = new Date();
@@ -75,9 +77,13 @@ export const TournamentDetails = ({
 
           <div className="flex flex-row justify-center items-end relative top-[35%]">
             <TopScore
-              users={["Pablo", "Juan", "Sebas"]}
-              score={["100", "50", "25"]}
-              icons={[ElephantUser, PiggyUser, BearUser]}
+              users={topScore ? topScore.map((score) => score.team.name) : []}
+              score={
+                topScore
+                  ? topScore.map((score) => score.total_score.toString())
+                  : []
+              }
+              icons={["sword.svg", "sword.svg", "sword.svg"]}
             />
             <YouScore
               userIcon={activeUser.user_profile.profile_icon}

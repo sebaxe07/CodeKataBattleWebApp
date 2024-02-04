@@ -24,7 +24,7 @@ export const TeamLeaderboard = ({ context, rank, icon, iconBg, name, exp }) => {
 
   return (
     <div
-      className={`flex w-full h-[60px] items-center  justify-around p-2 ${
+      className={`flex w-full h-[60px] items-center  justify-between px-20 p-2 ${
         rank % 2 == 0 ? colorScheme.even : colorScheme.uneven
       }`}
     >
