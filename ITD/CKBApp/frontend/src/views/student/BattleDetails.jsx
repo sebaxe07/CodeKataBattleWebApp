@@ -317,48 +317,42 @@ export const BattleDetails = ({}) => {
                   <TeamLeaderboard
                     context={"b"}
                     rank={"1"}
-                    icon={TigerUser}
-                    iconBg={"bg-[#FFC700]"}
+                    icon="tiger.svg"
                     name={"Juanito"}
                     exp={"100"}
                   />
                   <TeamLeaderboard
                     context={"b"}
                     rank={"2"}
-                    icon={TigerUser}
-                    iconBg={"bg-[#FFC700]"}
+                    icon="tiger.svg"
                     name={"Juanito"}
                     exp={"100"}
                   />
                   <TeamLeaderboard
                     context={"b"}
                     rank={"3"}
-                    icon={TigerUser}
-                    iconBg={"bg-[#FFC700]"}
+                    icon="tiger.svg"
                     name={"Juanito"}
                     exp={"100"}
                   />
                   <TeamLeaderboard
                     context={"b"}
                     rank={"4"}
-                    icon={TigerUser}
-                    iconBg={"bg-[#FFC700]"}
+                    icon="tiger.svg"
                     name={"Juanito"}
                     exp={"100"}
                   />
                   <TeamLeaderboard
                     context={"b"}
                     rank={"5"}
-                    icon={TigerUser}
-                    iconBg={"bg-[#FFC700]"}
+                    icon="tiger.svg"
                     name={"Juanito"}
                     exp={"100"}
                   />
                   <TeamLeaderboard
                     context={"b"}
                     rank={"6"}
-                    icon={TigerUser}
-                    iconBg={"bg-[#FFC700]"}
+                    icon="tiger.svg"
                     name={"Juanito"}
                     exp={"100"}
                   />

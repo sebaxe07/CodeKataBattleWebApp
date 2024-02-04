@@ -3,8 +3,10 @@ import { ReactSVG } from "react-svg";
 import { Text } from "../../common/text";
 import BattleDecorator from "../../../assets/images/BattleDecorator.svg";
 import { Button } from "../../common/Button";
-import python from "../../../assets/icons/python.svg";
-import binary from "../../../assets/icons/binaryIcon.svg";
+import Python from "../../../assets/images/battleLogos/python.svg";
+import Java from "../../../assets/images/battleLogos/java.svg";
+import Javascript from "../../../assets/images/battleLogos/javascript.svg";
+import Csharp from "../../../assets/images/battleLogos/csharp.svg";
 import { useNavigate } from "react-router-dom";
 
 export const BattleComp = ({
@@ -18,13 +20,17 @@ export const BattleComp = ({
   const navigate = useNavigate();
   switch (languageIcon) {
     case "python.svg":
-      languageIcon = python;
+      languageIcon = Python;
       break;
-    case "binaryIcon.svg":
-      languageIcon = binary;
+    case "java.svg":
+      languageIcon = Java;
       break;
-    default:
-      languageIcon = python;
+    case "csharp.svg":
+      languageIcon = Csharp;
+      break;
+    case "javascript.svg":
+      languageIcon = Javascript;
+      break;
   }
   return (
     <div className="bg-bgprimary relative w-[34%] h-[63%] min-w-[259px] rounded-[36px] flex justify-center items-start mx-2">

@@ -1,8 +1,10 @@
 import React from "react";
 import { ReactSVG } from "react-svg";
 import Decorator from "../../../assets/images/BattleDecorator2.svg";
-import Python from "../../../assets/icons/python.svg";
-import Binary from "../../../assets/icons/binaryIcon.svg";
+
+import Python from "../../../assets/images/battleLogos/python.svg";
+import Java from "../../../assets/images/battleLogos/java.svg";
+import Javascript from "../../../assets/images/battleLogos/javascript.svg";
 
 export const BattleLogo = ({
   BattleIcon,
@@ -16,11 +18,11 @@ export const BattleLogo = ({
     case "python.svg":
       BattleIcon = Python;
       break;
-    case "binaryIcon.svg":
-      BattleIcon = Binary;
+    case "java.svg":
+      BattleIcon = Java;
       break;
-    default:
-      BattleIcon = Python;
+    case "javascript.svg":
+      BattleIcon = Javascript;
       break;
   }
 
@@ -52,7 +54,7 @@ export const BattleLogo = ({
         beforeInjection={(svg) => {
           svg.setAttribute(
             "style",
-            `width: ${imgSize}px ; height: ${imgSize}px`
+            `width: ${imgSize}px ; height: ${imgSize}px; border-radius: 40%`
           );
         }}
         className={`absolute ${translateClasses2}`}

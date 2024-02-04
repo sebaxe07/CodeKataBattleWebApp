@@ -6,6 +6,7 @@ class Tournament(models.Model):
     STATUS_CHOICES = [
         ('registration', 'Registration'),
         ('active', 'Active'),
+        ('consolidation', 'Consolidation'),
         ('completed', 'Completed'),
     ]
     name = models.CharField(max_length=255)
@@ -16,7 +17,7 @@ class Tournament(models.Model):
     end_date = models.DateTimeField()
     invited_Educators = models.ManyToManyField(EducatorProfile, related_name='invited_tournaments', blank=True)
     subscribed_Students = models.ManyToManyField(StudentProfile, related_name='subscribed_tournaments', blank=True)
-    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='registration')
+    status = models.CharField(max_length=14, choices=STATUS_CHOICES, default='registration')
 
     def update_status(self):
         now = timezone.now()
@@ -36,6 +37,7 @@ class Battle(models.Model):
     STATUS_CHOICES = [
         ('registration', 'Registration'),
         ('active', 'Active'),
+        ('consolidation', 'Consolidation'),
         ('completed', 'Completed'),
     ]
     name = models.CharField(max_length=255)
@@ -48,7 +50,7 @@ class Battle(models.Model):
     picture = models.CharField(max_length=100, default='binaryIcon.svg')
     software_project = models.FileField(upload_to='software_projects/')
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='battles')
-    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='registration')
+    status = models.CharField(max_length=14, choices=STATUS_CHOICES, default='registration')
 
     def update_status(self):
         now = timezone.now()

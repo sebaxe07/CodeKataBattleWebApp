@@ -42,6 +42,7 @@ export const ProfileEducator = ({}) => {
               >
                 <MyTournament
                   name={"Tournament 1"}
+                  picture={"binaryIcon.svg"}
                   description={
                     "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                   }
@@ -51,6 +52,7 @@ export const ProfileEducator = ({}) => {
                 />
                 <MyTournament
                   name={"Tournament 2"}
+                  picture={"hacker_cat.svg"}
                   description={
                     "Tournament Description 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                   }
@@ -60,6 +62,7 @@ export const ProfileEducator = ({}) => {
                 />
                 <MyTournament
                   name={"Tournament 3"}
+                  picture={"Code.svg"}
                   description={
                     "Tournament Description 3 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                   }
@@ -69,6 +72,7 @@ export const ProfileEducator = ({}) => {
                 />
                 <MyTournament
                   name={"Tournament 4"}
+                  picture={"Code.svg"}
                   description={
                     "Tournament Description 4 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                   }
@@ -97,6 +101,7 @@ export const ProfileEducator = ({}) => {
               >
                 <MyTournament
                   name={"Tournament 1"}
+                  picture={"Code.svg"}
                   description={
                     "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                   }
@@ -106,6 +111,7 @@ export const ProfileEducator = ({}) => {
                 />
                 <MyTournament
                   name={"Tournament 2"}
+                  picture={"github_cop.svg"}
                   description={
                     "Tournament Description 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                   }
@@ -115,6 +121,7 @@ export const ProfileEducator = ({}) => {
                 />
                 <MyTournament
                   name={"Tournament 3"}
+                  picture={"binaryIcon.svg"}
                   description={
                     "Tournament Description 3 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                   }
@@ -124,6 +131,7 @@ export const ProfileEducator = ({}) => {
                 />
                 <MyTournament
                   name={"Tournament 4"}
+                  picture={"binaryIcon.svg"}
                   description={
                     "Tournament Description 4 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                   }

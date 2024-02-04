@@ -18,6 +18,18 @@ import CalendarT from "../../../assets/icons/calendar.svg";
 import Edit from "../../../assets/icons/edit.svg";
 import BgIconCard from "../../../components/common/bgIconCard";
 
+import IconSelector from "../../../components/common/iconSelector";
+
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  useDisclosure,
+} from "@chakra-ui/react";
+
 export const CreateTournament = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -25,12 +37,15 @@ export const CreateTournament = () => {
     new Date(new Date().setDate(new Date().getDate() + 1))
   );
   const [dateEnd, setEndDate] = useState(null);
-  const [langIco, setLangIco] = useState("python.svg");
+  const [langIco, setLangIco] = useState(null);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const { activeUser, setActiveUser } = useContext(UserContext);
   const [isCreated, setIsCreated] = useState(false);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedIcon, setSelectedIcon] = useState(null);
 
   const theme = {
     rainbow: {
@@ -58,6 +73,7 @@ export const CreateTournament = () => {
     closeAll();
     event.preventDefault();
 
+    const validIcon = langIco !== null;
     const validName = name.length > 0;
     const nameLength = name.length < 70;
     const validDescription = description.length > 0;
@@ -67,6 +83,7 @@ export const CreateTournament = () => {
 
     // Set error messages if needed
     const conditions = [
+      { isValid: validIcon, message: "Please select an icon." },
       { isValid: validName, message: "Please enter a valid name." },
       {
         isValid: nameLength,
@@ -127,6 +144,11 @@ export const CreateTournament = () => {
     }
   };
 
+  const changeIcon = () => {
+    setLangIco(selectedIcon);
+    onClose();
+  };
+
   return (
     <div className="bg-[#19362D] flex flex-col justify-center items-center  h-screen w-screen">
       {isLoading && <LoadingScreen />}
@@ -168,8 +190,16 @@ export const CreateTournament = () => {
             <div className="flex flex-col translate-y-2 w-[98%] h-[87%] bg-bgprimary rounded-b-[36px]">
               <div className=" justify-center flex items-center translate-x-40 -translate-y-8">
                 <TopDecorator LanguageIcon={langIco} size={200} />
-                <div className="translate-x-16 translate-y-1/2 cursor-pointer">
-                  <BgIconCard icon={Edit} size={45} bgColor={"bg-white"} />
+                <div
+                  className="translate-x-16 translate-y-1/2 cursor-pointer"
+                  onClick={console.log("Boton Editar")}
+                >
+                  <BgIconCard
+                    icon={Edit}
+                    size={45}
+                    bgColor={"bg-white"}
+                    onClick={onOpen}
+                  />
                 </div>
               </div>
               <div className="flex flex-col justify-center mt-10 items-center">
@@ -291,6 +321,30 @@ export const CreateTournament = () => {
               </div>
             </div>
           </div>
+          <Modal isOpen={isOpen} onClose={onClose} isCentered size={"xl"}>
+            <ModalOverlay />
+            <ModalContent borderRadius="36px " bg={"#705bff"}>
+              <ModalHeader />
+              <ModalBody>
+                <div className="flex flex-col justify-center items-center h-full w-full">
+                  <IconSelector
+                    context={"n icon"}
+                    IconSelected={setSelectedIcon}
+                  />
+                </div>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button
+                  name="Close"
+                  onClick={onClose}
+                  className={"mx-4"}
+                  backg={"bg-accentprimary"}
+                />
+                <Button name="Select" onClick={changeIcon} />
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </div>
       )}
     </div>

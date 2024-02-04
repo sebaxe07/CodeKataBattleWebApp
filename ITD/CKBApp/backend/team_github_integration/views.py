@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 from github import Github, InputGitTreeElement
 from django.conf import settings
 from django.core.mail import send_mail
+from pathlib import Path
 import os
 import zipfile
 import tempfile
@@ -74,6 +75,15 @@ class TeamAddMember(APIView):
 
             if team.members.count() >= team.battle.max_students_per_group:
                 return Response({"error": "The team is already full"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if team.members.filter(id=student_id).exists():
+                return Response({"error": "The student is already part of the team"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if student.teams.filter(battle=battle).exists():
+                return Response({"error": "The student is already part of a team in this battle"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if battle.status != 'registration':
+                return Response({"error": "The battle already started"}, status=status.HTTP_400_BAD_REQUEST)
             
             team.members.add(student)
             team.save()
@@ -161,25 +171,19 @@ class StartBattleView(APIView):
 
                     # Create blobs for each file and a tree with these blobs
                     tree_elements = create_tree(repo, src_dir, src_dir)
-                    workflow_file_content = """
-name: Trigger CKB Platform
+                    programming_language = Path(battle.picture).stem
 
-on:
-  push:
-    branches:
-    - main
+                    current_dir = os.path.dirname(os.path.realpath(__file__))
+                    print(f'Current directory: {current_dir}')
+                    # Define the path to the workflow template
+                    workflow_template_path = os.path.join(current_dir, "workflow_templates", f"{programming_language}.yml")
 
-jobs:
-  notify:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Trigger CKB Platform
-      run: |
-        curl -X POST \
-          -H "Content-Type: application/json" \
-          -d '{"commit": "${{ github.sha }}", "repository": "${{ github.repository }}"}' \
-          https://dl529nfz-8000.euw.devtunnels.ms/tgms/trigger
-                    """
+                    print(f'Workflow template path: {workflow_template_path}')
+
+                    # Read the content of the workflow template
+                    with open(workflow_template_path, "r") as file:
+                        workflow_file_content = file.read()
+
                     blob = repo.create_git_blob(workflow_file_content, "utf-8")
                     workflow_file = InputGitTreeElement(path='.github/workflows/main.yml', mode="100644", type="blob", sha=blob.sha)
 
@@ -212,9 +216,18 @@ jobs:
                         print(f'Sending email to student: {student.user_profile.user.email}')
                         send_mail(
                             f'Battle {battle.name} Started',
+                            f'Hello {student.user_profile.user.first_name}!,\n\n'
+                            f'The battle {battle.name} has started. You are part of the team {team.name}.\n'
                             f'Please invite the following team members to your fork: {team_members}\n'
-                            f'Do not forget to activate the GitHub Actions workflow so that your project is evaluated automatically.\n'
-                            f'Here is the link to fork the repository: {fork_url}',
+                            f'Make sure to only create the fork of the repository once.\n\n'
+                            f'Here is the link to fork the repository: {fork_url}\n\n'
+                            f'To activate the GitHub Actions workflow, follow these steps:\n'
+                            f'1. Go to your forked repository.\n'
+                            f'2. Click on the "Actions" tab.\n'
+                            f'3. If you see a message saying "Workflows aren’t being run on this repository", click on "I understand my workflows, go ahead and enable them".\n'
+                            f'4. If you see a list of workflows, they are already enabled.\n\n'
+                            f'Do not forget to push your changes to the repository so that your project is evaluated automatically.\n\n'
+                            f'Note: Please do not change the repository name or the workflow file when creating the fork.\n\n',
                             settings.DEFAULT_FROM_EMAIL,
                             [student.user_profile.user.email],  
                             fail_silently=False,
@@ -235,6 +248,7 @@ jobs:
             logger.error(f"An unexpected error occurred: {e}")
             if 'repo' in locals():  # Check if the repo was created
                 repo.delete()  # Delete the repo
+                print(f"Repository {repo_name} deleted due to unexpected error.")
                 logger.info(f"Repository {repo_name} deleted due to unexpected error.")
             return Response({"message": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

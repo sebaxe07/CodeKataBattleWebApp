@@ -84,7 +84,7 @@ export const ManageBattle = () => {
 
       // Find the index of the tournament with the matching ID
       const batID = Number(bid);
-      let battleIndex = battle.findIndex((b) => b.id === bid);
+      let battleIndex = battle.findIndex((b) => b.id === batID);
 
       // Update the necessary fields
       battle[battleIndex].start_date = new Date();

@@ -5,6 +5,8 @@ import Logout from "../../assets/icons/logout.svg";
 import search from "../../assets/icons/search.svg";
 import BgIconCard from "../common/bgIconCard";
 import Button from "../common/Button";
+import Rankings from "../../assets/icons/rankings.svg";
+import RankingsE from "../../assets/icons/rankings2.svg";
 import { NavLink, Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "../../services/api";
@@ -134,6 +136,26 @@ const Sidebar = () => {
               size={55}
               classname={`w-[55px] h-[55px] rounded-[36px]`}
             />
+          </NavLink>
+          <NavLink
+            to={educator ? "/educator/rankings" : "/student/rankings"}
+            className=" flex justify-center "
+          >
+            {educator ? (
+              <ReactSVG
+                src={RankingsE}
+                beforeInjection={(svg) => {
+                  svg.setAttribute("style", "width: 40px; height: 35px;");
+                }}
+              />
+            ) : (
+              <ReactSVG
+                src={Rankings}
+                beforeInjection={(svg) => {
+                  svg.setAttribute("style", "width: 40px; height: 35px;");
+                }}
+              />
+            )}
           </NavLink>
           {!educator ? (
             <NavLink
