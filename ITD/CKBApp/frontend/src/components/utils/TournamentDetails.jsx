@@ -37,7 +37,14 @@ export const TournamentDetails = ({
   onSeeMoreClick,
   onBattleSelect,
   teams,
-  scoreData,
+  scoreData = [
+    {
+      total_score: 0,
+      position: 0,
+      battle_scores: [],
+      top_tournament_scores: [],
+    },
+  ],
 }) => {
   const [topScore, setTopScore] = useState(null);
 

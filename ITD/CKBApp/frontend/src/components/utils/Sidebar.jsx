@@ -85,9 +85,23 @@ const Sidebar = () => {
         localStorage.removeItem("tournaments");
       }
 
+      if (localStorage.getItem("OngoingTournaments")) {
+        localStorage.removeItem("OngoingTournaments");
+      }
+
+      if (localStorage.getItem("ongoingScores")) {
+        localStorage.removeItem("ongoingScores");
+      }
+
+      if (localStorage.getItem("scores")) {
+        localStorage.removeItem("scores");
+      }
+
       const keys = Object.keys(localStorage);
       const battleKeys = keys.filter((key) => key.startsWith("battle"));
+      const teamKeys = keys.filter((key) => key.startsWith("team"));
       battleKeys.forEach((key) => localStorage.removeItem(key));
+      teamKeys.forEach((key) => localStorage.removeItem(key));
 
       // Remove the user object from the global context
       setActiveUser(null);
