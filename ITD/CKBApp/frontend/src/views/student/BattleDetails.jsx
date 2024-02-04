@@ -369,7 +369,7 @@ export const BattleDetails = ({}) => {
                               )
                             : []
                         }
-                        icons={[Sword, Sword, Sword]}
+                        icons={["swords.svg", "swords.svg", "swords.svg"]}
                       />
                       <YouScore
                         userIcon={"swords.svg"}
@@ -408,15 +408,21 @@ export const BattleDetails = ({}) => {
                     </div>
                     <div className="bg-[#2F8F6F] flex-col w-full h-full flex overflow-y-auto overflow-x-hidden scrollbar-thumb-accentSecondaryEducator scrollbar-thin">
                       {leaderboard && leaderboard.length > 0 ? (
-                        leaderboard.map((score, index) => (
-                          <TeamLeaderboard
-                            context={"b"}
-                            rank={index + 1}
-                            icon={Sword}
-                            name={score.team.name}
-                            exp={score.total_score.toString()}
-                          />
-                        ))
+                        <>
+                          {/* leaderboard.map((score, index) => (
+                          <>
+                            /{" "}
+                            <TeamLeaderboard
+                              context={"b"}
+                              rank={index + 1}
+                              icon={Sword}
+                              name={score.team.name}
+                              exp={score.total_score.toString()}
+                              team={score.team}
+                            />
+                          </>
+                          )) */}
+                        </>
                       ) : (
                         <div className="flex flex-row justify-center bg-[#2F8F6F] items-center w-full h-full">
                           {leaderboard === null ? null : (

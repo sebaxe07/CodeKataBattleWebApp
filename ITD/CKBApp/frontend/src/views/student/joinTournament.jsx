@@ -65,55 +65,69 @@ export const JoinTournament = () => {
       />
       <div className="flex flex-col  h-full w-full justify-center items-center">
         <div className="flex flex-col justify-center items-center w-full">
-          <Text
+          {/* <Text
             text={["Looks like you don’t have any active tournament yet..."]}
             size="text-[16px]"
             fontColor="text-accentprimary"
             fontType="font-normal"
-          />
+          /> */}
           <Text
             text={["¡Join a new tournament!"]}
-            size="text-[32px]"
+            size="text-[42px]"
             fontColor="text-white"
-            fontType="font-bold"
+            fontType="font-black"
             className={"mb-5"}
           />
         </div>
 
-        <div className="fadeScroll1 w-full">
-          <div
-            className="overflow-auto  scrollbar-thin scrollbar-thumb-bgaccent scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
-            style={{ maxHeight: "600px" }}
-          >
-            {tournaments
-              .sort((a, b) => new Date(a.start_date) - new Date(b.start_date))
-              .map((tournament) => {
-                const startDate = new Date(tournament.start_date);
-                const now = new Date();
-                const diffInDays = Math.ceil(
-                  (startDate - now) / (1000 * 60 * 60 * 24)
-                );
-                const soonToEnd = diffInDays <= 5;
-                const timeRemaining = soonToEnd
-                  ? `Subscription ends in ${diffInDays} days`
-                  : undefined;
+        {tournaments.length > 0 ? (
+          <div className="fadeScroll1 w-full">
+            <div
+              className="overflow-auto  scrollbar-thin scrollbar-thumb-bgaccent scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
+              style={{ maxHeight: "600px" }}
+            >
+              {tournaments
+                .sort((a, b) => new Date(a.start_date) - new Date(b.start_date))
+                .map((tournament) => {
+                  const startDate = new Date(tournament.start_date);
+                  const now = new Date();
+                  const diffInDays = Math.ceil(
+                    (startDate - now) / (1000 * 60 * 60 * 24)
+                  );
+                  const soonToEnd = diffInDays <= 5;
+                  const timeRemaining = soonToEnd
+                    ? `Subscription ends in ${diffInDays} days`
+                    : undefined;
 
-                return (
-                  <ActiveTournamentCard
-                    key={tournament.id}
-                    name={tournament.name}
-                    soonToEnd={soonToEnd}
-                    timeRemainig={timeRemaining}
-                    startDate={new Date(
-                      tournament.start_date
-                    ).toLocaleDateString()}
-                    endDate={new Date(tournament.end_date).toLocaleDateString()}
-                    tournamentData={tournament}
-                  />
-                );
-              })}
+                  return (
+                    <ActiveTournamentCard
+                      key={tournament.id}
+                      picture={tournament.picture}
+                      name={tournament.name}
+                      soonToEnd={soonToEnd}
+                      timeRemainig={timeRemaining}
+                      startDate={new Date(
+                        tournament.start_date
+                      ).toLocaleDateString()}
+                      endDate={new Date(
+                        tournament.end_date
+                      ).toLocaleDateString()}
+                      tournamentData={tournament}
+                    />
+                  );
+                })}
+            </div>
           </div>
-        </div>
+        ) : (
+          <>
+            <Text
+              text={["There are no available tournaments right now..."]}
+              size="text-[24px]"
+              fontColor="text-accentprimary"
+              fontType="font-bold"
+            />{" "}
+          </>
+        )}
       </div>
     </div>
   );

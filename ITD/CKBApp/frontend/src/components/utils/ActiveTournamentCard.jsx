@@ -26,6 +26,7 @@ import {
 
 const ActiveTournament = ({
   name,
+  picture,
   soonToEnd,
   timeRemainig,
   startDate,
@@ -98,7 +99,7 @@ const ActiveTournament = ({
         <div className="flex flex-row justify-start mx-5 gap-10 items-center  h-full   w-1/3 ">
           <BgIconCard
             classname={`${randomColor} w-[72px] h-[69px] rounded-[29px]`}
-            icon={"trophyGold.svg"}
+            icon={picture}
           />
           <Text
             text={[`${name}`]}

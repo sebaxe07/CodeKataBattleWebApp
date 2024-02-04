@@ -1,6 +1,6 @@
+// Import necessary dependencies and components from external libraries and local files.
 import React, { useState, useEffect, useContext } from "react";
 import axios from "../../services/api";
-//import { TextField } from "../../components/common/textfield";
 import { ReactSVG } from "react-svg";
 import { Text } from "../../components/common/text";
 import Logo from "../../assets/images/Logo.svg";
@@ -11,16 +11,23 @@ import { useNavigate } from "react-router-dom";
 import { LoadingScreen } from "../../services/LoadingScreen";
 import RefreshG from "../../assets/icons/refreshG.svg";
 
+// Define the EducatorHome component.
 export const EducatorHome = () => {
+  // Access the navigation functionality from React Router DOM.
   const navigate = useNavigate();
+  // Access user-related information using the UserContext.
   const { activeUser, setActiveUser } = useContext(UserContext);
+  // State variables for storing tournament data and managing loading state.
   const [tournaments, setTournaments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
 
+  // Function to fetch tournaments from the server.
   const fetchTournaments = async () => {
+    // Set loading state to true.
     setIsLoading(true);
     try {
+      // Make a GET request to fetch tournaments for the current educator.
       const response = await axios.get(
         `/tms/tournaments/user/${activeUser.roleid}`,
         {
@@ -28,34 +35,43 @@ export const EducatorHome = () => {
         }
       );
 
-      // Save tournaments
+      // Save fetched tournaments to local storage.
       localStorage.setItem("tournaments", JSON.stringify(response.data));
 
+      // Update state with the fetched tournaments.
       setTournaments(response.data);
       console.log(response.data);
     } catch (error) {
+      // Log an error message if fetching tournaments fails.
       console.error("Failed to fetch tournaments:", error);
     } finally {
+      // Set loading and spinning states to false when the operation is complete.
       setIsLoading(false);
       setIsSpinning(false);
     }
   };
 
+  // Function to trigger a refresh by fetching tournaments.
   const refresh = () => {
     fetchTournaments();
   };
 
+  // useEffect hook to fetch tournaments when the component mounts.
   useEffect(() => {
+    // Retrieve stored tournaments from local storage.
     const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
     if (storedTournaments) {
+      // If stored tournaments exist, set state with stored data.
       setTournaments(storedTournaments);
     } else {
+      // If no stored tournaments, fetch from the server.
       fetchTournaments();
     }
   }, []);
 
   return (
     <div className="bg-bgsecondaryeducator flex flex-row justify-center items-center h-screen w-[screen-120px] ml-[120px]">
+      {/* Render the application logo. */}
       <ReactSVG
         src={Logo}
         beforeInjection={(svg) => {
@@ -67,14 +83,18 @@ export const EducatorHome = () => {
           right: 30,
         }}
       />
+      {/* Render a loading screen if data is being fetched. */}
       {isLoading && <LoadingScreen />}
+      {/* Main content area with tournament information. */}
       <div className="flex flex-col  h-full w-full justify-center items-center">
+        {/* Header with My Tournaments title and refresh button. */}
         <div className="flex flex-row w-full justify-evenly items-center ">
           <Text
             text={["My Tournaments"]}
             size="text-[24px]"
             fontColor="text-white font-bold"
           />
+          {/* Refresh button for fetching updated tournament data manually. */}
           <ReactSVG
             src={RefreshG}
             beforeInjection={(svg) => {
@@ -88,11 +108,13 @@ export const EducatorHome = () => {
           />
         </div>
 
+        {/* Scrollable area displaying the educator's tournaments. */}
         <div className="fadeScroll w-full">
           <div
             className="overflow-auto  scrollbar-thin scrollbar-thumb-bgeducator scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
             style={{ maxHeight: "600px" }}
           >
+            {/* Map through tournaments and render MyTournament component for each. */}
             {tournaments.map((tournament) => (
               <MyTournament
                 key={tournament.id}
@@ -108,6 +130,7 @@ export const EducatorHome = () => {
           </div>
         </div>
 
+        {/* Add Tournament button for navigating to the tournament creation page. */}
         <div
           className="flex w-[50px]  justify-center cursor-pointer mt-5 items-center"
           onClick={() => navigate("/educator/tournament/create")}
