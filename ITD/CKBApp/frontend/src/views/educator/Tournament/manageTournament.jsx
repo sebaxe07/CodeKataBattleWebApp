@@ -231,7 +231,7 @@ export const ManageTournament = () => {
               <div className="flex flex-row  -space-y-1  items-center justify-evenly h-full w-full ">
                 <TopDecorator
                   LanguageIcon={tournament.picture}
-                  size={200}
+                  size={220}
                   shouldTranslate={false}
                 />
                 <div className="flex flex-col justify-evenly h-full -space-y-16">

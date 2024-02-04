@@ -18,6 +18,17 @@ import Back from "../../../assets/icons/backArrow.svg";
 import CalendarT from "../../../assets/icons/calendar.svg";
 import Edit from "../../../assets/icons/edit.svg";
 import BgIconCard from "../../../components/common/bgIconCard";
+import IconSelector from "../../../components/common/iconSelector";
+
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 export const CreateBattle = () => {
   const [name, setName] = useState("");
@@ -29,7 +40,7 @@ export const CreateBattle = () => {
   const [files, setFile] = useState(0);
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
-  const [langIco, setLangIco] = useState("python.svg");
+  const [langIco, setLangIco] = useState(null);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -37,6 +48,88 @@ export const CreateBattle = () => {
   const [isCreated, setIsCreated] = useState(false);
   const { id } = useParams();
   const [tournament, setTournament] = useState([]);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedIcon, setSelectedIcon] = useState(null);
+
+  const [correctStructure, setStructure] = useState(null);
+
+  const fileStructure = [
+    {
+      code: [
+        "my_python_project/",
+        "│",
+        "├── my_python_project/",
+        "│   ├── _init_.py",
+        "│   ├── main.py",
+        "│   └── utils.py",
+        "│",
+        "├── tests/",
+        "│   ├── _init_.py",
+        "│   ├── test_main.py",
+        "│   └── test_utils.py",
+        "│",
+        "├── setup.py",
+        "├── README.md",
+        "└── requirements.txt",
+      ],
+    },
+    {
+      code: [
+        "my-project/",
+        "├── src/",
+        "│   ├── main/",
+        "│   │   ├── java/",
+        "│   │   │   └── com/",
+        "│   │   │       └── mycompany/",
+        "│   │   │           └── myproject/",
+        "│   │   │               └── MyClass.java",
+        "│   │   └── resources/",
+        "│   │       └── application.properties",
+        "│   └── test/",
+        "│       ├── java/",
+        "│       │   └── com/",
+        "│       │       └── mycompany/",
+        "│       │           └── myproject/",
+        "│       │               └── MyClassTest.java",
+        "│       └── resources/",
+        "│           └── test.properties",
+        "├── build.gradle",
+        "└── settings.gradle",
+      ],
+    },
+    {
+      code: [
+        "my_js_project/",
+        "│",
+        "├── src/",
+        "│   ├── main.js",
+        "│   └── utils.js",
+        "│",
+        "├── tests/",
+        "│   ├── main.test.js",
+        "│   └── utils.test.js",
+        "│",
+        "├── package.json",
+        "└── README.md ",
+      ],
+    },
+  ];
+
+  useEffect(() => {
+    setStructure(fileStructure[0]);
+    setStructure(
+      fileStructure[
+        selectedIcon == "python.svg"
+          ? 0
+          : selectedIcon == "java.svg"
+          ? 1
+          : selectedIcon == "javascript.svg"
+          ? 2
+          : null
+      ]
+    );
+  }, [selectedIcon]);
 
   const theme = {
     rainbow: {
@@ -58,6 +151,11 @@ export const CreateBattle = () => {
   function closeAll() {
     toast.closeAll();
   }
+
+  const handleClose = () => {
+    onClose();
+    setSelectedIcon(null);
+  };
 
   useEffect(() => {
     console.log(id);
@@ -107,6 +205,7 @@ export const CreateBattle = () => {
     event.preventDefault();
 
     // Check if all fields are valid
+    const validIcon = langIco !== null;
     const validName = name !== "";
     const validDescription = description !== "";
     const validDateStart = dateStart !== null;
@@ -120,6 +219,7 @@ export const CreateBattle = () => {
 
     // Set error messages if needed
     const conditions = [
+      { isValid: validIcon, message: "Please select a language." },
       { isValid: validName, message: "Please input a valid name." },
       {
         isValid: validDescription,
@@ -202,6 +302,11 @@ export const CreateBattle = () => {
     }
   };
 
+  const changeIcon = () => {
+    setLangIco(selectedIcon);
+    onClose();
+  };
+
   return (
     <div className="bg-[#19362D] flex flex-col justify-center items-center  h-screen w-screen">
       {isLoading && <LoadingScreen />}
@@ -246,7 +351,12 @@ export const CreateBattle = () => {
             <div className="translate-x-32 -translate-y-10">
               <BattleLogo BattleIcon={langIco} size={150} />
               <div className="translate-x-96 translate-y-1/2 cursor-pointer">
-                <BgIconCard icon={Edit} size={45} bgColor={"bg-white"} />
+                <BgIconCard
+                  icon={Edit}
+                  size={45}
+                  bgColor={"bg-white"}
+                  onClick={onOpen}
+                />
               </div>
             </div>
             {/* Main Content */}
@@ -441,6 +551,50 @@ export const CreateBattle = () => {
               </div>
             </div>
           </div>
+          <Modal isOpen={isOpen} onClose={handleClose} isCentered size={"xl"}>
+            <ModalOverlay />
+            <ModalContent borderRadius="36px " bg={"#39b58b"}>
+              <ModalHeader />
+              <ModalBody>
+                <div className="flex flex-col justify-center items-center h-full w-full">
+                  <IconSelector
+                    context={" language"}
+                    IconSelected={setSelectedIcon}
+                  />
+                  {correctStructure != null ? (
+                    <div className="w-full mt-5">
+                      <Text
+                        text={["Expected structure:"]}
+                        size="text-[20px]"
+                        fontColor={"text-white"}
+                        className={"text-start leading-tight ml-10 "}
+                        fontType={"font-black"}
+                      />
+                      <div className="w-full bg-shadowboxeducator flex-row m-2 p-2 rounded-[20px] justify-evenly items-center flex">
+                        <Text
+                          text={correctStructure.code}
+                          size="text-[16px]"
+                          fontColor={"text-white"}
+                          className={"text-start leading-tight "}
+                          fontType={"font-normal"}
+                        />
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button
+                  name="Close"
+                  onClick={onClose}
+                  className={"mx-4"}
+                  backg={"bg-accentprimary"}
+                />
+                <Button name="Select" onClick={changeIcon} />
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </div>
       )}
     </div>

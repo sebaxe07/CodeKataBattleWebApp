@@ -11,11 +11,22 @@ import { useToast } from "@chakra-ui/react";
 import axios from "../../../services/api";
 import { LoadingScreen } from "../../../services/LoadingScreen";
 import { UserContext } from "../../../services/contexts/UserContext";
+import IconSelector from "../../../components/common/iconSelector";
 
 import Back from "../../../assets/icons/backArrow.svg";
 import CalendarT from "../../../assets/icons/calendar.svg";
 import Edit from "../../../assets/icons/edit.svg";
 import BgIconCard from "../../../components/common/bgIconCard";
+
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 export const EditTournament = () => {
   const [name, setName] = useState("");
@@ -30,6 +41,9 @@ export const EditTournament = () => {
   const [tournament, setTournament] = useState([]);
   const { activeUser, setActiveUser } = useContext(UserContext);
   const [battles, setBattles] = useState([]);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedIcon, setSelectedIcon] = useState(null);
 
   const theme = {
     rainbow: {
@@ -180,6 +194,11 @@ export const EditTournament = () => {
     }
   };
 
+  const changeIcon = () => {
+    setLangIco(selectedIcon);
+    onClose();
+  };
+
   return (
     <div className="bg-[#19362D] flex flex-col justify-center items-center  h-screen w-screen">
       {isLoading && <LoadingScreen />}
@@ -219,7 +238,12 @@ export const EditTournament = () => {
             <div className=" justify-center flex items-center translate-x-40 -translate-y-8">
               <TopDecorator LanguageIcon={langIco} size={200} />
               <div className="translate-x-16 translate-y-1/2 cursor-pointer">
-                <BgIconCard icon={Edit} size={45} bgColor={"bg-white"} />
+                <BgIconCard
+                  icon={Edit}
+                  size={45}
+                  bgColor={"bg-white"}
+                  onClick={onOpen}
+                />
               </div>
             </div>
             <div className="flex flex-col justify-center mt-10 items-center">
@@ -342,7 +366,27 @@ export const EditTournament = () => {
           </div>
         </div>
       </div>
-      s{" "}
+      <Modal isOpen={isOpen} onClose={onClose} isCentered size={"xl"}>
+        <ModalOverlay />
+        <ModalContent borderRadius="36px " bg={"#705bff"}>
+          <ModalHeader />
+          <ModalBody>
+            <div className="flex flex-col justify-center items-center h-full w-full">
+              <IconSelector context={"n icon"} IconSelected={setSelectedIcon} />
+            </div>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              name="Close"
+              onClick={onClose}
+              className={"mx-4"}
+              backg={"bg-accentprimary"}
+            />
+            <Button name="Select" onClick={changeIcon} />
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

@@ -11,6 +11,7 @@ import axios from "../../../services/api";
 import { LoadingScreen } from "../../../services/LoadingScreen";
 import { UserContext } from "../../../services/contexts/UserContext";
 import { CompleteBattleCreation } from "../../../views/educator/Battle/completeBattleCreation";
+import IconSelector from "../../../components/common/iconSelector";
 
 import Logo from "../../../assets/images/Logo.svg";
 
@@ -18,6 +19,16 @@ import Back from "../../../assets/icons/backArrow.svg";
 import CalendarT from "../../../assets/icons/calendar.svg";
 import Edit from "../../../assets/icons/edit.svg";
 import BgIconCard from "../../../components/common/bgIconCard";
+
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 export const EditBattle = () => {
   const [name, setName] = useState("");
@@ -40,6 +51,9 @@ export const EditBattle = () => {
 
   const [battles, setBattles] = useState(null);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedIcon, setSelectedIcon] = useState(null);
+
   const theme = {
     rainbow: {
       palette: {
@@ -60,6 +74,8 @@ export const EditBattle = () => {
   function closeAll() {
     toast.closeAll();
   }
+
+  const handleSelectIcon = async (event) => {};
 
   useEffect(() => {
     const storedBattles = JSON.parse(localStorage.getItem(`battle${id}`));
@@ -232,6 +248,11 @@ export const EditBattle = () => {
     }
   };
 
+  const changeIcon = () => {
+    setLangIco(selectedIcon);
+    onClose();
+  };
+
   return (
     <div className="bg-[#19362D] flex flex-col justify-center items-center  h-screen w-screen">
       {isLoading && <LoadingScreen />}
@@ -274,7 +295,12 @@ export const EditBattle = () => {
           <div className="translate-x-32 -translate-y-10">
             <BattleLogo BattleIcon={langIco} size={150} />
             <div className="translate-x-96 translate-y-1/2 cursor-pointer">
-              <BgIconCard icon={Edit} size={45} bgColor={"bg-white"} />
+              <BgIconCard
+                icon={Edit}
+                size={45}
+                bgColor={"bg-white"}
+                onClick={onOpen}
+              />
             </div>
           </div>
           {/* Main Content */}
@@ -470,6 +496,30 @@ export const EditBattle = () => {
           </div>
         </div>
       </div>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered size={"xl"}>
+        <ModalOverlay />
+        <ModalContent borderRadius="36px " bg={"#39b58b"}>
+          <ModalHeader />
+          <ModalBody>
+            <div className="flex flex-col justify-center items-center h-full w-full">
+              <IconSelector
+                context={" language"}
+                IconSelected={setSelectedIcon}
+              />
+            </div>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              name="Close"
+              onClick={onClose}
+              className={"mx-4"}
+              backg={"bg-accentprimary"}
+            />
+            <Button name="Select" onClick={changeIcon} />
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

@@ -1,8 +1,10 @@
 import React from "react";
 import { ReactSVG } from "react-svg";
 import Decorator from "../../../assets/images/Decorator.svg";
-import Python from "../../../assets/icons/python.svg";
-import Binary from "../../../assets/icons/binaryIcon.svg";
+import Binary from "../../../assets/images/tournamentLogos/binaryIcon.svg";
+import HackerCat from "../../../assets/images/tournamentLogos/hacker_cat.svg";
+import Code from "../../../assets/images/tournamentLogos/Code.svg";
+import Copilot from "../../../assets/images/tournamentLogos/github_cop.svg";
 
 export const TopDecorator = ({
   LanguageIcon,
@@ -11,17 +13,27 @@ export const TopDecorator = ({
 }) => {
   const innerSize = (size / 50) * 74;
   const innermostSize = (size / 50) * 65;
-  const imgSize = (size / 50) * 29;
+  const imgSize = (size / 50) * 28;
 
   switch (LanguageIcon) {
-    case "python.svg":
-      LanguageIcon = Python;
-      break;
     case "binaryIcon.svg":
+      console.log("LanguageIcon", LanguageIcon);
       LanguageIcon = Binary;
       break;
-    default:
-      LanguageIcon = Binary;
+    case "hacker_cat.svg":
+      console.log("LanguageIcon", LanguageIcon);
+      LanguageIcon = HackerCat;
+
+      break;
+    case "Code.svg":
+      console.log("LanguageIcon", LanguageIcon);
+      LanguageIcon = Code;
+
+      break;
+    case "github_cop.svg":
+      console.log("LanguageIcon", LanguageIcon);
+      LanguageIcon = Copilot;
+
       break;
   }
 
@@ -32,7 +44,7 @@ export const TopDecorator = ({
   return (
     <div
       className={
-        shouldTranslate ? "" : "relative flex items-center justify-center"
+        shouldTranslate ? "" : "relative flex items-center justify-center "
       }
     >
       <ReactSVG
@@ -43,17 +55,18 @@ export const TopDecorator = ({
             `width: ${innerSize}px ; height: ${innerSize}px`
           );
         }}
-        className={` ${translateClasses}`}
+        className={`${translateClasses}`}
       />
+
       <ReactSVG
         src={LanguageIcon}
         beforeInjection={(svg) => {
           svg.setAttribute(
             "style",
-            `width: ${imgSize}px ; height: ${imgSize}px`
+            `width: ${imgSize}px ; height: ${imgSize}px; border-radius: 30%`
           );
         }}
-        className={`absolute  ${translateClasses}`}
+        className={`absolute  ${translateClasses} `}
       />
     </div>
   );

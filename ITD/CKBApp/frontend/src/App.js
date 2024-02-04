@@ -33,6 +33,8 @@ import { EditBattle } from "./views/educator/Battle/editBattle";
 import { ProfileEducator } from "./views/educator/ProfileEducator";
 import { JoinTournament } from "./views/student/joinTournament";
 
+import GlobalRankings from "./views/GlobalRankings";
+
 function App() {
   return (
     <ChakraProvider>
@@ -61,12 +63,17 @@ function App() {
                 <Route path="joinTournament" element={<JoinTournament />} />
                 <Route path="profile" element={<ProfileStudents />} />
                 <Route path="battle/:id" element={<BattleDetails />} />
+                <Route path="rankings" element={<GlobalRankings />} />
                 <Route path="*" element={<Navigate to="home" />} />
               </Route>
               <Route path="/educator" element={<Sidebar />}>
                 <Route index element={<Navigate to="home" />} />
                 <Route path="home" element={<EducatorHome />} />
                 <Route path="profile" element={<ProfileEducator />} />
+                <Route
+                  path="rankings"
+                  element={<GlobalRankings context={"educator"} />}
+                />
                 <Route path="tournament">
                   <Route index element={<Navigate to="home" />} />
                   <Route path="manage/:id">

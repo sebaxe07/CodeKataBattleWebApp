@@ -1,12 +1,14 @@
 import React from "react";
-import python from "../../assets/icons/python.svg";
-import binary from "../../assets/icons/binaryIcon.svg";
+import Binary from "../../assets/images/tournamentLogos/binaryIcon.svg";
+import HackerCat from "../../assets/images/tournamentLogos/hacker_cat.svg";
+import Code from "../../assets/images/tournamentLogos/Code.svg";
+import Copilot from "../../assets/images/tournamentLogos/github_cop.svg";
 import { ReactSVG } from "react-svg";
 
 export const iconCard = ({
   background = "bg-accentprimary",
   shadow = "bg-bgprimary",
-  icon = "binaryIcon.svg",
+  icon,
   size = 80,
 }) => {
   const innerSize = (size / 80) * 74;
@@ -14,14 +16,18 @@ export const iconCard = ({
   const imgSize = (size / 80) * 52;
 
   switch (icon) {
-    case "python.svg":
-      icon = python;
-      break;
     case "binaryIcon.svg":
-      icon = binary;
+      icon = Binary;
       break;
-    default:
-      icon = python;
+    case "hacker_cat.svg":
+      icon = HackerCat;
+      break;
+    case "Code.svg":
+      icon = Code;
+      break;
+    case "github_cop.svg":
+      icon = Copilot;
+      break;
   }
 
   return (
@@ -42,7 +48,7 @@ export const iconCard = ({
             beforeInjection={(svg) => {
               svg.setAttribute(
                 "style",
-                `width: ${imgSize}; height: ${imgSize};`
+                `width: ${imgSize}; height: ${imgSize}; border-radius: 30%`
               );
             }}
           />
