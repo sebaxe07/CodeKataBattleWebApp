@@ -6,11 +6,13 @@ import { TextField } from "../../components/common/textfield";
 import { Text } from "../../components/common/text";
 import { ReactComponent as Logo } from "../../assets/images/Logo.svg";
 import { ReactComponent as Codekatabattle } from "../../assets/images/codekatabattle.svg";
+import { LoadingScreen } from "../../services/LoadingScreen";
 import { useToast } from "@chakra-ui/react";
 
 export const PasswordReset = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
   const handleSubmit = async (event) => {
@@ -30,6 +32,8 @@ export const PasswordReset = () => {
     }
 
     try {
+      setIsLoading(true);
+
       const response = await axios.post("/auth/users/reset_password/", {
         email,
       });
@@ -52,11 +56,14 @@ export const PasswordReset = () => {
         duration: 3000,
         isClosable: true,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="bg-bgsecondary flex flex-col justify-center items-center h-screen w-screen">
+      {isLoading && <LoadingScreen />}
       <Logo />
       <div className="mt-[22px] w-[373px] h-[482px] bg-shadowbox rounded-[36px]">
         <div className="w-[364px] h-[469px] bg-bgprimary rounded-[36px] flex flex-col justify-center items-center space-y-5">

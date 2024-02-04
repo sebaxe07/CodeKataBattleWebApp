@@ -6,13 +6,21 @@ from django.shortcuts import get_object_or_404
 from .serializers import UserRegisterSerializer, UserSerializer, EducatorProfileSerializer, StudentProfileSerializer
 from .models import EducatorProfile, StudentProfile
 from rest_framework import status
+from django.contrib.auth.models import User
 
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegisterSerializer
     permission_classes = (permissions.AllowAny,)
+    
     def create(self, request, *args, **kwargs):
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
+                username = serializer.validated_data.get('username')
+                email = serializer.validated_data.get('email')
+                if User.objects.filter(username=username).exists():
+                    return Response({"username": ["Username is already in use."]}, status=status.HTTP_400_BAD_REQUEST)
+                if User.objects.filter(email=email).exists():
+                    return Response({"email": ["Email is already in use."]}, status=status.HTTP_400_BAD_REQUEST)
                 serializer.save()
                 # Customized response
                 user_data = serializer.data

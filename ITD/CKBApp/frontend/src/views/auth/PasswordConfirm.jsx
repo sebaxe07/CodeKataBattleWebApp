@@ -11,6 +11,7 @@ import { useToast } from "@chakra-ui/react";
 import { ReactSVG } from "react-svg";
 import PassHide from "../../assets/icons/passHide.svg";
 import PassShow from "../../assets/icons/passShow.svg";
+import { LoadingScreen } from "../../services/LoadingScreen";
 
 export const PasswordConfirm = () => {
   const { uid, token } = useParams();
@@ -19,6 +20,7 @@ export const PasswordConfirm = () => {
   const [passwordType, setPasswordType] = useState("password");
   const [password, setPassword] = useState("");
   const [passwordValid, setPasswordValid] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const togglePasswordVisibility = () => {
     setPasswordType(passwordType === "password" ? "text" : "password");
@@ -53,6 +55,7 @@ export const PasswordConfirm = () => {
     }
 
     try {
+      setIsLoading(true);
       const response = await axios.post("/auth/users/reset_password_confirm/", {
         uid: uid, // The user's ID, as included in the password reset link
         token: token, // The password reset token, as included in the password reset link
@@ -90,11 +93,14 @@ export const PasswordConfirm = () => {
         duration: 5000,
         isClosable: true,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="bg-bgsecondary flex flex-col justify-center items-center h-screen w-screen">
+      {isLoading && <LoadingScreen />}
       <Logo />
       <div className="mt-[22px] w-[373px] h-[482px] bg-shadowbox rounded-[36px]">
         <div className="w-[364px] h-[469px] bg-bgprimary rounded-[36px] flex flex-col justify-center items-center space-y-5">

@@ -21,7 +21,6 @@ export const ProfileStudents = ({}) => {
         }}
       />
       <div className="flex flex-row w-full justify-around items-center">
-        <SuscribedTournaments />
         <ProfileCard
           icon={activeUser.user_profile.profile_icon}
           rol={activeUser.user_profile.role === "student" ? "Seito" : "Sensei"}

@@ -3,11 +3,13 @@ from django.shortcuts import render
 from rest_framework import generics, status
 from django.http import Http404
 from .models import Tournament, Battle
-from user_management.models import StudentProfile
+from user_management.models import StudentProfile, EducatorProfile
 from .serializers import TournamentSerializer, BattleSerializer, TournamentWithBattlesSerializer, BattleEducatorSerializer, TournameentEducatorSerializer
 from rest_framework.response import Response
 from django.core.mail import send_mass_mail
 from django.utils import timezone
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
 
 
 # Tournaments views 
@@ -71,6 +73,43 @@ class EndTournamentView(generics.UpdateAPIView):
         tournament.save()
 
         return Response({'status': 'Tournament ended'}, status=status.HTTP_200_OK)
+    
+class TournamentInviteView(generics.UpdateAPIView):
+    queryset = Tournament.objects.all()
+    serializer_class = TournamentSerializer
+
+
+    def update(self, request, *args, **kwargs):
+        tournament = self.get_object()
+        email = request.data.get('email')
+
+        # Get the user
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'error': 'User with this email does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the user is an educator
+        if user.user_profile.role != 'educator':
+            return Response({'error': 'User with this email is not an educator.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Get the educator profile
+        educator_profile = EducatorProfile.objects.get(user_profile=user.user_profile)
+
+        # Add the educator to the tournament
+        tournament.invited_Educators.add(educator_profile)
+        tournament.save()
+
+        send_mail(
+            'You have been invited to a tournament',
+            f'You have been invited to the tournament {tournament.name}.',
+            settings.DEFAULT_FROM_EMAIL,
+            [email],
+            fail_silently=False,
+        )
+
+        return Response({'status': 'Educator invited successfully.'}, status=status.HTTP_200_OK)
+    
     
 class TournamentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tournament.objects.all()

@@ -96,6 +96,8 @@ export const Login = () => {
     }
 
     try {
+      setIsLoading(true);
+
       const response = await axios.post("/auth/users/resend_activation/", {
         email,
       });
@@ -116,6 +118,8 @@ export const Login = () => {
         isClosable: true,
       });
       console.error("Error resending activation email:", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 

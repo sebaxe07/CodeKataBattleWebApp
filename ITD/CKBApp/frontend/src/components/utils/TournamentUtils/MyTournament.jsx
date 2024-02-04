@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import IconCard from "../../common/iconCard";
 import { Text } from "../../common/text";
 import Calendar from "../../../assets/icons/calendarD.svg";
 import Calendar2 from "../../../assets/icons/calendarC.svg";
+import axios from "../../../services/api";
 import { ReactSVG } from "react-svg";
 import { Button } from "../../common/Button";
 import { TextField } from "../../common/textfield";
 import { useNavigate } from "react-router-dom";
-
+import { useToast } from "@chakra-ui/react";
+import { LoadingScreen } from "../../../services/LoadingScreen";
+import { UserContext } from "../../../services/contexts/UserContext";
 import {
   Modal,
   ModalOverlay,
@@ -46,16 +49,70 @@ export const MyTournament = ({
   const [colorScheme, setColorScheme] = useState(colorSchemes[0]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [email, setEmail] = useState("");
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const { activeUser, setActiveUser } = useContext(UserContext);
 
   useEffect(() => {
     setColorScheme(colorSchemes[active ? 0 : 1]);
   }, [active]);
+
+  const handleInvite = async () => {
+    // Validate email
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isEmailCorrect = emailRegex.test(email);
+
+    if (!isEmailCorrect) {
+      toast({
+        title: "Please input a valid email",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await axios.patch(
+        `/tms/tournaments/${id}/invite/`,
+        {
+          email,
+        },
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+      console.log(response.data); // Handle the response as needed
+      // Inform the user that an email has been sent
+      onClose();
+      toast({
+        title: "Invitation sent!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error sending invitation:", error);
+      // Display an error message
+      toast({
+        title: "Error sending invitation!",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div
       className="relative flex items-center justify-center my-[13px] "
       style={{ userSelect: "none" }}
     >
+      {isLoading && <LoadingScreen />}
       <div
         className={`relative ${colorScheme.background} hover:ring-4 hover:ring-shadowbox w-[50%] min-w-[941px] min-h-[140px] rounded-[29px] shadow-xl transition-all`}
       >
@@ -180,7 +237,7 @@ export const MyTournament = ({
               className={"mx-4"}
               backg={"bg-accentprimary"}
             />
-            <Button name="Invite" />
+            <Button name="Invite" onClick={handleInvite} />
           </ModalFooter>
         </ModalContent>
       </Modal>

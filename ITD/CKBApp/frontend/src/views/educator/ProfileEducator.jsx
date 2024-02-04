@@ -1,5 +1,7 @@
 // Import necessary dependencies and components from external libraries and local files.
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../../services/api";
 import { ReactSVG } from "react-svg";
 import { ProfileCard } from "../../components/common/profileCard";
 import { SuscribedTournaments } from "../../components/utils/SuscribedTournaments";
@@ -12,6 +14,60 @@ import MyTournament from "../../components/utils/TournamentUtils/MyTournament";
 export const ProfileEducator = ({}) => {
   // Access the user context to retrieve active user information.
   const { activeUser, setActiveUser } = useContext(UserContext);
+
+  // Access the navigation functionality from React Router DOM.
+  const navigate = useNavigate();
+  // State variables for storing tournament data and managing loading state.
+  const [tournaments, setTournaments] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(false);
+
+  // Function to fetch tournaments from the server.
+  const fetchTournaments = async () => {
+    // Set loading state to true.
+    setIsLoading(true);
+    try {
+      // Make a GET request to fetch tournaments for the current educator.
+      const response = await axios.get(
+        `/tms/tournaments/user/${activeUser.roleid}`,
+        {
+          headers: { Authorization: `Token ${activeUser.authToken}` },
+        }
+      );
+
+      // Save fetched tournaments to local storage.
+      localStorage.setItem("tournaments", JSON.stringify(response.data));
+
+      // Update state with the fetched tournaments.
+      setTournaments(response.data);
+      console.log(response.data);
+    } catch (error) {
+      // Log an error message if fetching tournaments fails.
+      console.error("Failed to fetch tournaments:", error);
+    } finally {
+      // Set loading and spinning states to false when the operation is complete.
+      setIsLoading(false);
+      setIsSpinning(false);
+    }
+  };
+
+  // Function to trigger a refresh by fetching tournaments.
+  const refresh = () => {
+    fetchTournaments();
+  };
+
+  // useEffect hook to fetch tournaments when the component mounts.
+  useEffect(() => {
+    // Retrieve stored tournaments from local storage.
+    const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
+    if (storedTournaments) {
+      // If stored tournaments exist, set state with stored data.
+      setTournaments(storedTournaments);
+    } else {
+      // If no stored tournaments, fetch from the server.
+      fetchTournaments();
+    }
+  }, []);
   return (
     <div className="bg-bgsecondaryeducator flex flex-row justify-center items-center h-screen w-[screen-120px] ml-[120px]">
       {/* Render the application logo. */}
@@ -48,46 +104,24 @@ export const ProfileEducator = ({}) => {
                 }}
               >
                 {/* Render MyTournament component for each current tournament. */}
-                <MyTournament
-                  name={"Tournament 1"}
-                  picture={"binaryIcon.svg"}
-                  description={
-                    "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={true}
-                />
-                <MyTournament
-                  name={"Tournament 2"}
-                  picture={"hacker_cat.svg"}
-                  description={
-                    "Tournament Description 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={true}
-                />
-                <MyTournament
-                  name={"Tournament 3"}
-                  picture={"Code.svg"}
-                  description={
-                    "Tournament Description 3 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={true}
-                />
-                <MyTournament
-                  name={"Tournament 4"}
-                  picture={"Code.svg"}
-                  description={
-                    "Tournament Description 4 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={true}
-                />
+                {tournaments
+                  .filter((tournament) => tournament.status !== "completed")
+                  .map((tournament) => (
+                    <MyTournament
+                      key={tournament.id}
+                      id={tournament.id}
+                      name={tournament.name}
+                      description={tournament.description}
+                      startDate={new Date(
+                        tournament.start_date
+                      ).toLocaleDateString()}
+                      endDate={new Date(
+                        tournament.end_date
+                      ).toLocaleDateString()}
+                      active={tournament.status === "completed" ? false : true}
+                      picture={tournament.picture}
+                    />
+                  ))}
               </div>
             </div>
           </div>
@@ -110,46 +144,24 @@ export const ProfileEducator = ({}) => {
                 }}
               >
                 {/* Render MyTournament component for each past tournament. */}
-                <MyTournament
-                  name={"Tournament 1"}
-                  picture={"Code.svg"}
-                  description={
-                    "Tournament Description 1 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={false}
-                />
-                <MyTournament
-                  name={"Tournament 2"}
-                  picture={"github_cop.svg"}
-                  description={
-                    "Tournament Description 2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={false}
-                />
-                <MyTournament
-                  name={"Tournament 3"}
-                  picture={"binaryIcon.svg"}
-                  description={
-                    "Tournament Description 3 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={false}
-                />
-                <MyTournament
-                  name={"Tournament 4"}
-                  picture={"binaryIcon.svg"}
-                  description={
-                    "Tournament Description 4 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                  }
-                  startDate={"22 Dec. 2023"}
-                  endDate={"01 Jan. 2024"}
-                  active={false}
-                />
+                {tournaments
+                  .filter((tournament) => tournament.status === "completed")
+                  .map((tournament) => (
+                    <MyTournament
+                      key={tournament.id}
+                      id={tournament.id}
+                      name={tournament.name}
+                      description={tournament.description}
+                      startDate={new Date(
+                        tournament.start_date
+                      ).toLocaleDateString()}
+                      endDate={new Date(
+                        tournament.end_date
+                      ).toLocaleDateString()}
+                      active={tournament.status === "completed" ? false : true}
+                      picture={tournament.picture}
+                    />
+                  ))}
               </div>
             </div>
           </div>
