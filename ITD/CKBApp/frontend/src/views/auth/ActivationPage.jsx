@@ -21,7 +21,7 @@ export const ActivationPage = () => {
           uid,
           token,
         });
-        console.log(response.data); // Handle the response as needed
+        // console.log(response.data); // Handle the response as needed
         // Inform the user that an email has been sent
         toast({
           title: "Account activation successful!",

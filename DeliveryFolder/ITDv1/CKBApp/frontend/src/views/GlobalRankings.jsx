@@ -81,12 +81,12 @@ export const GlobalRankings = ({ context }) => {
         headers: { Authorization: `Token ${activeUser.authToken}` },
       });
 
-      console.log(response.data);
+      // console.log(response.data);
       // If no tournaments are available, navigate to joinTournament page.
       if (response.data.length === 0) {
-        console.log("No ongoing tournaments");
+        // console.log("No ongoing tournaments");
       } else {
-        console.log("Ongoing Tournaments");
+        // console.log("Ongoing Tournaments");
         // Update state with fetched tournament data.
         setTournaments(response.data);
         // Sort the tournaments by end date
@@ -109,7 +109,7 @@ export const GlobalRankings = ({ context }) => {
           }
         );
 
-        console.log(scoreResponse.data);
+        // console.log(scoreResponse.data);
         // Update state with fetched team data.
         setScore(scoreResponse.data);
         localStorage.setItem(
@@ -118,7 +118,7 @@ export const GlobalRankings = ({ context }) => {
         );
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       // Set loading and spinning states to false after fetching data.
       setIsLoading(false);

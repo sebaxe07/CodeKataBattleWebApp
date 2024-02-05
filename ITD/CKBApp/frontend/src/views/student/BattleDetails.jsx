@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { ReactSVG } from "react-svg";
 import { useParams } from "react-router-dom";
 import { Text } from "../../components/common/text";
@@ -12,19 +12,12 @@ import { LoadingScreen } from "../../services/LoadingScreen";
 import { TopScore } from "../../components/common/TopScore";
 import { YouScore } from "../../components/common/YouScore";
 import Logo from "../../assets/images/Logo.svg";
-import Python from "../../assets/icons/python.svg";
-import Binary from "../../assets/icons/binaryIcon.svg";
 import Back from "../../assets/icons/backArrow.svg";
 import Sensei from "../../assets/icons/UsersIcons/BearSensei.svg";
 import Sword from "../../assets/icons/swords.svg";
-import ElephantUser from "../../assets/icons/UsersIcons/elephant.svg";
-import PiggyUser from "../../assets/icons/UsersIcons/piggy.svg";
-import BearUser from "../../assets/icons/UsersIcons/bear.svg";
-import TigerUser from "../../assets/icons/UsersIcons/tiger.svg";
 import TeamLeaderboardStudent from "../../components/utils/TournamentDetails/TeamLeaderboardStudent";
 import axios from "../../services/api";
 import { UserContext } from "../../services/contexts/UserContext";
-import { background } from "@chakra-ui/react";
 
 const defaultTournamentData = {
   name: "Tournament Name",
@@ -68,14 +61,8 @@ const defaultTeam = {
   members: [],
 };
 
-const defaultScore = { team: { id: 1, name: "Team 1" }, total_score: 100 };
 const defaultScoring = [{ total_score: 100 }];
 const defaultMyScoreIndex = 0;
-
-const defaultMyScore = {
-  score: defaultScoring[defaultMyScoreIndex],
-  position: defaultMyScoreIndex + 1,
-};
 
 export const BattleDetails = ({}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -94,18 +81,6 @@ export const BattleDetails = ({}) => {
   const firstName =
     tournamentData.created_by.user_profile.user.first_name.split(" ")[0];
 
-  const handleWheel = (e) => {
-    e.preventDefault();
-    const container = e.currentTarget;
-    const containerScrollPosition = container.scrollLeft;
-    const scrollSpeed = 0.3; // Change this value to adjust the scroll speed
-    container.scrollTo({
-      top: 0,
-      left: containerScrollPosition + e.deltaY * scrollSpeed,
-      behaviour: "smooth",
-    });
-  };
-
   const fechtRanking = async () => {
     setIsLoading(true);
     const battleID = Number(id);
@@ -113,10 +88,10 @@ export const BattleDetails = ({}) => {
       const response = await axios.get(`/ss/ranking/${battleID}/`, {
         headers: { Authorization: `Token ${activeUser.authToken}` },
       });
-      console.log(response.data);
+      // console.log(response.data);
       setScoring(response.data);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -128,13 +103,13 @@ export const BattleDetails = ({}) => {
       const response = await axios.get(`/ss/ranking/${battleID}/`, {
         headers: { Authorization: `Token ${activeUser.authToken}` },
       });
-      console.log(response.data);
+      // console.log(response.data);
       setScoring(response.data);
 
       const battleResponse = await axios.get(`/tms/battles/${battleID}/`, {
         headers: { Authorization: `Token ${activeUser.authToken}` },
       });
-      console.log(battleResponse.data);
+      // console.log(battleResponse.data);
       setBattle(battleResponse.data);
 
       const tournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
@@ -146,15 +121,15 @@ export const BattleDetails = ({}) => {
           ),
         };
       });
-      console.log("updatedTournaments ", updatedTournaments);
+      // console.log("updatedTournaments ", updatedTournaments);
       localStorage.setItem("tournaments", JSON.stringify(updatedTournaments));
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
   useEffect(() => {
-    console.log(battle);
+    // console.log(battle);
     if (battle.min_students_per_group == battle.max_students_per_group) {
       setTeamSize(battle.min_students_per_group);
     } else {
@@ -166,11 +141,11 @@ export const BattleDetails = ({}) => {
 
   useEffect(() => {
     if (scoring && scoring.length > 0) {
-      console.log("scoring");
-      console.log(scoring);
+      // console.log("scoring");
+      // console.log(scoring);
       setTopScore(scoring.slice(0, 3));
-      console.log("Top Score");
-      console.log(scoring.slice(0, 3));
+      // console.log("Top Score");
+      // console.log(scoring.slice(0, 3));
       const myScoreIndex = scoring.findIndex(
         (score) => score.team.id === team.id
       );
@@ -178,11 +153,11 @@ export const BattleDetails = ({}) => {
         score: scoring[myScoreIndex],
         position: myScoreIndex + 1,
       });
-      console.log("My Score");
-      console.log(scoring.find((score) => score.team.id === team.id));
+      // console.log("My Score");
+      // console.log(scoring.find((score) => score.team.id === team.id));
       setLeaderboard(scoring);
-      console.log("Leaderboard");
-      console.log(scoring);
+      // console.log("Leaderboard");
+      // console.log(scoring);
     }
   }, [scoring]);
 

@@ -41,7 +41,7 @@ export const EducatorHome = () => {
 
       // Update state with the fetched tournaments.
       setTournaments(response.data);
-      console.log(response.data);
+      // console.log(response.data);
 
       // Make a GET request to fetch tournaments the educator has been invited to.
       const invitedResponse = await axios.get(
@@ -59,7 +59,7 @@ export const EducatorHome = () => {
 
       // Update state with the fetched invited tournaments.
       setInvitedTournaments(invitedResponse.data);
-      console.log(invitedResponse.data);
+      // console.log(invitedResponse.data);
     } catch (error) {
       // Log an error message if fetching tournaments fails.
       console.error("Failed to fetch tournaments:", error);

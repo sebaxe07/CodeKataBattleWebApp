@@ -66,8 +66,8 @@ export const ShowRanks = ({
   }, [context]);
 
   useEffect(() => {
-    console.log("scoreData ", scoreData[0]);
-    console.log("filteredScores ", filteredScores);
+    // console.log("scoreData ", scoreData[0]);
+    // console.log("filteredScores ", filteredScores);
   }, [scoreData, filteredScores]);
 
   const { activeUser, setActiveUser } = useContext(UserContext);

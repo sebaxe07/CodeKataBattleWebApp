@@ -72,7 +72,7 @@ export const TeamLeaderboard = ({
           headers: { Authorization: `Token ${activeUser.authToken}` },
         }
       );
-      console.log(response);
+      // console.log(response);
 
       toast({
         title: "Success",
@@ -82,7 +82,7 @@ export const TeamLeaderboard = ({
         isClosable: true,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast({
         title: "Error",
         description: "An error occurred, please try again",

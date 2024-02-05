@@ -52,11 +52,11 @@ export const TeamLeaderboardStudent = ({
   }, [context]);
 
   useEffect(() => {
-    console.log("TeamLeaderboard: team", team);
+    // console.log("TeamLeaderboard: team", team);
   }, [team]);
 
   useEffect(() => {
-    console.log("TeamLeaderboard: battle", battle);
+    // console.log("TeamLeaderboard: battle", battle);
   }, [battle]);
 
   return (

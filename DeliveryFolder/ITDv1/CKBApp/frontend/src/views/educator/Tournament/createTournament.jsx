@@ -118,7 +118,7 @@ export const CreateTournament = () => {
       end_date: dateEnd,
     };
 
-    console.log(payload);
+    // console.log(payload);
 
     setIsLoading(true);
 
@@ -126,7 +126,7 @@ export const CreateTournament = () => {
       const response = await axios.post("/tms/tournaments/", payload, {
         headers: { Authorization: `Token ${activeUser.authToken}` },
       });
-      console.log(response.data);
+      // console.log(response.data);
 
       setIsCreated(true);
     } catch (error) {
@@ -192,7 +192,7 @@ export const CreateTournament = () => {
                 <TopDecorator LanguageIcon={langIco} size={200} />
                 <div
                   className="translate-x-16 translate-y-1/2 cursor-pointer"
-                  onClick={console.log("Boton Editar")}
+                  onClick={// console.log("Boton Editar")}
                 >
                   <BgIconCard
                     icon={Edit}

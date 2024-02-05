@@ -44,7 +44,7 @@ export const ManageBattle = () => {
   const cancelRef = React.useRef();
 
   useEffect(() => {
-    console.log(id);
+    // console.log(id);
     const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
     const tournamentId = Number(id); // Convert id to number
     const storedInvitedTournaments = JSON.parse(
@@ -61,7 +61,7 @@ export const ManageBattle = () => {
         `Tournament with ID ${tournamentId} not found in storedTournaments or storedInvitedTournaments`
       );
     }
-    console.log(id);
+    // console.log(id);
     const storedBattles = JSON.parse(localStorage.getItem(`battle${id}`));
     const battleid = Number(bid); // Convert id to number
     setBattles(storedBattles.filter((battle) => battle.id === battleid)[0]);
@@ -71,7 +71,7 @@ export const ManageBattle = () => {
   }, []);
 
   useEffect(() => {
-    console.log(battles);
+    // console.log(battles);
     if (battles.min_students_per_group == battles.max_students_per_group) {
       setTeamSize(battles.min_students_per_group);
     } else {
@@ -87,10 +87,10 @@ export const ManageBattle = () => {
       const response = await axios.get(`/ss/ranking/${battleID}/`, {
         headers: { Authorization: `Token ${activeUser.authToken}` },
       });
-      console.log(response.data);
+      // console.log(response.data);
       setScoring(response.data);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -104,7 +104,7 @@ export const ManageBattle = () => {
           headers: { Authorization: `Token ${activeUser.authToken}` },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
       battles.status = "ended";
       battles.end_date = new Date().toLocaleDateString();
 
@@ -151,7 +151,7 @@ export const ManageBattle = () => {
           headers: { Authorization: `Token ${activeUser.authToken}` },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
       battles.status = "consolidation";
       battles.end_date = new Date().toLocaleDateString();
 
@@ -198,7 +198,7 @@ export const ManageBattle = () => {
           headers: { Authorization: `Token ${activeUser.authToken}` },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
 
       const runBattle = await axios.post(
         `/tgms/battles/start/${bid}/`,
@@ -207,7 +207,7 @@ export const ManageBattle = () => {
           headers: { Authorization: `Token ${activeUser.authToken}` },
         }
       );
-      console.log(runBattle.data);
+      // console.log(runBattle.data);
 
       battles.start_date = new Date().toLocaleDateString();
       battles.status = "active";

@@ -63,13 +63,13 @@ export const StudentHome = () => {
         }
       );
 
-      console.log(response.data);
+      // console.log(response.data);
       // Check if there are any subscribed tournaments
       if (response.data.length === 0) {
-        console.log("No tournaments");
+        // console.log("No tournaments");
         navigate("/student/joinTournament");
       } else {
-        console.log("Tournaments");
+        // console.log("Tournaments");
         setTournaments(response.data);
         // Sort the tournaments by end date
         const sortedTournaments = response.data.sort(
@@ -88,7 +88,7 @@ export const StudentHome = () => {
           }
         );
 
-        console.log(teamsResponse.data);
+        // console.log(teamsResponse.data);
         setTeams(teamsResponse.data);
         localStorage.setItem("teams", JSON.stringify(teamsResponse.data));
 
@@ -99,12 +99,12 @@ export const StudentHome = () => {
           }
         );
 
-        console.log(scoreResponse.data);
+        // console.log(scoreResponse.data);
         setTourBattleScore(scoreResponse.data);
         localStorage.setItem("scores", JSON.stringify(scoreResponse.data));
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setIsLoading(false);
       setIsSpinning(false);
@@ -120,12 +120,12 @@ export const StudentHome = () => {
         }
       );
 
-      console.log(response.data);
+      // console.log(response.data);
       if (response.data.length === 0) {
-        console.log("No tournaments");
+        // console.log("No tournaments");
         navigate("/student/joinTournament");
       } else {
-        console.log("Tournaments");
+        // console.log("Tournaments");
         setTournaments(response.data);
         // Sort the tournaments by end date
 
@@ -137,7 +137,7 @@ export const StudentHome = () => {
           }
         );
 
-        console.log(teamsResponse.data);
+        // console.log(teamsResponse.data);
         // Check if the team data has changed
         const oldTeams = JSON.parse(localStorage.getItem("teams") || "[]");
         if (JSON.stringify(oldTeams) !== JSON.stringify(teamsResponse.data)) {
@@ -156,12 +156,12 @@ export const StudentHome = () => {
           }
         );
 
-        console.log(scoreResponse.data);
+        // console.log(scoreResponse.data);
         setTourBattleScore(scoreResponse.data);
         localStorage.setItem("scores", JSON.stringify(scoreResponse.data));
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
   // Load data on component mount or retrieve from local storage if available

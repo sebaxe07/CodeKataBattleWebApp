@@ -3,7 +3,7 @@ import React from "react";
 // Button component
 // name: string
 // onClick: function
-// use: <Button name="Login" onClick={() => console.log("Button clicked")} />
+// use: <Button name="Login" onClick={() => // console.log("Button clicked")} />
 
 export const Button = ({
   name,

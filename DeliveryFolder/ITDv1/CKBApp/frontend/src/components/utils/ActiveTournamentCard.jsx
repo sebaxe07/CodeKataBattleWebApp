@@ -63,7 +63,7 @@ const ActiveTournament = ({
           headers: { Authorization: `Token ${activeUser.authToken}` },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
 
       toast({
         title: "Subscription successful!",

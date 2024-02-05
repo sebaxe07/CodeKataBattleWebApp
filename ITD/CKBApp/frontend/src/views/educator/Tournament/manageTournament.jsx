@@ -45,7 +45,7 @@ export const ManageTournament = () => {
   const { activeUser, setActiveUser } = useContext(UserContext);
 
   useEffect(() => {
-    console.log(id);
+    // console.log(id);
     const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
     const tournamentId = Number(id); // Convert id to number
 
@@ -81,11 +81,11 @@ export const ManageTournament = () => {
   }, []);
 
   useEffect(() => {
-    console.log("tournament", tournament);
+    // console.log("tournament", tournament);
   }, [tournament]);
 
   useEffect(() => {
-    console.log(battles);
+    // console.log(battles);
   }, [battles]);
 
   const fetchBattles = async () => {
@@ -102,7 +102,7 @@ export const ManageTournament = () => {
       localStorage.setItem(`battle${id}`, JSON.stringify(response.data));
 
       setBattles(response.data);
-      console.log(response.data);
+      // console.log(response.data);
 
       const scoreTournamentResponse = await axios.get(
         `/ss/ranking/tournament/${id}/`,
@@ -111,7 +111,7 @@ export const ManageTournament = () => {
         }
       );
 
-      console.log(scoreTournamentResponse.data);
+      // console.log(scoreTournamentResponse.data);
       setTournamentScores(scoreTournamentResponse.data);
       localStorage.setItem(
         `tournamentScores${id}`,
@@ -138,7 +138,7 @@ export const ManageTournament = () => {
       localStorage.setItem(`battle${id}`, JSON.stringify(response.data));
 
       setBattles(response.data);
-      console.log(response.data);
+      // console.log(response.data);
 
       const scoreTournamentResponse = await axios.get(
         `/ss/ranking/tournament/${id}/`,
@@ -147,7 +147,7 @@ export const ManageTournament = () => {
         }
       );
 
-      console.log(scoreTournamentResponse.data);
+      // console.log(scoreTournamentResponse.data);
       setTournamentScores(scoreTournamentResponse.data);
       localStorage.setItem(
         `tournamentScores${id}`,
@@ -172,7 +172,7 @@ export const ManageTournament = () => {
           headers: { Authorization: `Token ${activeUser.authToken}` },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
 
       tournament.end_date = new Date();
       tournament.status = "completed";
@@ -221,7 +221,7 @@ export const ManageTournament = () => {
           headers: { Authorization: `Token ${activeUser.authToken}` },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
 
       tournament.start_date = new Date();
       tournament.status = "active";

@@ -40,7 +40,7 @@ export const ProfileEducator = ({}) => {
 
       // Update state with the fetched tournaments.
       setTournaments(response.data);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       // Log an error message if fetching tournaments fails.
       console.error("Failed to fetch tournaments:", error);

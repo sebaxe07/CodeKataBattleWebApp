@@ -69,7 +69,7 @@ export const TournamentDetails = ({
   };
 
   useEffect(() => {
-    console.log("scoreData ", scoreData[0]);
+    // console.log("scoreData ", scoreData[0]);
   }, [scoreData]);
 
   return (

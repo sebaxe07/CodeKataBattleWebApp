@@ -23,7 +23,7 @@ export const JoinTournament = () => {
           headers: { Authorization: `Token ${activeUser.authToken}` },
         });
 
-        console.log(response.data);
+        // console.log(response.data);
         let newTournaments = response.data;
         if (localStorage.getItem("tournaments")) {
           const storedTournaments = JSON.parse(
@@ -37,11 +37,11 @@ export const JoinTournament = () => {
                 (storedTournament) => storedTournament.id === tournament.id
               )
           );
-          console.log("newTournaments", newTournaments);
+          // console.log("newTournaments", newTournaments);
         }
         setTournaments(newTournaments);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       } finally {
         setIsLoading(false);
         setIsSpinning(false);

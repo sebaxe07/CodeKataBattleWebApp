@@ -3,15 +3,12 @@ import ActiveTournamentCard from "../../components/utils/ActiveTournamentCard";
 import { Text } from "../../components/common/text";
 import { ReactSVG } from "react-svg";
 import Logo from "../../assets/images/Logo.svg";
-import { useNavigate } from "react-router-dom";
 import { LoadingScreen } from "../../services/LoadingScreen";
 import { UserContext } from "../../services/contexts/UserContext";
 import axios from "../../services/api";
 
 export const JoinTournament = () => {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [isSpinning, setIsSpinning] = useState(false);
   const { activeUser, setActiveUser } = useContext(UserContext);
   const [tournaments, setTournaments] = useState([]);
 
@@ -23,7 +20,7 @@ export const JoinTournament = () => {
           headers: { Authorization: `Token ${activeUser.authToken}` },
         });
 
-        console.log(response.data);
+        // console.log(response.data);
         let newTournaments = response.data;
         if (localStorage.getItem("tournaments")) {
           const storedTournaments = JSON.parse(
@@ -37,14 +34,13 @@ export const JoinTournament = () => {
                 (storedTournament) => storedTournament.id === tournament.id
               )
           );
-          console.log("newTournaments", newTournaments);
+          // console.log("newTournaments", newTournaments);
         }
         setTournaments(newTournaments);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       } finally {
         setIsLoading(false);
-        setIsSpinning(false);
       }
     };
     fetchData();

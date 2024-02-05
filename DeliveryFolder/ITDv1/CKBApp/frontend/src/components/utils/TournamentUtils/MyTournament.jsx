@@ -85,7 +85,7 @@ export const MyTournament = ({
           headers: { Authorization: `Token ${activeUser.authToken}` },
         }
       );
-      console.log(response.data); // Handle the response as needed
+      // console.log(response.data); // Handle the response as needed
       // Inform the user that an email has been sent
       onClose();
       toast({

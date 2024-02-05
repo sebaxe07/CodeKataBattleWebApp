@@ -35,7 +35,7 @@ export function useFetchUserData() {
             }
           );
           roleprofile = ProfileResponse.data;
-          console.log(ProfileResponse.data);
+          // console.log(ProfileResponse.data);
         } else {
           const ProfileResponse = await axios.get(
             `/ums/student-profile/${userData.user_profile.id}/`,
@@ -44,7 +44,7 @@ export function useFetchUserData() {
             }
           );
           roleprofile = ProfileResponse.data;
-          console.log(ProfileResponse.data);
+          // console.log(ProfileResponse.data);
         }
       } catch (error) {
         console.error("Error getting profile: ", error);
@@ -68,7 +68,7 @@ export function useFetchUserData() {
           profile_icon: userData.user_profile.profile_icon,
         },
       };
-      console.log("User data with token:", userWithToken);
+      // console.log("User data with token:", userWithToken);
 
       // Update the active user in the UserContext and store in local storage.
       setActiveUser(userWithToken);

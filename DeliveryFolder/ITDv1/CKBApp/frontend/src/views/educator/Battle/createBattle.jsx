@@ -158,7 +158,7 @@ export const CreateBattle = () => {
   };
 
   useEffect(() => {
-    console.log(id);
+    // console.log(id);
     const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
     const storedInvitedTournaments = JSON.parse(
       localStorage.getItem("invitedTournaments")
@@ -199,7 +199,7 @@ export const CreateBattle = () => {
   };
 
   useEffect(() => {
-    console.log(selectedFile);
+    // console.log(selectedFile);
     if (selectedFile) {
       setFile(selectedFile.name);
     }
@@ -282,8 +282,8 @@ export const CreateBattle = () => {
     payload.append("tournament", id);
     payload.append("active", true);
 
-    console.log(payload);
-    console.log(activeUser.roleid);
+    // console.log(payload);
+    // console.log(activeUser.roleid);
 
     setIsLoading(true);
 
@@ -294,7 +294,7 @@ export const CreateBattle = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response.data);
+      // console.log(response.data);
 
       setIsCreated(true);
     } catch (error) {

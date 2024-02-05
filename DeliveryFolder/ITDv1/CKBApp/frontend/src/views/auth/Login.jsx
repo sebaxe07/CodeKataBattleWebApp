@@ -70,7 +70,7 @@ export const Login = () => {
 
   useEffect(() => {
     // Check if activeUser is not null or undefined
-    console.log("Active User:", activeUser);
+    // console.log("Active User:", activeUser);
     if (activeUser && autoLog) {
       // Navigate to the new page
       if (activeUser.user_profile.role === "educator") {
@@ -101,7 +101,7 @@ export const Login = () => {
       const response = await axios.post("/auth/users/resend_activation/", {
         email,
       });
-      console.log(response.data);
+      // console.log(response.data);
       toast({
         title: "Activation email sent!",
         description: "Please check your email to activate your account.",
@@ -135,7 +135,7 @@ export const Login = () => {
 
     try {
       const response = await axios.post("/auth/token/login/", payload);
-      console.log(response.data); // Handle the response as needed
+      // console.log(response.data); // Handle the response as needed
       const data = response.data;
       const authToken = data.auth_token;
 

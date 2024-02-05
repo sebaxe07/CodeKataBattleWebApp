@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { ReactSVG } from "react-svg";
 import { Text } from "../components/common/text";
 import { EducatorName } from "../components/utils/TournamentDetails/EducatorName";
 import { TopDecorator } from "../components/utils/TournamentDetails//TopDecorator";
@@ -66,8 +65,8 @@ export const ShowRanks = ({
   }, [context]);
 
   useEffect(() => {
-    console.log("scoreData ", scoreData[0]);
-    console.log("filteredScores ", filteredScores);
+    // console.log("scoreData ", scoreData[0]);
+    // console.log("filteredScores ", filteredScores);
   }, [scoreData, filteredScores]);
 
   const { activeUser, setActiveUser } = useContext(UserContext);
@@ -77,17 +76,6 @@ export const ShowRanks = ({
   const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
   const firstName =
     tournamentData.created_by.user_profile.user.first_name.split(" ")[0];
-
-  const handleWheel = (e) => {
-    const container = e.currentTarget;
-    const containerScrollPosition = container.scrollLeft;
-    const scrollSpeed = 0.3; // Change this value to adjust the scroll speed
-    container.scrollTo({
-      top: 0,
-      left: containerScrollPosition + e.deltaY * scrollSpeed,
-      behaviour: "smooth",
-    });
-  };
 
   return (
     <div

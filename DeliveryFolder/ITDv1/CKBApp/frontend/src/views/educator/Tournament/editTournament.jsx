@@ -107,9 +107,9 @@ export const EditTournament = () => {
     const validDateEnd = dateEnd !== null;
     const validDate = new Date(dateStart) < new Date(dateEnd);
 
-    console.log("Valid Date: ", dateStart);
-    console.log("Valid Date: ", dateEnd);
-    console.log("Valid Date: ", validDate);
+    // console.log("Valid Date: ", dateStart);
+    // console.log("Valid Date: ", dateEnd);
+    // console.log("Valid Date: ", validDate);
 
     // Set error messages if needed
     const conditions = [

@@ -113,10 +113,10 @@ export const BattleDetails = ({}) => {
       const response = await axios.get(`/ss/ranking/${battleID}/`, {
         headers: { Authorization: `Token ${activeUser.authToken}` },
       });
-      console.log(response.data);
+      // console.log(response.data);
       setScoring(response.data);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -128,13 +128,13 @@ export const BattleDetails = ({}) => {
       const response = await axios.get(`/ss/ranking/${battleID}/`, {
         headers: { Authorization: `Token ${activeUser.authToken}` },
       });
-      console.log(response.data);
+      // console.log(response.data);
       setScoring(response.data);
 
       const battleResponse = await axios.get(`/tms/battles/${battleID}/`, {
         headers: { Authorization: `Token ${activeUser.authToken}` },
       });
-      console.log(battleResponse.data);
+      // console.log(battleResponse.data);
       setBattle(battleResponse.data);
 
       const tournaments = JSON.parse(localStorage.getItem("tournaments")) || [];
@@ -146,15 +146,15 @@ export const BattleDetails = ({}) => {
           ),
         };
       });
-      console.log("updatedTournaments ", updatedTournaments);
+      // console.log("updatedTournaments ", updatedTournaments);
       localStorage.setItem("tournaments", JSON.stringify(updatedTournaments));
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
   useEffect(() => {
-    console.log(battle);
+    // console.log(battle);
     if (battle.min_students_per_group == battle.max_students_per_group) {
       setTeamSize(battle.min_students_per_group);
     } else {
@@ -166,11 +166,11 @@ export const BattleDetails = ({}) => {
 
   useEffect(() => {
     if (scoring && scoring.length > 0) {
-      console.log("scoring");
-      console.log(scoring);
+      // console.log("scoring");
+      // console.log(scoring);
       setTopScore(scoring.slice(0, 3));
-      console.log("Top Score");
-      console.log(scoring.slice(0, 3));
+      // console.log("Top Score");
+      // console.log(scoring.slice(0, 3));
       const myScoreIndex = scoring.findIndex(
         (score) => score.team.id === team.id
       );
@@ -178,11 +178,11 @@ export const BattleDetails = ({}) => {
         score: scoring[myScoreIndex],
         position: myScoreIndex + 1,
       });
-      console.log("My Score");
-      console.log(scoring.find((score) => score.team.id === team.id));
+      // console.log("My Score");
+      // console.log(scoring.find((score) => score.team.id === team.id));
       setLeaderboard(scoring);
-      console.log("Leaderboard");
-      console.log(scoring);
+      // console.log("Leaderboard");
+      // console.log(scoring);
     }
   }, [scoring]);
 

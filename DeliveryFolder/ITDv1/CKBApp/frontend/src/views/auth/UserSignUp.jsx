@@ -228,7 +228,7 @@ export const SignUpSlides = () => {
 
     try {
       const response = await axios.post("/ums/register/", payload);
-      console.log(response.data);
+      // console.log(response.data);
 
       // Send activation email
       await axios.post("/auth/users/resend_activation/", { email: eMail });
@@ -294,16 +294,16 @@ export const SignUpSlides = () => {
     if (slide < screens.length) {
       if (screens[slide].validate()) {
         if (slide === screens.length - 1) {
-          console.log("submit");
-          console.log(registerContext.userData);
+          // console.log("submit");
+          // console.log(registerContext.userData);
 
           handleSubmit();
           return;
         }
         screens[slide].buttonAction();
-        console.log(registerContext);
+        // console.log(registerContext);
       } else {
-        console.log(registerContext);
+        // console.log(registerContext);
 
         switch (slide) {
           case 0:

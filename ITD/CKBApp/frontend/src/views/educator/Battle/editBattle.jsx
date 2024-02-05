@@ -99,7 +99,7 @@ export const EditBattle = () => {
   }, [battles]);
 
   useEffect(() => {
-    console.log(id);
+    // console.log(id);
     const storedTournaments = JSON.parse(localStorage.getItem("tournaments"));
     const tournamentId = Number(id); // Convert id to number
     const storedInvitedTournaments = JSON.parse(
@@ -140,7 +140,7 @@ export const EditBattle = () => {
   };
 
   useEffect(() => {
-    console.log(selectedFile);
+    // console.log(selectedFile);
     if (selectedFile) {
       setFile(selectedFile.name);
     }
@@ -219,7 +219,7 @@ export const EditBattle = () => {
       payload.append("software_project", selectedFile);
     }
 
-    console.log(payload);
+    // console.log(payload);
 
     setIsLoading(true);
 
@@ -228,7 +228,7 @@ export const EditBattle = () => {
         headers: { Authorization: `Token ${activeUser.authToken}` },
         "Content-Type": "multipart/form-data",
       });
-      console.log(response.data);
+      // console.log(response.data);
 
       const storedBattles = JSON.parse(localStorage.getItem(`battle${id}`));
       const battleid = Number(bid); // Convert id to number

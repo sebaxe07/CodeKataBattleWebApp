@@ -17,19 +17,19 @@ export const TopDecorator = ({
 
   switch (LanguageIcon) {
     case "binaryIcon.svg":
-      console.log("LanguageIcon", LanguageIcon);
+      // console.log("LanguageIcon", LanguageIcon);
       LanguageIcon = Binary;
       break;
     case "hacker_cat.svg":
-      console.log("LanguageIcon", LanguageIcon);
+      // console.log("LanguageIcon", LanguageIcon);
       LanguageIcon = HackerCat;
       break;
     case "Code.svg":
-      console.log("LanguageIcon", LanguageIcon);
+      // console.log("LanguageIcon", LanguageIcon);
       LanguageIcon = Code;
       break;
     case "github_cop.svg":
-      console.log("LanguageIcon", LanguageIcon);
+      // console.log("LanguageIcon", LanguageIcon);
       LanguageIcon = Copilot;
       break;
     default:

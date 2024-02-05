@@ -62,7 +62,7 @@ export const PasswordConfirm = () => {
         new_password: password, // The new password
         re_new_password: passwordValid, // The new password, repeated for confirmation
       });
-      console.log(response.data); // Handle the response as needed
+      // console.log(response.data); // Handle the response as needed
       // Inform the user that an email has been sent
       toast({
         title: "Password reseted successfully, please login",
