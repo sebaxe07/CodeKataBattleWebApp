@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import StartBattleView, TeamRemoveMember, TeamListCreateView, TeamRetrieveUpdateDestroyView, UserTeamsListView, TeamMembersListView, PublicTeamsListView, TeamAddMember
 
+# URL patterns for the team_github_integration app
 urlpatterns = [
     path('teams/', TeamListCreateView.as_view(), name='team-list-create'),
     path('teams/<int:pk>/', TeamRetrieveUpdateDestroyView.as_view(), name='team-retrieve-update-destroy'),

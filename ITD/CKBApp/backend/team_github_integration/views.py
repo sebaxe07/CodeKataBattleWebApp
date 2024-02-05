@@ -22,7 +22,7 @@ import logging
 import github
 import smtplib
 
-
+# View for listing and creating teams
 class TeamListCreateView(generics.ListCreateAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
@@ -30,6 +30,7 @@ class TeamListCreateView(generics.ListCreateAPIView):
     def get_queryset(self):
         return Team.objects.filter(active=True)
     
+# View for listing public teams
 class PublicTeamsListView(generics.ListAPIView):
     serializer_class = TeamSerializer
 
@@ -43,18 +44,21 @@ class PublicTeamsListView(generics.ListAPIView):
             members_count__lt=battle.max_students_per_group,
             battle_id=battle_id
         )
-    
+
+# View for retrieving, updating and deleting a team
 class TeamRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
 
+# View for listing the teams of a user
 class UserTeamsListView(generics.ListAPIView):
     serializer_class = TeamSerializer
 
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         return Team.objects.filter(members__id=user_id)
-    
+
+# View for listing the members of a team 
 class TeamMembersListView(generics.ListAPIView):
     serializer_class = StudentProfileSerializer
 
@@ -62,8 +66,7 @@ class TeamMembersListView(generics.ListAPIView):
         team_id = self.kwargs['team_id']
         return Team.objects.get(id=team_id).members.all()
     
-
-
+# View for adding a member to a team
 class TeamAddMember(APIView):
     def post(self, request, code, student_id, battle_id):
         try:
@@ -99,6 +102,7 @@ class TeamAddMember(APIView):
         except Battle.DoesNotExist:
             return Response({"error": "Battle not found"}, status=status.HTTP_404_NOT_FOUND)
     
+# View for removing a member from a team
 class TeamRemoveMember(APIView):
     def post(self, request, code, student_id):
         try:
@@ -113,14 +117,15 @@ class TeamRemoveMember(APIView):
             return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-
+# View for starting a battle        
 class StartBattleView(APIView):
     def post(self, request, battle_id):
         # Get the battle and the teams
         battle = Battle.objects.get(id=battle_id)
         teams = battle.teams.all()
         min_students = battle.min_students_per_group
-
+        
+        # Remove teams that do not meet the minimum requirements
         for team in teams:
             if team.members.count() < min_students:
                 with transaction.atomic():
@@ -137,16 +142,19 @@ class StartBattleView(APIView):
                         )
                     # Delete team from battle and respective models
                     team.delete()
-
+        # Log the start of the battle
         logger = logging.getLogger(__name__)
-
+        
         software_project_file = battle.software_project.path
         print(f'Software project file: {software_project_file}')  # Print the path of the software project file
         print(f'Battle name: {battle.name}')  # Print the name of the battle
         print(f'Number of teams: {len(teams)}')  # Print the number of teams
+
         # Initialize the Github object
         github_token = settings.GITHUB_ACCESS_TOKEN
         g = Github(github_token)
+
+        # try to initialize the Github repository for the battle
         try:
             # Create a new repository
             user = g.get_user()
@@ -155,6 +163,7 @@ class StartBattleView(APIView):
 
             print(f'Repository created: {repo.html_url}')  # Print the URL of the repository
 
+            # Create a tree with the contents of the software project file
             def create_tree(repo, base_path, path):
                 tree_elements = []
                 for root, dirs, files in os.walk(path):
@@ -190,6 +199,8 @@ class StartBattleView(APIView):
 
                     # Create blobs for each file and a tree with these blobs
                     tree_elements = create_tree(repo, src_dir, src_dir)
+
+                    # Define the language of the software project
                     programming_language = Path(battle.picture).stem
 
                     current_dir = os.path.dirname(os.path.realpath(__file__))

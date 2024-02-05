@@ -13,14 +13,24 @@ from django.core.mail import send_mail
 
 
 # Tournaments views 
+# - TournamentListCreateView: view for listing and creating Tournaments
+# - TournamentListOngoingView: view for listing ongoing Tournaments
+# - StartTournamentView: view for starting a Tournament
+# - EndTournamentView: view for ending a Tournament
+# - TournamentInviteView: view for inviting an Educator to a Tournament
+# - TournamentRetrieveUpdateDestroyView: view for retrieving, updating and deleting a Tournament
+# - UserTournamentsListView: view for listing Tournaments of a User
+# - InvitedTournamentsListView: view for listing Tournaments invited to an Educator
 
 class TournamentListCreateView(generics.ListCreateAPIView):
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer
 
+    # Get only tournaments in registration status
     def get_queryset(self):
         return Tournament.objects.filter(status='registration')
     
+    # Send an email to all students when a new tournament is created
     def perform_create(self, serializer):
         tournament = serializer.save()
 
@@ -53,7 +63,9 @@ class TournamentListOngoingView(generics.ListCreateAPIView):
 class StartTournamentView(generics.UpdateAPIView):
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer
-
+    # Start the tournament
+    # - Set the start date to the current date
+    # - Set the status to 'active'
     def update(self, request, *args, **kwargs):
         tournament = self.get_object()
         tournament.start_date = timezone.now()
@@ -66,6 +78,9 @@ class EndTournamentView(generics.UpdateAPIView):
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer
 
+    # End the tournament
+    # - Set the end date to the current date
+    # - Set the status to 'completed'
     def update(self, request, *args, **kwargs):
         tournament = self.get_object()
         tournament.end_date = timezone.now()
@@ -78,7 +93,7 @@ class TournamentInviteView(generics.UpdateAPIView):
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer
 
-
+    # Invite an educator to the tournament
     def update(self, request, *args, **kwargs):
         tournament = self.get_object()
         email = request.data.get('email')
@@ -131,11 +146,20 @@ class InvitedTournamentsListView(generics.ListAPIView):
         return Tournament.objects.filter(invited_Educators=educator)
     
 # Battles views
-    
+# - StartBattleView: view for starting a Battle
+# - ConsolidateBattleView: view for consolidating a Battle
+# - EndBattleView: view for ending a Battle
+# - UserBattlesListView: view for listing Battles of a User
+# - BattleListCreateView: view for listing and creating Battles
+# - BattleRetrieveUpdateDestroyView: view for retrieving, updating and deleting a Battle
+
 class StartBattleView(generics.UpdateAPIView):
     queryset = Battle.objects.all()
     serializer_class = BattleSerializer
 
+    # Start the battle
+    # - Set the start date to the current date
+    # - Set the status to 'active'
     def update(self, request, *args, **kwargs):
         battle = self.get_object()
         battle.start_date = timezone.now()
@@ -148,6 +172,9 @@ class ConsolidateBattleView(generics.UpdateAPIView):
     queryset = Battle.objects.all()
     serializer_class = BattleSerializer
 
+    # Consolidate the battle
+    # - Set the end date to the current date
+    # - Set the status to 'consolidation'
     def update(self, request, *args, **kwargs):
         battle = self.get_object()
         battle.end_date = timezone.now()
@@ -160,6 +187,9 @@ class EndBattleView(generics.UpdateAPIView):
     queryset = Battle.objects.all()
     serializer_class = BattleSerializer
 
+    # End the battle
+    # - Set the status to 'completed'
+    # - Update the status of the tournament
     def update(self, request, *args, **kwargs):
         battle = self.get_object()
         battle.status = 'completed'
@@ -169,7 +199,7 @@ class EndBattleView(generics.UpdateAPIView):
 
 class UserBattlesListView(generics.ListAPIView):
     serializer_class = BattleEducatorSerializer
-
+    
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         tournament_id=self.kwargs['tournament_id']
@@ -210,7 +240,8 @@ class BattleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
 
 # Student - Tournaments views
-
+# - StudentSubscribedTournamentsListView: view for listing Tournaments subscribed to by a Student
+# - StudentSubscribeTournament: view for subscribing a Student to a Tournament
 class StudentSubscribedTournamentsListView(generics.ListAPIView):
     serializer_class = TournamentWithBattlesSerializer
 
@@ -225,6 +256,9 @@ class StudentSubscribedTournamentsListView(generics.ListAPIView):
 class StudentSubscribeTournament(generics.UpdateAPIView):
     serializer_class = TournamentSerializer
 
+    # Subscribe a student to a tournament
+    # - Add the student to the subscribed students of the tournament
+    # - Send an email to the student
     def post(self, request, *args, **kwargs):
         student_id = self.kwargs['student_id']
         tournament_id = self.kwargs['tournament_id']

@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import UserRegistrationView, UserDetailView, UserLogoutView, EducatorProfileDetailView, StudentProfileDetailView
 
+# URL patterns for the user_management app
 urlpatterns = [
     path('register/', UserRegistrationView.as_view(), name='register'),
     path('profile/', UserDetailView.as_view(), name='profile'),

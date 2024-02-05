@@ -5,6 +5,16 @@ from automated_evaluation.models import Repository
 from user_management.models import StudentProfile, UserProfile
 from django.contrib.auth.models import User
 
+
+# Serializers for the models in the scoring_system app
+# - UserSerializer: serializer for the User model
+# - UserProfile: serializer for the UserProfile model
+# - StudentProfileSerializer: serializer for the StudentProfile model
+# - RepositorySerializer: serializer for the Repository model
+# - TeamSerializer: serializer for the Team model
+# - BattleScoreSerializer: serializer for the BattleScore model
+# - TournamentScoreSerializer: serializer for the TournamentScore model
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

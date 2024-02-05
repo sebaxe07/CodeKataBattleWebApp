@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-
+# View for setting manual score for a BattleScore
 class SetManualScoreView(APIView):
     def patch(self, request, scoring_id, score, format=None):
         try:
@@ -22,6 +22,7 @@ class SetManualScoreView(APIView):
         except BattleScore.DoesNotExist:
             return Response({"message": "BattleScore not found."}, status=status.HTTP_404_NOT_FOUND)
 
+# View for getting the ranking of a Tournament
 class RankingTournamentListView(generics.ListAPIView):
     serializer_class = TournamentScoreSerializer
 
@@ -29,7 +30,8 @@ class RankingTournamentListView(generics.ListAPIView):
         tournament_id = self.kwargs['tournament_id']
         # Get the BattleScores for the Tournament, ordered by total_score in descending order
         return TournamentScore.objects.filter(tournament_id=tournament_id).order_by('-total_score')
-    
+
+# View for getting the ranking of ongoing Tournaments
 class RankingTournamentOngoingListView(generics.ListAPIView):
     serializer_class = TournamentScoreSerializer
 
@@ -37,6 +39,7 @@ class RankingTournamentOngoingListView(generics.ListAPIView):
         # Get the BattleScores for the ongoing Tournament, ordered by total_score in descending order
         return TournamentScore.objects.filter(tournament__status='active').order_by('-total_score')
     
+# View for getting the scores of a Student
 class StudentScoresView(APIView):
     def get(self, request, student_id, format=None):
         try:
@@ -71,6 +74,7 @@ class StudentScoresView(APIView):
         except StudentProfile.DoesNotExist:
             return Response({"message": "Student not found."}, status=status.HTTP_404_NOT_FOUND)
         
+# View for getting the ranking of a Battle
 class RankingListView(generics.ListAPIView):
     serializer_class = BattleScoreSerializer
 

@@ -8,15 +8,21 @@ from .models import EducatorProfile, StudentProfile
 from rest_framework import status
 from django.contrib.auth.models import User
 
+# View for user registration
+
+# UserRegistrationView: view for user registration
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegisterSerializer
     permission_classes = (permissions.AllowAny,)
     
+    # Create a new user
     def create(self, request, *args, **kwargs):
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
                 username = serializer.validated_data.get('username')
                 email = serializer.validated_data.get('email')
+
+                # Check if the username or email is already in use
                 if User.objects.filter(username=username).exists():
                     return Response({"username": ["Username is already in use."]}, status=status.HTTP_400_BAD_REQUEST)
                 if User.objects.filter(email=email).exists():
@@ -33,6 +39,7 @@ class UserRegistrationView(generics.CreateAPIView):
                 # Handle the validation error
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
+# View for user profile detail
 class EducatorProfileDetailView(generics.RetrieveAPIView):
     queryset = EducatorProfile.objects.all()
     serializer_class = EducatorProfileSerializer
@@ -42,6 +49,7 @@ class EducatorProfileDetailView(generics.RetrieveAPIView):
         obj = get_object_or_404(queryset, user_profile_id=self.kwargs["pk"])
         return obj
     
+# View for student profile detail
 class StudentProfileDetailView(generics.RetrieveAPIView):
     queryset = StudentProfile.objects.all()
     serializer_class = StudentProfileSerializer
@@ -51,14 +59,15 @@ class StudentProfileDetailView(generics.RetrieveAPIView):
         obj = get_object_or_404(queryset, user_profile_id=self.kwargs["pk"])
         return obj
 
+# View for user detail
 class UserDetailView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self):
         return self.request.user
-
-
+    
+# View for user logout
 class UserLogoutView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 

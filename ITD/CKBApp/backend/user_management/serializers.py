@@ -4,6 +4,18 @@ from .models import UserProfile, EducatorProfile, StudentProfile
 from github import Github, UnknownObjectException
 from django.conf import settings
 
+# Serializers for the models in the user_management app
+# - UserProfileSerializer: serializer for the UserProfile model
+# - EducatorProfileSerializer: serializer for the EducatorProfile model
+# - StudentProfileSerializer: serializer for the StudentProfile model
+# - UserSerializer: serializer for the User model
+# - UserProfileRegisterSerializer: serializer for the UserProfile model for registration
+# - UserRegisterSerializer: serializer for the User model for registration
+
+# Note: The User model is imported from django.contrib.auth.models
+# Note: The User Login, Logout, Password Reset, Password Change and email verification are 
+# handle by Djoser, so we don't need to create a serializer for it
+
 class EducatorProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = EducatorProfile

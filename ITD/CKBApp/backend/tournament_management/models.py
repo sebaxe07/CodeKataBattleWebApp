@@ -2,6 +2,16 @@ from django.db import models
 from user_management.models import EducatorProfile, StudentProfile
 from django.utils import timezone
 
+### Model for Tournament
+# - name: name of the tournament
+# - description: description of the tournament
+# - picture: picture of the tournament
+# - created_by: educator who created the tournament
+# - start_date: start date of the tournament
+# - end_date: end date of the tournament
+# - invited_Educators: educators invited to the tournament
+# - subscribed_Students: students subscribed to the tournament
+# - status: status of the tournament (Registration/Active/Consolidation/Completed)
 class Tournament(models.Model):
     STATUS_CHOICES = [
         ('registration', 'Registration'),
@@ -19,6 +29,7 @@ class Tournament(models.Model):
     subscribed_Students = models.ManyToManyField(StudentProfile, related_name='subscribed_tournaments', blank=True)
     status = models.CharField(max_length=14, choices=STATUS_CHOICES, default='registration')
 
+    # Update the status of the tournament based on the current date
     def update_status(self):
         now = timezone.now()
         print("Updating status for tournament", self.name, "at", now)
@@ -33,6 +44,18 @@ class Tournament(models.Model):
     def __str__(self): 
         return self.name
 
+### Model for Battle
+# - name: name of the battle
+# - description: description of the battle
+# - created_by: educator who created the battle
+# - min_students_per_group: minimum number of students per group
+# - max_students_per_group: maximum number of students per group
+# - start_date: start date of the battle
+# - end_date: end date of the battle
+# - picture: picture of the battle
+# - software_project: software project for the battle
+# - tournament: the Tournament associated with the battle
+# - status: status of the battle (Registration/Active/Consolidation/Completed)
 class Battle(models.Model):
     STATUS_CHOICES = [
         ('registration', 'Registration'),
@@ -52,6 +75,7 @@ class Battle(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='battles')
     status = models.CharField(max_length=14, choices=STATUS_CHOICES, default='registration')
 
+    # Update the status of the battle based on the current date
     def update_status(self):
         now = timezone.now()
         print("Updating status for battle", self.name, "at", now)

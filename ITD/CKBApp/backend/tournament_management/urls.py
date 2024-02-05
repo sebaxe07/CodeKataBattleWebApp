@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import TournamentListCreateView,InvitedTournamentsListView, TournamentListOngoingView, EndTournamentView, TournamentInviteView, ConsolidateBattleView, EndBattleView, StartTournamentView, StartBattleView , TournamentRetrieveUpdateDestroyView, BattleListCreateView, BattleRetrieveUpdateDestroyView, UserTournamentsListView, UserBattlesListView, UserBattlesListView, StudentSubscribedTournamentsListView, StudentSubscribeTournament
 
+# URL patterns for the tournament_management app
 urlpatterns = [
     path('tournaments/', TournamentListCreateView.as_view(), name='tournament-list-create'),
     path('tournaments/<int:pk>/', TournamentRetrieveUpdateDestroyView.as_view(), name='tournament-retrieve-update-destroy'),

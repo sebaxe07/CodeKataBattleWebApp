@@ -3,6 +3,16 @@ from .models import Tournament, Battle
 from django.contrib.auth.models import User
 from user_management.models import EducatorProfile, UserProfile
 
+# Serializers for the models in the tournament_management app
+# - UserSerializer: serializer for the User model
+# - UserProfile: serializer for the UserProfile model
+# - EducatorProfileSerializer: serializer for the EducatorProfile model
+# - TournamentSerializer: serializer for the Tournament model
+# - BattleSerializer: serializer for the Battle model
+# - TournamentWithBattlesSerializer: serializer for the Tournament model with Battle serializer
+# - TournameentEducatorSerializer: serializer for the Tournament model with EducatorProfile serializer
+# - BattleEducatorSerializer: serializer for the Battle model with EducatorProfile serializer
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

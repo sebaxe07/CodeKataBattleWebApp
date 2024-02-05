@@ -9,11 +9,13 @@ from tournament_management.models import Battle
 from django.core.exceptions import ObjectDoesNotExist
 
 
-
+### Webhook class to handle the POST request from GitHub
 class webhook(APIView):
+    # Allow any user (authenticated or not) to access this endpoint
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
+        # Extract the repository name, commit SHA, commit message, commit author, test results from the POST request
         repo_name = request.data['repo']
         repo_url = 'https://github.com/' + repo_name
         commit_sha = request.data['commit_sha']
@@ -23,7 +25,7 @@ class webhook(APIView):
         test_passed = request.data['tests_passed']
         test_total = request.data['tests_total']
 
-
+        # Print the details of the push event
         print("Push event received for", repo_name, "by", commit_author, "with commit message:", commit_message)
 
         print("=====================================")
@@ -32,6 +34,7 @@ class webhook(APIView):
         print("Total tests:", test_total)
         print("=====================================")
 
+        # Check if the push event is from CodeKataBattleHUB
         if commit_author == 'CodeKataBattleHUB':
             print('Ignoring webhook from CodeKataBattleHUB')
             return HttpResponse('POST request')

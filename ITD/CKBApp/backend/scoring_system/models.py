@@ -11,7 +11,7 @@ from django.db.models import Window, F
 from django.db.models.functions import Rank
 from django.core.mail import send_mail
 
-
+### Trigger to update the BattleScore when a new Evaluation is created
 @receiver(post_save, sender=Evaluation)
 def update_battle_score(sender, instance, created, **kwargs):
     if created:  # only for newly created Evaluation instances
@@ -40,12 +40,13 @@ def update_battle_score(sender, instance, created, **kwargs):
         new_manual_score = 0  
         battle_score.update_score(new_functional_score, new_timeliness_score, new_manual_score)
 
-
+### Trigger to update the TournamentScore when a Battle is completed or active
 @receiver(post_save, sender=Battle)
 def update_tournament_score(sender, instance, **kwargs):
     if instance.status == "active":
         print("Initializing BattleScore for", instance)
         for team in instance.teams.all():
+            # Initialize the BattleScore for each Team
             print("Initializing BattleScore for", team.name)
             battle_score, created = BattleScore.objects.get_or_create(team=team, battle=instance)
             if created:
@@ -58,10 +59,12 @@ def update_tournament_score(sender, instance, **kwargs):
         for team in instance.teams.all():
             print("Updating TournamentScore for", team.name) 
             for student in team.members.all():
+                # Get or create the TournamentScore associated with the Student and Tournament
                 print("Updating TournamentScore for", student.user_profile.user.username)
                 tournament_score, created = TournamentScore.objects.get_or_create(student=student, tournament=instance.tournament)
                 tournament_score.update_score()
 
+        # Notify the students about the end of the battle
         for team in instance.teams.all():
             for student in team.members.all():
                 print("Notificating battle score for", student.user_profile.user.username)
@@ -91,6 +94,7 @@ def update_tournament_score(sender, instance, **kwargs):
                     fail_silently=False,
                 )
 
+### Trigger to notify the students about the end of the tournament
 @receiver(post_save, sender=Tournament)
 def notify_tournament_score(sender, instance, **kwargs):
         if instance.status == "completed":
@@ -122,6 +126,14 @@ def notify_tournament_score(sender, instance, **kwargs):
                     fail_silently=False,
                 )
 
+### Model for BattleScore
+# - battle: battle to which the score belongs
+# - team: team to which the score belongs
+# - functional_score: functional score of the team
+# - timeliness_score: timeliness score of the team
+# - manual_score: manual score of the team
+# - total_score: total score of the team
+# - is_manual_evaluation: boolean to check if the evaluation is manual
 class BattleScore(models.Model):
     battle = models.ForeignKey(Battle, on_delete=models.CASCADE, related_name='battle_scores')
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team_scores')
@@ -131,6 +143,7 @@ class BattleScore(models.Model):
     total_score = models.PositiveIntegerField(default=0)
     is_manual_evaluation = models.BooleanField(default=False)
 
+    # Method to update the score of the team based on the functional score, timeliness score and manual score
     def update_score(self, new_functional_score, new_timeliness_score, new_manual_score=0):
         precision_factor = 10  
         self.functional_score = round(new_functional_score * precision_factor)
@@ -152,12 +165,16 @@ class BattleScore(models.Model):
         self.manual_score = round((self.manual_score / (100.0 * precision_factor)) * 100)
         self.save()
         
-
+### Model for TournamentScore
+# - tournament: tournament to which the score belongs
+# - student: student to which the score belongs
+# - total_score: total score of the student
 class TournamentScore(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='tournament_scores')
     student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name='student_scores')
     total_score = models.PositiveIntegerField(default=0)
 
+    # Method to update the score of the student based on the BattleScores
     def update_score(self):
         battle_scores = BattleScore.objects.filter(team__members=self.student, battle__tournament=self.tournament)
         self.total_score = sum(score.total_score for score in battle_scores)
