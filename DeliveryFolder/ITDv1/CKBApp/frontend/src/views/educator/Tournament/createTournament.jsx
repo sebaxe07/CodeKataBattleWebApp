@@ -190,10 +190,7 @@ export const CreateTournament = () => {
             <div className="flex flex-col translate-y-2 w-[98%] h-[87%] bg-bgprimary rounded-b-[36px]">
               <div className=" justify-center flex items-center translate-x-40 -translate-y-8">
                 <TopDecorator LanguageIcon={langIco} size={200} />
-                <div
-                  className="translate-x-16 translate-y-1/2 cursor-pointer"
-                  onClick={// console.log("Boton Editar")}
-                >
+                <div className="translate-x-16 translate-y-1/2 cursor-pointer">
                   <BgIconCard
                     icon={Edit}
                     size={45}
