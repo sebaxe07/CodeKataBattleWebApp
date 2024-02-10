@@ -1,9 +1,8 @@
-POLITECNICO DI MILANO 
-
+POLITECNICO DI MILANO
 
 SOFTWARE ENGINEERING II
 
---------------------------------------------------------------------
+---
 
 CodeKataBattle Project
 
@@ -13,8 +12,9 @@ DD File: https://docs.google.com/document/d/1CYZAEXlCPdyZWeev4ro-wO1cGzP8o1JyO6z
 
 ITD File: https://docs.google.com/document/d/1N2RyZKrJvkTAknL-LLb74XXQP1tU7UNW2QTBdnN7Cpk/edit?usp=sharing
 
---------------------------------------------------------------------
+ATD File: https://docs.google.com/document/d/1wPn3aalsZyMzqkIkIC2HPSFeaRjfE7RRZMIlFtwRNzQ/edit?usp=sharing
 
+---
 
 Daniel Maurio Ruiz Suarez
 Sebastian Enrique Perea Lopez
