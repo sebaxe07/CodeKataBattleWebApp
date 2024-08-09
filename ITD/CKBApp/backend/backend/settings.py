@@ -90,7 +90,7 @@ EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST_PASSWORD = ''
 DEFAULT_FROM_EMAIL = 'info@codekatabattle.site'
 
 # Celery settings
@@ -138,7 +138,7 @@ DATABASES = {
         'NAME': 'CKBdb',
         'USER': 'postgres',
         'PASSWORD': 'codekatabattle',
-        'HOST': 'ckb-db.cfm6asw80bof.eu-north-1.rds.amazonaws.com',
+        'HOST': '',
         'PORT': '5432',
     }
 }
@@ -162,7 +162,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-GITHUB_ACCESS_TOKEN = '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'
+GITHUB_ACCESS_TOKEN = ''
 
 
 # Internationalization
